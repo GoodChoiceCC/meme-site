@@ -53,6 +53,10 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
 
     steps:
+      - name: Stop Fitlife containers
+        run: |
+          docker stop $(docker ps -q --filter "name=fitlife_") 2>/dev/null || true
+
       - name: Pull latest image and restart container
         run: |
           docker pull ghcr.io/goodchoicecc/meme-site:latest
