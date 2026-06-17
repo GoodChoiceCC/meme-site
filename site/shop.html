@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE INVISIBLE SHOP — Est. Who Knows</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#080808; color:#f0f0f0; font-family:'Space Grotesk',sans-serif; }
+
+    /* Ticker */
+    .ticker { background:#f0f0f0; color:#080808; padding:7px 0; font-size:.8rem; font-weight:600; overflow:hidden; }
+    .ticker-inner { display:inline-flex; gap:60px; animation:tick 25s linear infinite; white-space:nowrap; }
+    @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    header {
+      padding:20px 40px;
+      display:flex; align-items:center; justify-content:space-between;
+      border-bottom:1px solid #1a1a1a;
+    }
+    .logo { font-size:1.4rem; font-weight:700; letter-spacing:-.02em; }
+    .logo span { color:#888; }
+    .cart-btn {
+      background:#f0f0f0; color:#080808;
+      border:none; padding:10px 22px; font-family:inherit;
+      font-weight:700; cursor:pointer; font-size:.9rem;
+    }
+    .cart-count { background:#ff0040; color:white; border-radius:50%; padding:2px 7px; font-size:.75rem; margin-left:6px; }
+
+    .hero-strip {
+      background:#111;
+      border-bottom:1px solid #222;
+      padding:60px 40px;
+      text-align:center;
+    }
+    .hero-strip h1 { font-size:2.8rem; font-weight:700; margin-bottom:8px; }
+    .hero-strip p { color:#888; font-size:1.1rem; }
+    .filter-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:25px; }
+    .filter-btn { border:1px solid #333; background:none; color:#888; padding:8px 18px; cursor:pointer; font-family:inherit; font-size:.85rem; }
+    .filter-btn.active { border-color:#f0f0f0; color:#f0f0f0; }
+
+    .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1px; background:#1a1a1a; padding:0; max-width:1200px; margin:0 auto; }
+    .product-card { background:#080808; padding:30px; position:relative; }
+    .badge {
+      position:absolute; top:15px; right:15px;
+      padding:4px 10px; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+      border-radius:2px;
+    }
+    .badge-sold { background:#333; color:#666; }
+    .badge-last { background:#ff0040; color:white; }
+    .badge-new { background:#00ff88; color:#000; }
+    .badge-cursed { background:#7c3aed; color:white; }
+
+    .product-visual {
+      height:180px; background:#111;
+      display:flex; align-items:center; justify-content:center;
+      font-size:4rem; margin-bottom:20px;
+      border:1px solid #1a1a1a;
+    }
+    .product-name { font-size:1.05rem; font-weight:700; margin-bottom:6px; }
+    .product-desc { font-size:.82rem; color:#666; line-height:1.6; margin-bottom:15px; }
+    .price-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .price { font-size:1.2rem; font-weight:700; }
+    .add-btn {
+      background:#f0f0f0; color:#080808;
+      border:none; padding:9px 18px; font-family:inherit; font-weight:700;
+      cursor:pointer; font-size:.85rem;
+      transition:background .15s;
+    }
+    .add-btn:hover { background:#ddd; }
+    .add-btn:disabled { background:#222; color:#444; cursor:not-allowed; }
+
+    .review-section { max-width:800px; margin:60px auto; padding:0 30px; }
+    .review-section h2 { font-size:1.5rem; margin-bottom:25px; }
+    .review { background:#111; border:1px solid #1a1a1a; padding:20px; margin-bottom:15px; }
+    .review-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .reviewer { font-weight:600; font-size:.9rem; }
+    .stars { color:#f59e0b; font-size:.85rem; }
+    .review p { color:#888; font-size:.85rem; line-height:1.6; }
+
+    .toast {
+      position:fixed; bottom:30px; right:30px;
+      background:#f0f0f0; color:#080808;
+      padding:15px 25px; font-weight:700;
+      transform:translateY(100px);
+      transition:transform .3s;
+      z-index:999;
+    }
+    .toast.show { transform:translateY(0); }
+
+    footer { border-top:1px solid #1a1a1a; padding:25px 40px; color:#444; font-size:.8rem; text-align:center; }
+    footer a { color:#666; margin:0 10px; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span>🔥 The Concept of Thursday — Back in stock (maybe) &nbsp; ✦ &nbsp; Free shipping on all invisible items &nbsp; ✦ &nbsp; Your Future — Last one! &nbsp; ✦ &nbsp; Air (Vintage 2019) — Limited supply &nbsp; ✦ &nbsp; The Feeling You Forgot Something — Currently unavailable &nbsp; ✦ &nbsp;</span>
+      <span>🔥 The Concept of Thursday — Back in stock (maybe) &nbsp; ✦ &nbsp; Free shipping on all invisible items &nbsp; ✦ &nbsp; Your Future — Last one! &nbsp; ✦ &nbsp; Air (Vintage 2019) — Limited supply &nbsp; ✦ &nbsp; The Feeling You Forgot Something — Currently unavailable &nbsp; ✦ &nbsp;</span>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo">THE INVISIBLE SHOP <span>™</span></div>
+    <button class="cart-btn" onclick="cartClick()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+  </header>
+
+  <div class="hero-strip">
+    <h1>Shop the Invisible</h1>
+    <p>Premium abstract goods. Free shipping. No returns (there is nothing to return).</p>
+    <div class="filter-row">
+      <button class="filter-btn active">All Items</button>
+      <button class="filter-btn">Concepts</button>
+      <button class="filter-btn">Atmospheric</button>
+      <button class="filter-btn">Temporal</button>
+      <button class="filter-btn">Existential</button>
+    </div>
+  </div>
+
+  <div class="product-grid">
+    <div class="product-card">
+      <span class="badge badge-sold">Sold Out</span>
+      <div class="product-visual">🌬️</div>
+      <div class="product-name">Air (Vintage 2019)</div>
+      <div class="product-desc">Pre-pandemic air. Curated from an unspecified outdoor location. Notes of optimism and mild uncertainty. Bottled in nothing.</div>
+      <div class="price-row"><span class="price">€12.99</span><button class="add-btn" disabled>Sold Out</button></div>
+    </div>
+
+    <div class="product-card">
+      <span class="badge badge-last">Last One</span>
+      <div class="product-visual">🔮</div>
+      <div class="product-name">Your Future</div>
+      <div class="product-desc">One future, gently used. Comes with three possibilities and one certainty (not disclosed). Non-refundable. You've already purchased this item in a sense.</div>
+      <div class="price-row"><span class="price">€∞</span><button class="add-btn" onclick="addCart(this)">Add to Cart</button></div>
+    </div>
+
+    <div class="product-card">
+      <span class="badge badge-sold">Sold Out</span>
+      <div class="product-visual">💭</div>
+      <div class="product-name">A Thought (Unfinished)</div>
+      <div class="product-desc">One partially formed thought, abandoned at the junction of "good idea" and "I'll do it later." May return at 3am uninvited.</div>
+      <div class="price-row"><span class="price">€4.50</span><button class="add-btn" disabled>Sold Out</button></div>
+    </div>
+
+    <div class="product-card">
+      <span class="badge badge-new">New</span>
+      <div class="product-visual">📅</div>
+      <div class="product-name">The Concept of Thursday</div>
+      <div class="product-desc">Thursday, as a concept. Not a specific Thursday. All Thursdays. The idea that things happen on Thursday. That you exist on Thursday.</div>
+      <div class="price-row"><span class="price">€7.77</span><button class="add-btn" onclick="addCart(this)">Add to Cart</button></div>
+    </div>
+
+    <div class="product-card">
+      <span class="badge badge-sold">Sold Out</span>
+      <div class="product-visual">😰</div>
+      <div class="product-name">The Feeling You Forgot Something</div>
+      <div class="product-desc">That specific unease. You can't shake it. You check your keys. They're there. You check again. Still there. It's not the keys. It's never the keys.</div>
+      <div class="price-row"><span class="price">€0.01</span><button class="add-btn" disabled>Sold Out</button></div>
+    </div>
+
+    <div class="product-card">
+      <span class="badge badge-cursed">⚠️ Cursed</span>
+      <div class="product-visual">🐷</div>
+      <div class="product-name">One (1) John Pork Missed Call</div>
+      <div class="product-desc">He called. You didn't answer. This is the record of that call. We obtained it through channels. Buy it back from us. It's yours anyway.</div>
+      <div class="price-row"><span class="price">€666</span><button class="add-btn" onclick="addCart(this)">Add to Cart</button></div>
+    </div>
+
+    <div class="product-card">
+      <span class="badge badge-new">New</span>
+      <div class="product-visual">🌙</div>
+      <div class="product-name">A Quiet Moment at 2:37am</div>
+      <div class="product-desc">Exactly that. The specific quietness of 2:37am. The refrigerator hum. The existential clarity. The regrettable decision to check your email.</div>
+      <div class="price-row"><span class="price">€8.99</span><button class="add-btn" onclick="addCart(this)">Add to Cart</button></div>
+    </div>
+
+    <div class="product-card">
+      <span class="badge badge-sold">Sold Out</span>
+      <div class="product-visual">🧊</div>
+      <div class="product-name">Ice (Theoretical)</div>
+      <div class="product-desc">Water, but slower. Cold, but represented. The concept of temperature reduction captured in a marketable format. Does not melt. Does not cool anything.</div>
+      <div class="price-row"><span class="price">€3.20</span><button class="add-btn" disabled>Sold Out</button></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h2>Customer Reviews</h2>
+    <div class="review">
+      <div class="review-header"><span class="reviewer">Dave #23</span><span class="stars">★★★★★</span></div>
+      <p>"I purchased Your Future last month. It hasn't arrived yet. I think that's part of the experience. Five stars for emotional resonance."</p>
+    </div>
+    <div class="review">
+      <div class="review-header"><span class="reviewer">Gerald (the banana)</span><span class="stars">★★★☆☆</span></div>
+      <p>"The Vintage 2019 Air was everything I expected, which was nothing. I'm a banana. I don't have a nose. Three stars because the packaging was invisible too, which felt lazy."</p>
+    </div>
+    <div class="review">
+      <div class="review-header"><span class="reviewer">Sterling H. Trottington III</span><span class="stars">★★★★★</span></div>
+      <p>"As a horse attorney, I have represented many clients in consumer disputes. The Invisible Shop has never lost a case against my clients because there is nothing to sue them for. Legally impeccable. Five stars."</p>
+    </div>
+    <div class="review">
+      <div class="review-header"><span class="reviewer">Anonymous (definitely not John Pork)</span><span class="stars">★☆☆☆☆</span></div>
+      <p>"I am trying to reach the person who manages this account. Please call me back. I have been calling. You know who this is."</p>
+    </div>
+  </div>
+
+  <footer>
+    © THE INVISIBLE SHOP™ — All goods are non-physical and non-refundable. By purchasing you acknowledge that the item exists only conceptually and no delivery will occur. | <a href="index.html">John Pork</a> | <a href="legal.html">Terms</a> | <a href="contact.html">Contact (Void)</a>
+  </footer>
+
+  <div class="toast" id="toast">✓ Added to invisible cart</div>
+
+  <script>
+    let count = 0;
+    function addCart(btn) {
+      count++;
+      document.getElementById('cartCount').textContent = count;
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+    function cartClick() {
+      alert(`Your invisible cart contains ${count} item(s).\n\nTotal: ??? \n\nThey will be delivered when the concept of time allows.\n\nThank you for shopping at The Invisible Shop.`);
+    }
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

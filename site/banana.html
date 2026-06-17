@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE BANANA TRUTH FOUNDATION™</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #ffee00;
+      font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+      font-weight: 700;
+      overflow-x: hidden;
+    }
+    /* rotating marquee header */
+    marquee.top {
+      background: black;
+      color: #ffee00;
+      font-size: 1.1rem;
+      padding: 8px 0;
+    }
+
+    .wrapper { transform: rotate(-2deg); padding: 40px 20px; }
+
+    h1 {
+      font-size: 3.5rem;
+      text-align: center;
+      color: #cc6600;
+      text-shadow: 4px 4px 0 black;
+      transform: skewX(-5deg);
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .subtitle-band {
+      background: #cc6600;
+      color: white;
+      text-align: center;
+      padding: 8px;
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      transform: rotate(1deg);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .fact-box {
+      background: white;
+      border: 4px solid black;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 6px 6px 0 #cc6600;
+    }
+    .fact-box h2 { font-size: 1.3rem; margin-bottom:10px; color:#cc6600; border-bottom:2px dashed black; padding-bottom:5px; }
+    .fact-box p, .fact-box li { font-size: .95rem; line-height:1.6; }
+    .fact-box ul { padding-left:20px; }
+
+    .chart-area {
+      max-width: 900px;
+      margin: 30px auto;
+      background: white;
+      border: 4px solid black;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 8px 8px 0 black;
+    }
+    .chart-area h2 { margin-bottom:15px; font-size:1.4rem; }
+    .bar-chart { display:flex; gap:15px; align-items:flex-end; height:200px; border-left:3px solid black; border-bottom:3px solid black; padding:10px 10px 0; }
+    .bar { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+    .bar-fill { width:100%; border-radius:5px 5px 0 0; transition:height .5s; }
+    .bar-label { font-size:.75rem; text-align:center; transform:rotate(-30deg); white-space:nowrap; }
+
+    .upside-down-section {
+      transform: rotate(180deg);
+      background: #cc6600;
+      color: white;
+      padding: 25px;
+      margin: 30px 0;
+      text-align: center;
+      font-size: 1.2rem;
+      border: 4px solid black;
+    }
+
+    .nav-buttons { max-width:900px; margin:30px auto; display:flex; flex-wrap:wrap; gap:15px; justify-content:center; }
+    .nav-btn {
+      background: black; color: #ffee00;
+      padding: 14px 28px; border:none; cursor:pointer;
+      font-family:inherit; font-size:1rem; font-weight:700;
+      text-decoration:none; display:inline-block;
+      transform: rotate(-1deg);
+      box-shadow: 4px 4px 0 #cc6600;
+    }
+    .nav-btn:hover { transform: rotate(1deg) scale(1.05); }
+
+    .corner-warning {
+      position: fixed; bottom:0; left:0;
+      background: red; color: white;
+      padding: 8px 15px; font-size:.75rem;
+      transform: rotate(-3deg);
+      transform-origin: bottom left;
+    }
+  </style>
+</head>
+<body>
+  <marquee class="top" scrollamount="6">
+    🍌 BANANA TRUTH ALERT 🍌 — Bananas are not fruit. They are a lifestyle. — 🍌 Scientists confirm: bananas are watching. — Do NOT peel from the bottom. Or do. We don't actually know. — 🍌 BANANA TRUTH ALERT 🍌
+  </marquee>
+
+  <div class="wrapper">
+    <h1>🍌 THE BANANA TRUTH FOUNDATION™ 🍌</h1>
+    <div class="subtitle-band">Est. 1987 (contested) &nbsp;|&nbsp; Peer-Reviewed by Nobody &nbsp;|&nbsp; Bananas Inside</div>
+
+    <div class="two-col">
+      <div class="fact-box">
+        <h2>📜 Verified Banana Facts</h2>
+        <ul>
+          <li>Bananas are botanically a berry. This is real. Everything else is a lie.</li>
+          <li>Bananas are radioactive (true, slightly, ignore this)</li>
+          <li>There are no wild bananas anymore. We ate them all. We are monsters.</li>
+          <li>A bunch of bananas is called a "hand." One banana is a "finger." Your whole life is a lie.</li>
+          <li>Bananas ripen faster when they are together. They influence each other. Like people. Unlike people.</li>
+          <li>The original banana had seeds and tasted like a starchy disappointment.</li>
+        </ul>
+      </div>
+      <div class="fact-box">
+        <h2>🔬 Our Research Findings</h2>
+        <ul>
+          <li>After 14 years of study, we have concluded: bananas are yellow (mostly)</li>
+          <li>Bananas become sentient at 72 hours past peak ripeness</li>
+          <li>Leaving a banana peel on the floor is technically performance art</li>
+          <li>The average person consumes 3.6 bananas per lunar cycle</li>
+          <li>We lost the data for the other 3.6</li>
+          <li>Our lead researcher has been replaced by a banana named Gerald</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-area">
+      <h2>📊 SCIENTIFIC CHART: Banana Danger Level vs. Time (unverified data)</h2>
+      <div class="bar-chart" id="barChart">
+        <div class="bar"><div class="bar-fill" style="height:30%;background:#22cc22"></div><div class="bar-label">Day 0<br>Unripe<br>(safe)</div></div>
+        <div class="bar"><div class="bar-fill" style="height:60%;background:#aacc00"></div><div class="bar-label">Day 2<br>Yellow<br>(normal)</div></div>
+        <div class="bar"><div class="bar-fill" style="height:85%;background:#ffaa00"></div><div class="bar-label">Day 4<br>Spotty<br>(aware)</div></div>
+        <div class="bar"><div class="bar-fill" style="height:95%;background:#ff5500"></div><div class="bar-label">Day 6<br>Brown<br>(plotting)</div></div>
+        <div class="bar"><div class="bar-fill" style="height:100%;background:#cc0000"></div><div class="bar-label">Day 8<br>Mush<br>(sentient)</div></div>
+        <div class="bar"><div class="bar-fill" style="height:140%;background:#660000;position:relative;top:-40%"></div><div class="bar-label">Day 10<br>Unknown<br>(run)</div></div>
+      </div>
+      <p style="font-size:.75rem;margin-top:10px;color:#999">* Chart exceeds bounds at Day 10. We accept no responsibility. Gerald signed off on this.</p>
+    </div>
+
+    <div class="upside-down-section">
+      <p>THIS SECTION IS UPSIDE DOWN ON PURPOSE</p>
+      <p>IF YOU ARE READING THIS YOU HAVE TURNED YOUR HEAD</p>
+      <p>OR YOUR SCREEN</p>
+      <p>EITHER WAY: A BANANA APPROVES</p>
+      <p>🍌</p>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="index.html" class="nav-btn">← back to the call</a>
+      <a href="horse.html" class="nav-btn">click here to NOT go to the horse page →</a>
+      <a href="beans.html" class="nav-btn">the beans await you</a>
+      <a href="contact.html" class="nav-btn">report a banana sighting</a>
+    </div>
+  </div>
+
+  <div class="corner-warning">⚠️ NO BANANAS WERE HARMED<br>IN THE MAKING OF THIS PAGE</div>
+</body>
+</html>

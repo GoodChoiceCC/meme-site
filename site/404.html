@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Not Found (or is it?)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #ff6b35;
+      color: white;
+      font-family: 'Roboto', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .four04 {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 12rem;
+      line-height: 1;
+      color: rgba(255,255,255,.15);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .card {
+      background: white;
+      color: #1a1a1a;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 8px 8px 0 rgba(0,0,0,.2);
+    }
+
+    .emoji { font-size: 4rem; display: block; margin-bottom: 15px; animation: wobble 2s ease-in-out infinite; }
+    @keyframes wobble { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
+
+    h1 { font-size: 1.8rem; margin-bottom: 10px; }
+    p { color: #555; line-height: 1.7; margin-bottom: 15px; font-size: .95rem; }
+
+    .nav-options { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:20px; }
+    .opt { padding:10px 20px; border-radius:50px; text-decoration:none; font-weight:700; font-size:.9rem; }
+    .opt-a { background:#ff6b35;color:white; }
+    .opt-b { background:#1a1a1a;color:white; }
+    .opt-c { background:#f0f0f0;color:#1a1a1a; }
+
+    .mystery-note { font-size:.75rem; color:#aaa; margin-top:20px; font-style:italic; }
+  </style>
+</head>
+<body>
+  <div class="four04">404</div>
+  <div class="card">
+    <span class="emoji">🐷</span>
+    <h1>Page Not Found</h1>
+    <p>The page you were looking for has gone somewhere else. Or it never existed. Or it existed and then made a decision. We respect that.</p>
+    <p>John Pork tried to find this page too. He couldn't. He called us about it. We didn't answer.</p>
+    <div class="nav-options">
+      <a href="/index.html" class="opt opt-a">🏠 Go Home</a>
+      <a href="/answered.html" class="opt opt-b">📞 Answer John Pork</a>
+      <a href="/deepest/index.html" class="opt opt-c">🕳️ Go to the Bottom</a>
+    </div>
+    <div class="mystery-note">Error code: 404. Or 403. Or 200, technically, since this page exists. Unclear.</div>
+  </div>
+</body>
+</html>

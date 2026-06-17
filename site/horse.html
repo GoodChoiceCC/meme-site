@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEIGH & PARTNERS LLP — Equine Legal Excellence</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#f5f0e8; color:#1a1a1a; font-family:'EB Garamond',Georgia,serif; font-size:17px; }
+
+    .topbar { background:#1c2b4a; color:#c9a84c; padding:8px 40px; font-size:.8rem; letter-spacing:.1em; display:flex; justify-content:space-between; }
+    .topbar a { color:#c9a84c; text-decoration:none; }
+
+    nav {
+      background:#2c3e6e;
+      color:white;
+      display:flex;
+      align-items:center;
+      padding:0 40px;
+    }
+    .logo {
+      font-size:1.6rem;
+      font-style:italic;
+      color:#c9a84c;
+      padding:20px 0;
+      margin-right:auto;
+      letter-spacing:.05em;
+    }
+    .logo span { font-size:.9rem; display:block; font-style:normal; color:#aaa; letter-spacing:.2em; }
+    nav a {
+      color:white; text-decoration:none;
+      padding:25px 18px; font-size:.9rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      transition:background .2s;
+    }
+    nav a:hover { background:#1c2b4a; }
+
+    .hero {
+      background: linear-gradient(135deg, #1c2b4a 60%, #2c3e6e 100%);
+      color:white;
+      padding:70px 40px;
+      display:flex;
+      align-items:center;
+      gap:40px;
+      flex-wrap:wrap;
+    }
+    .hero-text { flex:2; min-width:280px; }
+    .hero-text h1 { font-size:2.8rem; color:#c9a84c; margin-bottom:15px; font-style:italic; }
+    .hero-text p { font-size:1.1rem; line-height:1.8; color:#ddd; max-width:580px; }
+    .hero-badge {
+      flex:1; min-width:180px; text-align:center;
+      font-size:6rem;
+      border:3px solid #c9a84c;
+      border-radius:50%;
+      padding:30px;
+      color:#c9a84c;
+      text-shadow: 0 0 30px rgba(201,168,76,.5);
+    }
+    .cta-btn {
+      display:inline-block;
+      margin-top:25px;
+      background:#c9a84c;
+      color:#1c2b4a;
+      padding:14px 35px;
+      text-decoration:none;
+      font-size:1rem;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      font-family:'EB Garamond',serif;
+      font-weight:600;
+    }
+
+    .practice-areas { background:#fff; padding:60px 40px; }
+    .practice-areas h2 { font-size:2rem; color:#1c2b4a; text-align:center; margin-bottom:10px; }
+    .divider { width:80px; height:2px; background:#c9a84c; margin:0 auto 40px; }
+    .areas-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; max-width:1000px; margin:0 auto; }
+    .area-card {
+      border:1px solid #ddd;
+      padding:25px;
+      text-align:center;
+      transition:box-shadow .2s;
+    }
+    .area-card:hover { box-shadow:0 4px 20px rgba(0,0,0,.1); }
+    .area-icon { font-size:2.5rem; margin-bottom:12px; }
+    .area-card h3 { font-size:1.1rem; color:#1c2b4a; margin-bottom:8px; }
+    .area-card p { font-size:.9rem; color:#666; line-height:1.6; }
+
+    .attorneys { background:#f5f0e8; padding:60px 40px; }
+    .attorneys h2 { font-size:2rem; color:#1c2b4a; text-align:center; margin-bottom:10px; }
+    .atty-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:25px; max-width:900px; margin:30px auto 0; }
+    .atty {
+      background:white; border:1px solid #ddd;
+      padding:20px; text-align:center;
+    }
+    .atty-photo { font-size:4rem; margin-bottom:10px; display:block; }
+    .atty h3 { font-size:1rem; color:#1c2b4a; }
+    .atty .title { font-size:.8rem; color:#888; font-style:italic; margin-top:4px; }
+    .atty .bar { font-size:.75rem; color:#c9a84c; margin-top:4px; }
+
+    .testimonial {
+      background:#1c2b4a; color:white;
+      padding:50px 40px; text-align:center;
+    }
+    .testimonial blockquote { font-style:italic; font-size:1.3rem; max-width:700px; margin:0 auto 20px; line-height:1.8; }
+    .testimonial cite { color:#c9a84c; font-size:.9rem; }
+
+    footer {
+      background:#111;
+      color:#888;
+      padding:30px 40px;
+      font-size:.8rem;
+      display:flex;
+      flex-wrap:wrap;
+      gap:20px;
+      justify-content:space-between;
+    }
+    footer a { color:#c9a84c; text-decoration:none; }
+
+    .disclaimer {
+      background:#fffbe6;
+      border-left:4px solid #c9a84c;
+      padding:15px 20px;
+      font-size:.8rem;
+      color:#555;
+      max-width:900px;
+      margin:30px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <span>📞 1-800-NEIGH-LAW &nbsp;|&nbsp; info@neighpartners.horse &nbsp;|&nbsp; Mon–Fri: 9AM–5PM (Hay Time)</span>
+    <span><a href="#">Client Portal</a> &nbsp;|&nbsp; <a href="#">🌐 EN / 🐴 NEIGH</a></span>
+  </div>
+
+  <nav>
+    <div class="logo">Neigh &amp; Partners <span>EQUINE LEGAL PROFESSIONALS LLP</span></div>
+    <a href="horse.html">Home</a>
+    <a href="beans.html">Our Philosophy</a>
+    <a href="about.html">The Firm</a>
+    <a href="shop.html">Billing</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>When the Stable Needs Legal Counsel</h1>
+      <p>For over 30 years, Neigh &amp; Partners has provided unparalleled equine legal services across all jurisdictions where horses are recognised as partial legal persons (all of them, as of our 2019 filing).</p>
+      <p style="margin-top:12px">We do not accept humans as clients. You are here by mistake. Please leave.</p>
+      <a href="contact.html" class="cta-btn">Schedule a Consultation (Horses Only)</a>
+    </div>
+    <div class="hero-badge">🐴</div>
+  </div>
+
+  <div class="practice-areas">
+    <h2>Practice Areas</h2>
+    <div class="divider"></div>
+    <div class="areas-grid">
+      <div class="area-card">
+        <div class="area-icon">🌾</div>
+        <h3>Hay Contract Disputes</h3>
+        <p>You were promised premium hay. You received medium hay. This is actionable. We have won 47 cases. We have lost none (we do not count the 23 we lost).</p>
+      </div>
+      <div class="area-card">
+        <div class="area-icon">🪄</div>
+        <h3>Hoof Rights Litigation</h3>
+        <p>Your hooves belong to you. Not to the farrier. Not to the stable. Not to the concept of shoes. We will fight for your hooves in any court.</p>
+      </div>
+      <div class="area-card">
+        <div class="area-icon">🚫</div>
+        <h3>Neigh Harassment</h3>
+        <p>When someone ignores your neigh in a professional setting, that is a workplace violation. Our team handles all neigh-harassment claims with the urgency they deserve.</p>
+      </div>
+      <div class="area-card">
+        <div class="area-icon">🏁</div>
+        <h3>Racing Disputes</h3>
+        <p>Did you run fast and receive no carrots? Were you forced to carry a small human on your back for sport? You have rights. Call us. Do not call us. Neigh at us.</p>
+      </div>
+      <div class="area-card">
+        <div class="area-icon">📋</div>
+        <h3>Estate Planning</h3>
+        <p>Who gets your good saddle when you pass? Who inherits your bucket? We draft wills, trusts, and complex multi-paddock estate plans for horses of all ages.</p>
+      </div>
+      <div class="area-card">
+        <div class="area-icon">🍎</div>
+        <h3>Apple Injury Claims</h3>
+        <p>Someone gave you an apple with a sticker on it. You ate the sticker. That is negligence. We have recovered significant damages in similar sticker-adjacent cases.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="attorneys">
+    <h2>Our Attorneys</h2>
+    <div class="divider"></div>
+    <div class="atty-grid">
+      <div class="atty"><span class="atty-photo">🐴</span><h3>Sterling H. Trottington III</h3><div class="title">Managing Partner</div><div class="bar">Admitted: All Paddocks</div></div>
+      <div class="atty"><span class="atty-photo">🐎</span><h3>Marguerite A. Gallop</h3><div class="title">Senior Associate</div><div class="bar">Speciality: Carrot Law</div></div>
+      <div class="atty"><span class="atty-photo">🦄</span><h3>Prof. Sparkles J. Oatsworth</h3><div class="title">Partner (Mythical Div.)</div><div class="bar">Horn-Related Disputes</div></div>
+      <div class="atty"><span class="atty-photo">🐴</span><h3>Dave</h3><div class="title">Paralegal</div><div class="bar">He doesn't know why he's here</div></div>
+    </div>
+  </div>
+
+  <div class="testimonial">
+    <blockquote>"Neigh &amp; Partners secured me a full settlement of 400 premium carrots and an apology from the farrier. I have never felt more legally validated as a horse."</blockquote>
+    <cite>— Clover B., Mare, age 7 &nbsp;|&nbsp; Case: The Bucket Incident of 2021</cite>
+  </div>
+
+  <div class="disclaimer">
+    <strong>DISCLAIMER:</strong> Neigh &amp; Partners LLP is not a real law firm. Horses are not currently recognised as legal persons in most jurisdictions (we are working on this). This website was constructed by parties unknown and exists as a monument to the void. All consultations are non-binding and likely imaginary. Past results do not guarantee future results. We once represented a John Pork in a telecommunications dispute. We cannot comment further.
+  </div>
+
+  <footer>
+    <div>
+      © 2024 Neigh &amp; Partners LLP &nbsp;|&nbsp; All Hooves Reserved<br>
+      <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="beans.html">Philosophy</a> &nbsp;|&nbsp; <a href="contact.html">Contact</a>
+    </div>
+    <div>Certified by the International Equine Bar Association (not real)<br>Awards: Best Horse Firm in a Meme (2022, 2023, 2024)</div>
+  </footer>
+</body>
+</html>

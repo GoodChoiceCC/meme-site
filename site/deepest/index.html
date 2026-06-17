@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Bottom</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+    body {
+      background: #000000;
+      color: #111111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: monospace;
+      font-size: 14px;
+      cursor: none;
+      transition: background 30s;
+    }
+    body.light-mode {
+      background: #ffffff;
+      color: #eee;
+    }
+
+    .content {
+      text-align: center;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .main-text {
+      color: #1a1a1a;
+      font-size: 1.1rem;
+      letter-spacing: .05em;
+      margin-bottom: 40px;
+      line-height: 2.5;
+      transition: color 30s;
+    }
+
+    .counter {
+      color: #0d0d0d;
+      font-size: .7rem;
+      margin-bottom: 50px;
+      letter-spacing: .1em;
+      transition: color 30s;
+    }
+
+    .up-btn {
+      color: #151515;
+      text-decoration: none;
+      font-size: .8rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border: 1px solid #111;
+      display: inline-block;
+      transition: all 30s;
+    }
+    .up-btn:hover { color: #333; border-color:#333; transition: all .3s; }
+
+    .secret-link {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: #050505;
+      text-decoration: none;
+      font-size: .6rem;
+      letter-spacing: .05em;
+      transition: color 30s;
+    }
+    .secret-link:hover { color: #222; transition: color .2s; }
+
+    /* After 30s, page slowly brightens */
+    .revealed .main-text { color: #cccccc !important; }
+    .revealed .counter { color: #999 !important; }
+    .revealed .up-btn { color: #bbb !important; border-color:#888 !important; }
+    .revealed .secret-link { color: #888 !important; }
+    .revealed { background: #0a0a0a !important; }
+
+    /* Final reveal: a hidden message */
+    .hidden-msg {
+      opacity: 0;
+      color: #222;
+      font-size: .75rem;
+      margin-top: 30px;
+      line-height: 1.8;
+      transition: opacity 5s;
+    }
+    .hidden-msg.show { opacity: 1; }
+  </style>
+</head>
+<body id="thebody">
+  <div class="content">
+    <div class="main-text" id="mainText">
+      there is nothing here
+    </div>
+
+    <div class="counter" id="cnt">
+      you have been at the bottom for: <span id="sec">0</span> seconds
+    </div>
+
+    <a href="../index.html" class="up-btn" id="upBtn">go back up</a>
+
+    <div class="hidden-msg" id="hiddenMsg">
+      you stayed.<br>
+      most people don't stay.<br>
+      <br>
+      john pork was here once.<br>
+      he stayed for 47 seconds.<br>
+      then he called someone.<br>
+      they did not answer.<br>
+      <br>
+      the beans were here too.<br>
+      they understood the bottom.<br>
+      beans always understand the bottom.<br>
+      <br>
+      you can go now.<br>
+      or stay.<br>
+      the bottom does not mind.<br>
+      the bottom has no preferences.<br>
+      the bottom simply is.
+    </div>
+  </div>
+
+  <a href="../index.html" class="secret-link" id="secretLink">or go back to the beginning</a>
+
+  <script>
+    let t = 0;
+    const secEl = document.getElementById('sec');
+    const body = document.getElementById('thebody');
+    const hidden = document.getElementById('hiddenMsg');
+
+    const timer = setInterval(() => {
+      t++;
+      secEl.textContent = t;
+
+      if (t === 15) {
+        body.classList.add('revealed');
+      }
+      if (t === 40) {
+        hidden.classList.add('show');
+      }
+      if (t === 120) {
+        document.getElementById('mainText').textContent = 'ok you can actually go now';
+      }
+      if (t === 180) {
+        document.getElementById('mainText').textContent = 'seriously';
+      }
+      if (t === 240) {
+        document.getElementById('mainText').textContent = 'john pork has called 3 times while you were down here';
+      }
+      if (t === 300) {
+        document.getElementById('mainText').textContent = 'we are all beans at the bottom';
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    // Custom cursor (nothing)
+    document.addEventListener('mousemove', () => {});
+  </script>
+</body>
+</html>

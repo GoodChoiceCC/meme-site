@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOU ANSWERED JOHN PORK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Boogaloo&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #00ff66;
+      font-family: 'Boogaloo', cursive;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .confetti-bg {
+      position: fixed; inset:0;
+      background: repeating-linear-gradient(
+        45deg,
+        #00ff66 0px, #00ff66 20px,
+        #00dd55 20px, #00dd55 40px
+      );
+      z-index: 0;
+    }
+    .card {
+      position:relative; z-index:10;
+      background: white;
+      max-width: 650px;
+      margin: 60px auto 40px;
+      border-radius: 30px;
+      padding: 40px;
+      box-shadow: 10px 10px 0px #000, 20px 20px 0px #333;
+      border: 4px solid black;
+    }
+    h1 {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 2.8rem;
+      color: #000;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .pig { font-size: 6rem; text-align:center; display:block; animation: spin 3s linear infinite; }
+    @keyframes spin { from{transform:rotateY(0)} to{transform:rotateY(360deg)} }
+
+    .speech-bubble {
+      background: #fff8e1;
+      border: 3px solid #000;
+      border-radius: 20px;
+      padding: 20px 25px;
+      margin: 25px 0;
+      position: relative;
+      font-size: 1.3rem;
+      line-height: 1.7;
+    }
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: 40px;
+      width: 0; height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 20px solid #000;
+    }
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      top: -15px; left: 43px;
+      width: 0; height: 0;
+      border-left: 17px solid transparent;
+      border-right: 17px solid transparent;
+      border-bottom: 17px solid #fff8e1;
+    }
+    .speaker {
+      font-weight: bold; color: #cc00aa;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .nav-btn {
+      display: block;
+      padding: 15px;
+      border: 3px solid black;
+      border-radius: 12px;
+      text-decoration: none;
+      font-family: inherit;
+      font-size: 1.05rem;
+      text-align: center;
+      font-weight: bold;
+      transition: transform .1s;
+      box-shadow: 4px 4px 0 #000;
+    }
+    .nav-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #000; }
+    .nav-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+    .b1{background:#ff6b6b;color:white}
+    .b2{background:#4ecdc4;color:white}
+    .b3{background:#ffd93d;color:black}
+    .b4{background:#6c5ce7;color:white}
+    .b5{background:#fd79a8;color:white}
+    .b6{background:#00b894;color:white}
+
+    .timestamp {
+      text-align:center; color:#888; font-size:.8rem;
+      margin-top:20px; font-family:monospace;
+    }
+    .important-btn {
+      position: fixed;
+      bottom: 30px;
+      right: -120px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      animation: slideout 4s ease-in-out 2s infinite;
+    }
+    @keyframes slideout {
+      0%,40%{right:-120px}
+      20%,30%{right:20px}
+      100%{right:-120px}
+    }
+  </style>
+</head>
+<body>
+  <div class="confetti-bg"></div>
+  <div class="card">
+    <h1>🎉 YOU ANSWERED 🎉</h1>
+    <span class="pig">🐷</span>
+
+    <div class="speech-bubble">
+      <span class="speaker">John Pork:</span> &nbsp;"beep boop.<br>
+      i have been waiting.<br>
+      the cheese is NOT where you left it.<br>
+      also: congratulations on your recent purchase of a horse.<br>
+      you did not buy a horse. but you will.<br>
+      goodbye. i am going now.<br>
+      do not look for me under the bed.<br>
+      — John Pork"
+    </div>
+
+    <p style="text-align:center;font-size:1.1rem;margin-bottom:5px;">The call has ended. You are changed forever.</p>
+    <p style="text-align:center;font-size:.9rem;color:#555;margin-bottom:20px;">Call duration: 0:00:∞</p>
+
+    <div class="nav-grid">
+      <a href="banana.html" class="nav-btn b1">🍌 Go to the banana truth</a>
+      <a href="horse.html" class="nav-btn b2">🐴 Horse Law Firm</a>
+      <a href="beans.html" class="nav-btn b3">🫘 Bean Philosophy</a>
+      <a href="shop.html" class="nav-btn b4">🛒 Invisible Shop</a>
+      <a href="about.html" class="nav-btn b5">❓ About (useless)</a>
+      <a href="deep/index.html" class="nav-btn b6">🕳️ Go deeper</a>
+      <a href="timcheese.html" class="nav-btn" style="background:#cc8800;color:white;grid-column:1/-1">🧀 Visit Tim Cheese (do not do this)</a>
+    </div>
+    <div class="timestamp" id="ts"></div>
+  </div>
+
+  <button class="important-btn" onclick="alert('this button does nothing\n\nyou fell for it')">⚠️ IMPORTANT</button>
+
+  <script>
+    document.getElementById('ts').textContent =
+      'call ended at: ' + new Date().toLocaleString() + ' (local time, wherever you are, in the darkness)';
+  </script>
+</body>
+</html>

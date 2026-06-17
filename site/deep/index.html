@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layer 2 — You've Gone Deeper</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #000;
+      color: #00ff41;
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Scanline effect */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.1) 2px, rgba(0,0,0,.1) 4px);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .terminal {
+      max-width: 700px;
+      width: 100%;
+      padding: 40px 30px;
+      border: 1px solid #00aa28;
+      position: relative;
+      z-index: 10;
+    }
+    .terminal::before {
+      content: '[ LAYER 2 — DEPTH: 2.0 ]';
+      position: absolute;
+      top: -14px; left: 20px;
+      background: #000;
+      padding: 0 10px;
+      font-size: 14px;
+      color: #00aa28;
+    }
+
+    .line { margin-bottom: 12px; }
+    .prompt::before { content: '> '; color: #00aa28; }
+    .output { color: #00cc35; padding-left: 20px; }
+    .dim { color: #005512; }
+    .bright { color: #66ff77; }
+    .blink { animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    h1 { font-size: 2.5rem; color: #00ff41; margin-bottom: 20px; text-shadow: 0 0 10px #00ff41; }
+
+    .counter-box {
+      border: 1px dashed #003308;
+      padding: 15px;
+      margin: 25px 0;
+      text-align: center;
+    }
+    .big-num { font-size: 4rem; display: block; color: #00ff41; }
+
+    .nav-links { margin-top: 30px; display: flex; flex-direction: column; gap: 10px; }
+    .nav-links a { color: #00cc35; text-decoration: none; padding: 6px 0; border-bottom: 1px dashed #003308; }
+    .nav-links a::before { content: '>> '; }
+    .nav-links a:hover { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
+
+    .matrix-bg {
+      position: fixed; inset: 0; z-index: 1;
+      overflow: hidden;
+    }
+    .matrix-col {
+      position: absolute; top: -20px;
+      font-size: 14px;
+      color: #001a05;
+      animation: matrixfall linear infinite;
+      user-select: none;
+    }
+    @keyframes matrixfall { from{transform:translateY(-100%)} to{transform:translateY(110vh)} }
+
+    .warning-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #001a05;
+      border-top: 1px solid #003308;
+      padding: 8px 20px;
+      font-size: 13px;
+      color: #005512;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix-bg" id="matrixBg"></div>
+
+  <div class="terminal">
+    <h1>YOU WENT DEEPER</h1>
+
+    <div class="line prompt">DEPTH_CHECK: initializing...</div>
+    <div class="line output">✓ Depth confirmed: Layer 2 of unknown total</div>
+    <div class="line output">✓ Surface connection: stable</div>
+    <div class="line output">⚠ Signal quality: degrading</div>
+    <div class="line output">⚠ John Pork: still out there</div>
+
+    <div class="counter-box">
+      <span class="dim">PEOPLE WHO HAVE REACHED THIS LAYER:</span>
+      <span class="big-num">1</span>
+      <span class="dim">(just you)</span>
+    </div>
+
+    <div class="line">
+      <span class="dim">// The surface layer is 1 click above you. It contains John Pork, bananas, horses, and the other things. You chose to come here instead. We respect this. We do not understand it.</span>
+    </div>
+
+    <div class="line" style="margin-top:20px">
+      <span class="bright">LAYER 2 CONTAINS:</span>
+    </div>
+    <div class="line output">- This terminal</div>
+    <div class="line output">- A mild sense of unease</div>
+    <div class="line output">- The faint memory of something you forgot to do</div>
+    <div class="line output">- One (1) deeper layer below this one</div>
+    <div class="line output">- <span class="dim">possibly other things [REDACTED]</span></div>
+
+    <div class="line" style="margin-top:25px">
+      <span class="dim">RECOMMENDATION: Return to surface. Or go further. We cannot stop you. We are a terminal.</span>
+    </div>
+
+    <div class="line blink" style="margin-top:10px">█</div>
+
+    <div class="nav-links">
+      <a href="../index.html">return to surface (john pork awaits)</a>
+      <a href="../beans.html">tangent: read the bean philosophy</a>
+      <a href="../deeper/index.html">go to Layer 3 (do not say we did not warn you)</a>
+    </div>
+  </div>
+
+  <div class="warning-bar">
+    LAYER 2 — STABLE — NO ANOMALIES DETECTED — (one anomaly detected; suppressed) — HAVE A NICE TIME
+  </div>
+
+  <script>
+    const bg = document.getElementById('matrixBg');
+    const chars = '01アイウエオ🐷🫘🍌⚡?!';
+    for (let i = 0; i < 30; i++) {
+      const col = document.createElement('div');
+      col.className = 'matrix-col';
+      col.style.left = (i * 3.5) + '%';
+      col.style.animationDuration = (8 + Math.random() * 15) + 's';
+      col.style.animationDelay = (-Math.random() * 20) + 's';
+      let text = '';
+      for (let j = 0; j < 40; j++) text += chars[Math.floor(Math.random() * chars.length)] + '\n';
+      col.textContent = text;
+      bg.appendChild(col);
+    }
+  </script>
+</body>
+</html>

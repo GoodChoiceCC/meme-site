@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOHN PORK IS CALLING</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #07000f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Creepster', cursive;
+      color: white;
+    }
+    .bg-pulse {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, #3a0050 0%, #07000f 70%);
+      animation: pulsebg 2s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes pulsebg { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+    .container { position:relative; z-index:10; text-align:center; padding:20px; }
+    .caller-info { font-size:1.1rem; letter-spacing:.3em; color:#aaa; margin-bottom:8px; text-transform:uppercase; }
+
+    .john-pork {
+      font-size:9rem;
+      display:block;
+      animation: shake .4s ease-in-out infinite;
+      margin: 10px 0;
+      filter: drop-shadow(0 0 20px #ff00aa);
+    }
+    @keyframes shake { 0%,100%{transform:rotate(-8deg) scale(1)} 50%{transform:rotate(8deg) scale(1.05)} }
+
+    .name {
+      font-size:3.5rem;
+      color:#ff69b4;
+      text-shadow: 0 0 20px #ff69b4, 0 0 60px #ff00ff;
+      animation: glow 1s ease-in-out infinite alternate;
+    }
+    @keyframes glow { from{text-shadow:0 0 10px #ff69b4} to{text-shadow:0 0 30px #ff69b4,0 0 80px #ff00ff,0 0 120px #aa00aa} }
+
+    .subtitle { font-size:1.4rem; margin:8px 0 40px; color:#ccc; font-family:'Permanent Marker',cursive; }
+
+    .buttons { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; }
+
+    .btn-answer {
+      background: #00cc44;
+      color:white; border:none;
+      padding:20px 55px; font-size:1.5rem;
+      border-radius:50px; cursor:pointer;
+      font-family:inherit;
+      animation:bob 1s ease-in-out infinite;
+      box-shadow: 0 0 25px #00cc44;
+      text-decoration:none; display:inline-block;
+    }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+    .btn-decline {
+      background:#cc0000; color:white; border:none;
+      padding:20px 55px; font-size:1.5rem;
+      border-radius:50px; cursor:not-allowed;
+      font-family:inherit;
+      position:fixed;
+      transition: all 0.1s;
+    }
+
+    .floater {
+      position:fixed; font-size:2rem;
+      animation:floatup linear infinite;
+      pointer-events:none; user-select:none; z-index:5;
+    }
+    @keyframes floatup { from{transform:translateY(110vh) rotate(0deg)} to{transform:translateY(-150px) rotate(720deg)} }
+
+    .warning {
+      position:fixed; bottom:15px; right:15px;
+      font-size:.65rem; color:#333; font-family:monospace; text-align:right; z-index:20;
+      line-height:1.6;
+    }
+    .warning a { color:#444; }
+
+    .miss-counter {
+      position:fixed; top:15px; left:15px;
+      font-size:.7rem; color:#440022; font-family:monospace; z-index:20;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pulse"></div>
+
+  <div class="container">
+    <div class="caller-info">📞 &nbsp; Incoming Call &nbsp; 📞</div>
+    <span class="john-pork">🐷</span>
+    <div class="name">JOHN PORK</div>
+    <div class="subtitle">is calling you right now</div>
+    <div class="buttons">
+      <a href="answered.html" class="btn-answer">📞 &nbsp;ANSWER</a>
+      <button class="btn-decline" id="decline">❌ &nbsp;Decline</button>
+    </div>
+  </div>
+
+  <div class="miss-counter" id="misscnt"></div>
+
+  <div class="warning">
+    john pork died in april 2023<br>
+    because nobody answered his calls<br>
+    this is your chance to make it right<br><br>
+    <a href="legal.html">legal stuff nobody reads</a> &nbsp;|&nbsp;
+    <a href="about.html">about</a> &nbsp;|&nbsp;
+    <a href="timcheese.html" style="color:#553300">⚠ tim cheese</a>
+  </div>
+
+  <script>
+    // Decline button runs away
+    const btn = document.getElementById('decline');
+    let misses = 0;
+    btn.addEventListener('mouseenter', () => {
+      misses++;
+      document.getElementById('misscnt').textContent = `times you tried to decline: ${misses}`;
+      const maxX = window.innerWidth - 200;
+      const maxY = window.innerHeight - 80;
+      btn.style.left = Math.random() * maxX + 'px';
+      btn.style.top = Math.random() * maxY + 'px';
+    });
+    btn.addEventListener('click', () => {
+      alert('you cannot decline john pork.\n\nyou never could.');
+    });
+
+    // Floating emojis
+    const emojis = ['🐷','📞','🐽','🥓','🧀','📱','🐖','💜'];
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'floater';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (6 + Math.random() * 12) + 's';
+      el.style.animationDelay = (-Math.random() * 18) + 's';
+      el.style.fontSize = (.8 + Math.random() * 2.5) + 'rem';
+      document.body.appendChild(el);
+    }
+
+    // Phone ring sound on first click
+    document.addEventListener('click', () => {
+      try {
+        const ctx = new AudioContext();
+        const ring = () => {
+          [880, 660].forEach((f, i) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.connect(g); g.connect(ctx.destination);
+            o.frequency.value = f;
+            g.gain.setValueAtTime(.08, ctx.currentTime + i*.12);
+            g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i*.12 + .25);
+            o.start(ctx.currentTime + i*.12);
+            o.stop(ctx.currentTime + i*.12 + .25);
+          });
+        };
+        ring();
+        setInterval(ring, 1800);
+      } catch(e){}
+    }, { once: true });
+  </script>
+</body>
+</html>

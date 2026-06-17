@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CONTACT US (Please Don't)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #1a0533;
+      color: white;
+      font-family: 'Rubik', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* CHAOTIC LAYOUT */
+    .title-block {
+      background: #ff0066;
+      padding: 20px 30px;
+      transform: rotate(-2deg);
+      margin: 40px 30px 0;
+      display: inline-block;
+    }
+    .title-block h1 { font-size:2.5rem; font-weight:900; text-transform:uppercase; }
+    .title-block p { font-size:.9rem; margin-top:5px; opacity:.8; }
+
+    .form-container {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .field-group { margin-bottom: 30px; position:relative; }
+    label { display:block; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:#cc88ff; margin-bottom:8px; }
+
+    input, textarea, select {
+      width:100%; background:#2a0f44;
+      border:2px solid #4a1a66; border-radius:8px;
+      color:white; font-family:inherit; font-size:1rem;
+      padding:14px 16px;
+      transition:border-color .2s;
+    }
+    input:focus, textarea:focus, select:focus { outline:none; border-color:#ff0066; }
+    textarea { min-height:120px; resize:vertical; }
+    select option { background:#2a0f44; }
+
+    input::placeholder, textarea::placeholder { color:#5a3a7a; }
+
+    /* Intentionally misplaced fields */
+    .field-floater {
+      position: absolute;
+      background: #2a0f44;
+      border: 2px solid #4a1a66;
+      border-radius: 12px;
+      padding: 20px;
+      width: 230px;
+      z-index: 10;
+    }
+    .floater-right { right: -270px; top: 40px; transform: rotate(3deg); }
+    .floater-left { left: -260px; top: 200px; transform: rotate(-2deg); }
+
+    .field-floater label { color:#ffcc00; }
+    .field-floater input { background:#1a0533; border-color:#3a1a55; }
+
+    @media (max-width:900px) { .field-floater { position:static; width:100%; transform:none; margin-bottom:15px; } }
+
+    .submit-area { text-align:center; margin-top:40px; }
+    .submit-btn {
+      background: #ff0066; color:white; border:none;
+      padding:18px 60px; font-family:inherit; font-size:1.2rem;
+      font-weight:900; text-transform:uppercase;
+      cursor:pointer; border-radius:50px;
+      transform:rotate(-1deg);
+      box-shadow: 6px 6px 0 #7700cc;
+      transition:all .1s;
+    }
+    .submit-btn:hover { transform:rotate(1deg) scale(1.05); box-shadow:8px 8px 0 #7700cc; }
+    .submit-btn:active { transform:rotate(0) scale(.98); box-shadow:2px 2px 0 #7700cc; }
+
+    .fine-print { font-size:.65rem; color:#4a2a66; margin-top:15px; text-align:center; line-height:1.6; }
+
+    /* Random elements */
+    .floating-pig {
+      position:fixed; font-size:3rem;
+      pointer-events:none;
+      animation:pigfly 8s ease-in-out infinite;
+      top:20px; right:20px;
+      z-index:5;
+    }
+    @keyframes pigfly { 0%,100%{transform:rotate(-10deg) translateY(0)} 50%{transform:rotate(10deg) translateY(-20px)} }
+
+    .corner-number {
+      position:fixed; font-size:8rem; font-weight:900;
+      color:rgba(255,0,102,.05); pointer-events:none;
+      user-select:none;
+    }
+    .cn1 { top:-20px; left:-10px; }
+    .cn2 { bottom:-20px; right:-10px; }
+
+    .success-overlay {
+      position:fixed; inset:0; background:#00ff66;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      z-index:1000;
+      opacity:0; pointer-events:none;
+      transition:opacity .3s;
+      color:#000;
+      text-align:center;
+      padding:30px;
+    }
+    .success-overlay.show { opacity:1; pointer-events:all; }
+    .success-overlay h2 { font-size:3rem; font-weight:900; margin-bottom:20px; }
+    .success-overlay p { font-size:1.2rem; max-width:500px; line-height:1.7; margin-bottom:15px; }
+    .success-overlay a { color:#000; font-weight:700; display:block; margin-top:25px; font-size:1.1rem; }
+  </style>
+</head>
+<body>
+  <div class="corner-number cn1">?</div>
+  <div class="corner-number cn2">!</div>
+  <div class="floating-pig">🐷</div>
+
+  <div class="title-block">
+    <h1>Contact Us</h1>
+    <p>we are here. we do not want to be. please make it quick.</p>
+  </div>
+
+  <div class="form-container">
+
+    <!-- Floating misplaced fields -->
+    <div class="field-floater floater-right">
+      <label>Your Horse Email (if applicable)</label>
+      <input type="email" placeholder="horse@stable.com">
+      <p style="font-size:.7rem;color:#7a5a9a;margin-top:8px">Only fill in if you are a horse. Or if you know a horse. Or if you have eaten a horse-adjacent meal this week.</p>
+    </div>
+
+    <div class="field-floater floater-left">
+      <label>Secret Code (required, unknown)</label>
+      <input type="text" placeholder="??????????">
+      <p style="font-size:.7rem;color:#7a5a9a;margin-top:8px">We will tell you if it's correct. We won't tell you what correct is.</p>
+    </div>
+
+    <form onsubmit="handleSubmit(event)">
+      <div class="field-group">
+        <label>First Name (real names only, no Johns)</label>
+        <input type="text" placeholder="Your name (not John)" required>
+      </div>
+
+      <div class="field-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="the one you check at 2am" required>
+      </div>
+
+      <div class="field-group">
+        <label>Subject</label>
+        <select>
+          <option>I have a complaint about the beans</option>
+          <option>John Pork related inquiry</option>
+          <option>I would like to purchase a horse legally</option>
+          <option>The banana chart has changed my life</option>
+          <option>I found the secret code</option>
+          <option>There is something wrong with Thursday</option>
+          <option>I am one of the Daves</option>
+          <option>Other (unspecified)</option>
+          <option>I don't know why I'm here</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label>Your Deepest Fears (required)</label>
+        <textarea placeholder="Please describe your deepest fears in 2-3 sentences. We will not use this information. Probably."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label>Preferred Response Method</label>
+        <select>
+          <option>Email (we will not read it)</option>
+          <option>Phone call (John Pork will call you back)</option>
+          <option>Pigeon (medium confidence)</option>
+          <option>Dream visitation (slow, unreliable)</option>
+          <option>No response needed (wisest choice)</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label>Anything Else We Should Know</label>
+        <textarea rows="2" placeholder="Example: I have a horse. I know a John. I once left a banana for 10 days. Unrelated."></textarea>
+      </div>
+
+      <div class="submit-area">
+        <button type="submit" class="submit-btn">SUBMIT TO THE VOID</button>
+        <div class="fine-print">
+          By submitting this form you agree to our <a href="legal.html" style="color:#7755aa">Terms and Conditions</a>.<br>
+          Your message will be received and filed in a folder called "THE VOID."<br>
+          Response time: 3–5 business eternities.<br>
+          We are not responsible for John Pork related outcomes.
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="success-overlay" id="successOverlay">
+    <span style="font-size:5rem">🕳️</span>
+    <h2>SUBMITTED TO THE VOID</h2>
+    <p>Your message has been received by the void.</p>
+    <p>The void has acknowledged receipt.</p>
+    <p>The void says: "beep boop potato."</p>
+    <p style="font-size:.9rem;margin-top:10px;color:#2a5a2a">Expected response: 3–5 business eternities<br>Actual response: never (the void is busy)</p>
+    <a href="index.html">← return to john pork (he is still calling)</a>
+  </div>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('successOverlay').classList.add('show');
+    }
+  </script>
+</body>
+</html>
