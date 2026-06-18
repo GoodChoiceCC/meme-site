@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoodWeather™ — Accurate Forecasts</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #050a05;
+      color: #88cc44;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+    }
+    .header {
+      background: #000;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #88cc44;
+    }
+    .logo { font-weight: bold; font-size: 1.1rem; color: #c8e088; letter-spacing: .08em; font-family: 'Courier New', monospace; }
+    .logo span { color: #88cc44; }
+    .accuracy-badge { font-size: .7rem; color: #556633; background: #0a1a05; padding: 4px 10px; border: 1px solid #336622; letter-spacing: .1em; }
+
+    .hero-card {
+      background: #0a1a05;
+      margin: 20px;
+      border: 3px solid #88cc44;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .location { font-size: .75rem; color: #556633; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+    .temp-big { font-size: 4.5rem; font-weight: bold; color: #c8e088; line-height: 1; }
+    .condition { font-size: 1rem; color: #88cc44; margin-top: 6px; }
+    .weather-icon { position: absolute; right: 30px; top: 30px; font-size: 4rem; filter: drop-shadow(0 0 8px #88cc44); }
+    .feels-like { font-size: .8rem; color: #446633; margin-top: 12px; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 3px;
+      padding: 0 20px 20px;
+    }
+    .weather-card {
+      background: #0a1a05;
+      border: 1px solid #334422;
+      padding: 18px;
+    }
+    .card-location { font-size: .65rem; color: #556633; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+    .card-icon { font-size: 2rem; margin-bottom: 8px; }
+    .card-temp { font-size: 1.6rem; font-weight: bold; color: #c8e088; }
+    .card-cond { font-size: .7rem; color: #88cc44; margin-top: 4px; line-height: 1.5; }
+
+    .forecast-section {
+      padding: 0 20px 20px;
+    }
+    .section-title { font-size: .65rem; color: #556633; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 12px; }
+    .forecast-row {
+      background: #0a1a05;
+      border: 1px solid #334422;
+      border-bottom: none;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .forecast-row:last-child { border-bottom: 1px solid #334422; }
+    .fc-day { font-size: .8rem; color: #88cc44; width: 120px; }
+    .fc-icon { font-size: 1.2rem; }
+    .fc-cond { font-size: .75rem; color: #556633; flex: 1; padding: 0 12px; }
+    .fc-temp { font-size: .85rem; color: #c8e088; white-space: nowrap; }
+
+    .alert-bar {
+      background: #1a0800;
+      border: 2px solid #884400;
+      margin: 0 20px 20px;
+      padding: 12px 16px;
+      font-size: .75rem;
+      color: #ffaa44;
+    }
+    .alert-bar strong { color: #ffcc44; }
+
+    .footer-note {
+      text-align: center;
+      font-size: .6rem;
+      color: #334422;
+      padding: 20px;
+      border-top: 1px solid #1a2a10;
+    }
+    .footer-note a { color: #556633; text-decoration: none; }
+    .footer-note a:hover { color: #88cc44; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">Good<span>Weather</span>™</div>
+    <div class="accuracy-badge">47% accuracy guaranteed</div>
+  </div>
+
+  <div class="hero-card" style="margin-top:20px">
+    <div class="location">📍 The Space Behind Your Fridge</div>
+    <div class="temp-big">∞°</div>
+    <div class="condition">Warm, forgotten, slightly hostile</div>
+    <div class="feels-like">Feels like: something you lost in 2019 &nbsp;|&nbsp; Humidity: sentient</div>
+    <div class="weather-icon">🌡️</div>
+  </div>
+
+  <div class="alert-bar">
+    <strong>⚠ SEVERE WEATHER ALERT:</strong> Existential Fog advisory in effect until further notice. Do not go outside. Do not stay inside. The fog does not have instructions.
+  </div>
+
+  <div class="section-title" style="padding:0 20px 8px;margin-top:4px">CURRENT CONDITIONS — SELECTED LOCATIONS</div>
+  <div class="cards-grid">
+    <div class="weather-card">
+      <div class="card-location">Tim Cheese's Apartment</div>
+      <div class="card-icon">🧀</div>
+      <div class="card-temp">??°</div>
+      <div class="card-cond">Overcast with evidence. Do not visit.</div>
+    </div>
+    <div class="weather-card">
+      <div class="card-location">John Pork's Afterlife</div>
+      <div class="card-icon">🐷</div>
+      <div class="card-temp">📞°</div>
+      <div class="card-cond">Calling weather. High chance of unanswered.</div>
+    </div>
+    <div class="weather-card">
+      <div class="card-location">The Last Bean</div>
+      <div class="card-icon">🫘</div>
+      <div class="card-temp">Bean°</div>
+      <div class="card-cond">Calm. Ontologically stable. Bean pressure: high.</div>
+    </div>
+    <div class="weather-card">
+      <div class="card-location">Inside Your Screen</div>
+      <div class="card-icon">📺</div>
+      <div class="card-temp">Hot</div>
+      <div class="card-cond">Very hot. You are looking directly at it.</div>
+    </div>
+    <div class="weather-card">
+      <div class="card-location">Horse Law Office</div>
+      <div class="card-icon">🐴</div>
+      <div class="card-temp">Neigh°</div>
+      <div class="card-cond">Professional climate. Hay showers 3–5pm.</div>
+    </div>
+    <div class="weather-card">
+      <div class="card-location">Under the Bed</div>
+      <div class="card-icon">🌑</div>
+      <div class="card-temp">—</div>
+      <div class="card-cond">No data. No sensors will go there.</div>
+    </div>
+  </div>
+
+  <div class="forecast-section">
+    <div class="section-title">7-DAY FORECAST — THE SPACE BEHIND YOUR FRIDGE</div>
+    <div class="forecast-row">
+      <div class="fc-day">Monday</div>
+      <div class="fc-icon">🌧</div>
+      <div class="fc-cond">Rain of chairs, moderate to heavy</div>
+      <div class="fc-temp">47° / 47°</div>
+    </div>
+    <div class="forecast-row">
+      <div class="fc-day">Tuesday</div>
+      <div class="fc-icon">😶‍🌫️</div>
+      <div class="fc-cond">Overcast with existential dread</div>
+      <div class="fc-temp">Wrong° / Wrong°</div>
+    </div>
+    <div class="forecast-row">
+      <div class="fc-day">Wednesday</div>
+      <div class="fc-icon">🌀</div>
+      <div class="fc-cond">Rotating guilt, 40mph</div>
+      <div class="fc-temp">Confused</div>
+    </div>
+    <div class="forecast-row">
+      <div class="fc-day">Thursday</div>
+      <div class="fc-icon">☀️</div>
+      <div class="fc-cond">Sunny. This is wrong. Do not trust Thursday.</div>
+      <div class="fc-temp">🚫</div>
+    </div>
+    <div class="forecast-row">
+      <div class="fc-day">Friday</div>
+      <div class="fc-icon">🫘</div>
+      <div class="fc-cond">Bean storm. Possible bean accumulation.</div>
+      <div class="fc-temp">Beaning°</div>
+    </div>
+    <div class="forecast-row">
+      <div class="fc-day">Weekend</div>
+      <div class="fc-icon">❓</div>
+      <div class="fc-cond">Unknown. We don't do weekends.</div>
+      <div class="fc-temp">N/A</div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Powered by <a href="birds.html">BirdNet™ Weather Surveillance Division</a> &nbsp;|&nbsp; All forecasts are legally binding fiction &nbsp;|&nbsp; <a href="index.html">← back</a>
+  </div>
+</body>
+</html>

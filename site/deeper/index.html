@@ -49,13 +49,11 @@
 
     .caustic {
       position: fixed; inset: 0; z-index: 2;
-      background: radial-gradient(ellipse 120px 40px at 30% 20%, rgba(126,207,255,.04), transparent),
-                  radial-gradient(ellipse 80px 30px at 70% 60%, rgba(126,207,255,.03), transparent),
-                  radial-gradient(ellipse 100px 35px at 50% 80%, rgba(126,207,255,.04), transparent);
-      animation: causticshift 8s ease-in-out infinite alternate;
+      background: repeating-linear-gradient(
+        0deg, transparent 0px, transparent 39px, rgba(126,207,255,.015) 39px, rgba(126,207,255,.015) 40px
+      );
       pointer-events: none;
     }
-    @keyframes causticshift { from{opacity:.5;transform:scale(1)} to{opacity:1;transform:scale(1.05)} }
 
     .content {
       position: relative;
@@ -92,8 +90,7 @@
     }
     .depth-fill {
       height: 10px;
-      background: linear-gradient(90deg, #004488, #0088cc);
-      border-radius: 3px;
+      background: #7ecfff;
       animation: deepen 3s ease-out forwards;
       width: 0;
     }
@@ -107,7 +104,6 @@
       padding: 30px;
       margin: 30px 0;
       text-align: left;
-      backdrop-filter: blur(4px);
       line-height: 1.9;
       color: #5ab0e8;
     }

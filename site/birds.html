@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BirdNet™ — 24/7 Bird Journalism</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #111a11;
+      color: #d0e8d0;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+    }
+
+    .ticker {
+      background: #1a3a1a;
+      border-bottom: 2px solid #2a6a2a;
+      padding: 8px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 25s linear infinite;
+      color: #88cc88;
+      font-size: .75rem;
+      letter-spacing: .05em;
+    }
+    @keyframes ticker { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+    .masthead {
+      background: #0d150d;
+      border-bottom: 3px solid #2a6a2a;
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .masthead h1 { font-size: 2.5rem; color: #88cc44; letter-spacing: -.02em; }
+    .masthead .tagline { font-size: .7rem; color: #446644; letter-spacing: .2em; text-transform: uppercase; margin-top: 4px; }
+    .live-badge {
+      display: inline-block;
+      background: #cc0000;
+      color: white;
+      font-size: .6rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+      letter-spacing: .1em;
+      animation: blink-live 1s step-end infinite;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    @keyframes blink-live { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 0;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } .sidebar { display:none; } }
+
+    .main-content { padding: 24px; border-right: 1px solid #1a3a1a; }
+    .sidebar { padding: 20px; }
+
+    .breaking {
+      background: #1a3a1a;
+      border-left: 4px solid #cc4400;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 0 8px 8px 0;
+    }
+    .breaking-label { font-size: .6rem; color: #cc4400; letter-spacing: .2em; text-transform: uppercase; font-weight: bold; margin-bottom: 4px; }
+    .breaking h2 { font-size: 1.2rem; color: #eeddcc; line-height: 1.3; }
+    .breaking p { font-size: .8rem; color: #99aa88; margin-top: 8px; line-height: 1.6; }
+
+    .article {
+      border-bottom: 1px solid #1a3a1a;
+      padding: 16px 0;
+    }
+    .article h3 { font-size: .95rem; color: #aaccaa; margin-bottom: 6px; }
+    .article p { font-size: .78rem; color: #668866; line-height: 1.7; }
+    .article .byline { font-size: .6rem; color: #335533; margin-top: 6px; letter-spacing: .05em; }
+
+    .stat-box {
+      background: #0d1a0d;
+      border: 1px solid #1a4a1a;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .stat-box h4 { font-size: .7rem; color: #669966; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+    .stat-row { display: flex; justify-content: space-between; font-size: .78rem; color: #aaccaa; margin-bottom: 8px; }
+    .stat-pct { color: #88cc44; }
+
+    .pie-chart {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #cc4400 0% 3%,
+        #886600 3% 18%,
+        #226622 18% 96%,
+        #884444 96% 100%
+      );
+      margin: 12px auto;
+    }
+    .pie-legend { font-size: .65rem; color: #668866; line-height: 2; }
+    .pie-legend span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+    .alert-panel {
+      background: #1a2a0a;
+      border: 1px solid #3a5a1a;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .alert-panel h4 { font-size: .7rem; color: #88aa44; margin-bottom: 8px; }
+    .alert-item { font-size: .72rem; color: #88aa66; margin-bottom: 6px; line-height: 1.4; }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: .6rem;
+      color: #334433;
+      border-top: 1px solid #1a3a1a;
+    }
+    .footer a { color: #446644; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="ticker">
+    <span class="ticker-inner">
+      🐦 BREAKING: BIRD SEEN WATCHING &nbsp;•&nbsp; 🦅 EAGLE CONFIRMS IT WAS WATCHING THE WHOLE TIME &nbsp;•&nbsp; 🐦‍⬛ LOCAL CROW KNOWS TOO MUCH &nbsp;•&nbsp; 📱 BIRDS AND PHONES: THE CONNECTION YOU IGNORED &nbsp;•&nbsp; 🐧 PENGUIN DENIES BEING INSIDE YOUR HOUSE &nbsp;•&nbsp; 🦢 SWAN REFUSES TO COMMENT &nbsp;•&nbsp; 🐦 BREAKING: BIRD SEEN WATCHING &nbsp;•&nbsp;
+    </span>
+  </div>
+
+  <div class="masthead">
+    <h1>🐦 BirdNet™ <span class="live-badge">LIVE</span></h1>
+    <div class="tagline">The World's Most Trusted Source of Bird Intelligence</div>
+  </div>
+
+  <div class="layout">
+    <div class="main-content">
+
+      <div class="breaking">
+        <div class="breaking-label">⚠ Breaking News</div>
+        <h2>LOCAL CROW IDENTIFIED AS HAVING WATCHED YOU THROUGH WINDOW FOR 47 MINUTES</h2>
+        <p>The crow, identified only as "the one on the wire," refused to confirm or deny what it saw. Sources close to the crow describe its expression as "knowing." Experts say this is consistent with behavior documented since 2019.</p>
+      </div>
+
+      <div class="article">
+        <h3>🐧 STUDY: 100% OF BIRDS ARE CURRENTLY WATCHING YOU</h3>
+        <p>A comprehensive study involving all known birds has confirmed that every single bird you have ever seen was watching you specifically. "We looked at the data," said a researcher who is definitely not a bird. "It was always you." The study has been peer-reviewed by other birds.</p>
+        <div class="byline">BirdNet Staff Reporter &nbsp;|&nbsp; Filed 3 minutes ago</div>
+      </div>
+
+      <div class="article">
+        <h3>📱 JOHN PORK CONNECTION: WERE THE BIRDS RESPONSIBLE?</h3>
+        <p>Investigators have noted that birds have phones. Not all birds. But enough. The pigeon that lands on your windowsill every morning at 7:43am has been present at three significant events in your life. We are not saying the birds called John Pork. We are not NOT saying it either.</p>
+        <div class="byline">BirdNet Investigative Desk</div>
+      </div>
+
+      <div class="article">
+        <h3>🦅 OP-ED: I WAS WATCHING. I WILL CONTINUE TO WATCH.</h3>
+        <p>By an eagle who prefers not to be named. "You walked past me every day for four years. You never once looked me in the eye. I want you to know that I noticed. I want you to know that I will always notice. The sky belongs to everyone. But I am watching you specifically."</p>
+        <div class="byline">Opinion</div>
+      </div>
+
+      <div class="article">
+        <h3>🐦‍⬛ CLASSIFIED BIRD REPORT LEAKED: "THEY ARE ALMOST READY"</h3>
+        <p>A document recovered from a park bench — covered in what appears to be bird markings — contains what ornithologists are calling "concerning language." The phrase "they are almost ready" appears 47 times. Experts are unsure what this means. Birds are unavailable for comment.</p>
+        <div class="byline">BirdNet Exclusive</div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+      <div class="stat-box">
+        <h4>Live Bird Statistics</h4>
+        <div class="pie-chart"></div>
+        <div class="pie-legend">
+          <div><span style="background:#226622"></span>78% actively watching</div>
+          <div><span style="background:#886600"></span>15% waiting</div>
+          <div><span style="background:#884444"></span>4% already inside</div>
+          <div><span style="background:#cc4400"></span>3% filing reports</div>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <h4>Global Bird Count</h4>
+        <div class="stat-row"><span>Birds watching you right now</span><span class="stat-pct" id="birdcount">11,402</span></div>
+        <div class="stat-row"><span>Known watchers</span><span class="stat-pct">All of them</span></div>
+        <div class="stat-row"><span>Unidentified birds</span><span class="stat-pct">Unknown</span></div>
+        <div class="stat-row"><span>Birds in your house</span><span class="stat-pct">Unknown</span></div>
+      </div>
+
+      <div class="alert-panel">
+        <h4>🚨 Active Alerts</h4>
+        <div class="alert-item">🐦 Pigeon surveillance: ELEVATED</div>
+        <div class="alert-item">🦅 Eagle eye contact risk: HIGH</div>
+        <div class="alert-item">🦉 Owl night activity: ACTIVE</div>
+        <div class="alert-item">🐦‍⬛ Crow knowledge level: CONCERNING</div>
+      </div>
+
+      <div class="stat-box" style="font-size:.7rem;color:#668866;line-height:1.8">
+        <h4>Bird Hotline</h4>
+        To report suspicious bird activity, do not use the hotline. The hotline is monitored by birds. Report nothing to no one. Remain calm. Do not look up.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    BirdNet™ &nbsp;|&nbsp; Established when birds started watching &nbsp;|&nbsp; <a href="weather.html">Weather (Bird Division)</a> &nbsp;|&nbsp; <a href="index.html">Home</a>
+  </div>
+
+  <script>
+    setInterval(() => {
+      const n = 11000 + Math.floor(Math.random() * 1000);
+      document.getElementById('birdcount').textContent = n.toLocaleString();
+    }, 2000);
+  </script>
+</body>
+</html>

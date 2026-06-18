@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waiting Room — Please Take a Number</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #e8e4d8;
+      color: #333;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ceiling-lights {
+      height: 12px;
+      background: repeating-linear-gradient(90deg, #f0eedd 0px, #f0eedd 80px, #fffef5 80px, #fffef5 82px);
+      border-bottom: 2px solid #ccc8bb;
+    }
+
+    .number-board {
+      background: #1a1a1a;
+      color: #ffcc00;
+      text-align: center;
+      padding: 16px;
+      font-size: 1.4rem;
+      letter-spacing: .1em;
+      font-family: 'Courier New', monospace;
+      border-bottom: 3px solid #000;
+    }
+    .now-serving { font-size: .7rem; color: #888; letter-spacing: .2em; margin-bottom: 4px; }
+    .number-display { font-size: 3rem; color: #ffcc00; font-weight: bold; animation: blink-num 2s step-end infinite; }
+    @keyframes blink-num { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+    .room-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 0;
+    }
+    @media(max-width:600px) { .room-layout{grid-template-columns:1fr} .info-panel{display:none} }
+
+    .seating-area {
+      padding: 24px;
+      border-right: 1px solid #ccc8bb;
+    }
+
+    .your-number {
+      background: #fff;
+      border: 2px solid #bbb;
+      border-radius: 4px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 2px 2px 0 #ccc;
+    }
+    .your-number h2 { font-size: .7rem; color: #888; letter-spacing: .2em; text-transform: uppercase; }
+    .your-number .num { font-size: 4rem; font-weight: bold; color: #1a1a1a; font-family: 'Courier New', monospace; }
+    .your-number .est { font-size: .7rem; color: #aaa; margin-top: 4px; }
+
+    .progress-section { margin-bottom: 24px; }
+    .progress-section h3 { font-size: .7rem; color: #888; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 8px; }
+    .progress-bar-bg {
+      background: #ddd;
+      border-radius: 3px;
+      height: 18px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #4a7a4a;
+      width: 0.1%;
+      transition: width 10s linear;
+    }
+    .progress-label { font-size: .65rem; color: #aaa; margin-top: 4px; }
+
+    .chairs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .chair {
+      background: #ddd8cc;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      padding: 10px 6px;
+      text-align: center;
+      font-size: .65rem;
+      color: #777;
+      line-height: 1.5;
+    }
+    .chair .occupant { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+    .chair.taken { background: #c8c4b4; }
+
+    .muzak {
+      background: #f0edd8;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: .72rem;
+      color: #777;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .muzak .dot { width: 8px; height: 8px; background: #4a7a4a; border-radius: 50%; animation: muz-pulse 1.5s ease-in-out infinite; }
+    @keyframes muz-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5)} }
+
+    .reveal-link {
+      display: none;
+      background: #fff;
+      border: 2px solid #4a7a4a;
+      border-radius: 4px;
+      padding: 14px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .reveal-link.visible { display: block; }
+    .reveal-link p { font-size: .75rem; color: #333; margin-bottom: 10px; }
+    .reveal-link a { color: #1a4a1a; font-size: .8rem; text-decoration: none; font-weight: bold; letter-spacing: .05em; }
+    .reveal-link a:hover { text-decoration: underline; }
+
+    .info-panel {
+      padding: 20px;
+      font-size: .72rem;
+      color: #666;
+      line-height: 1.8;
+    }
+    .info-panel h4 { font-size: .65rem; color: #888; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 8px; margin-top: 16px; }
+    .info-panel h4:first-child { margin-top: 0; }
+
+    .notice {
+      background: #fffacc;
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      font-size: .68rem;
+      color: #666;
+      margin: 10px 0;
+    }
+
+    .footer-strip {
+      background: #1a1a1a;
+      color: #555;
+      font-size: .6rem;
+      text-align: center;
+      padding: 10px;
+      letter-spacing: .1em;
+    }
+    .footer-strip a { color: #666; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="ceiling-lights"></div>
+
+  <div class="number-board">
+    <div class="now-serving">NOW SERVING</div>
+    <div class="number-display" id="serving">---</div>
+  </div>
+
+  <div class="room-layout">
+    <div class="seating-area">
+      <div class="your-number">
+        <h2>Your Number</h2>
+        <div class="num">∞</div>
+        <div class="est">Estimated wait: ∞ minutes<br>You may want to sit down.</div>
+      </div>
+
+      <div class="muzak">
+        <div class="dot"></div>
+        <span id="muzaktext">Now playing: "Gentle Hum" — The Office Sounds Orchestra, Vol. 4</span>
+      </div>
+
+      <div class="progress-section">
+        <h3>Queue Progress</h3>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progbar"></div></div>
+        <div class="progress-label" id="proglabel">Processing your request... 0.0%</div>
+      </div>
+
+      <div class="notice">
+        📋 Please do not approach the window until your number is called. The window may not exist. Please continue waiting.
+      </div>
+
+      <h3 style="font-size:.7rem;color:#888;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;margin-top:16px">Others Waiting</h3>
+      <div class="chairs">
+        <div class="chair taken"><span class="occupant">🐴</span>Horse<br>(legally here)</div>
+        <div class="chair taken"><span class="occupant">🫘</span>A Bean<br>(no appointment)</div>
+        <div class="chair"><span class="occupant">👤</span>Empty<br>(or is it)</div>
+        <div class="chair taken"><span class="occupant">🧑‍💼</span>Definitely<br>not Tim Cheese</div>
+        <div class="chair"><span class="occupant">💺</span>Occupied<br>(something)</div>
+        <div class="chair taken"><span class="occupant">👁️</span>Watching<br>(waiting)</div>
+        <div class="chair"><span class="occupant">📞</span>Missed<br>Call</div>
+        <div class="chair taken"><span class="occupant">🐷</span>John Pork<br>(waited 47s)</div>
+      </div>
+
+      <div class="reveal-link" id="revealbox">
+        <p>Your session has been processed. Please proceed.</p>
+        <a href="mirror.html">→ Proceed to the Next Room</a>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <h4>Office Hours</h4>
+      Monday–Monday: Open<br>
+      Tuesday: Unclear<br>
+      Weekends: The office does not acknowledge weekends.
+
+      <h4>Acceptable Items</h4>
+      ✓ A form of ID<br>
+      ✓ Patience (not included)<br>
+      ✓ Beans (limited)<br>
+      ✗ Questions<br>
+      ✗ Hopes
+
+      <h4>Services Available</h4>
+      Form filing<br>
+      Re-filing<br>
+      Filing the re-file<br>
+      Waiting<br>
+      Continued waiting
+
+      <h4>Your Rights</h4>
+      You do not have rights in this waiting room. You have a number. That number is ∞. Please hold.
+
+      <h4>Notices</h4>
+      The snack machine has been out of order since The Incident of 2019. It is still being investigated.
+    </div>
+  </div>
+
+  <div class="footer-strip">
+    Department of Indefinite Processing &nbsp;|&nbsp; <a href="shop.html">← Back to Shop</a> &nbsp;|&nbsp; <a href="index.html">Home</a>
+  </div>
+
+  <script>
+    const muzakTracks = [
+      '"Gentle Hum" — Office Sounds Orchestra, Vol. 4',
+      '"Please Hold" — The Waiting Ensemble',
+      '"Your Call is Important To Us" — Jazz Quartet',
+      '"Almost There" — 47 Minutes (Instrumental)',
+      '"The Form Is Nearly Processed" — Piano',
+      '"∞" — Unknown Artist',
+    ];
+    let mt = 0;
+    setInterval(() => {
+      mt = (mt+1) % muzakTracks.length;
+      document.getElementById('muzaktext').textContent = 'Now playing: ' + muzakTracks[mt];
+    }, 8000);
+
+    // Serving number slowly increments but never reaches ∞
+    const servingNumbers = ['---','001','001','002','002','002','003'];
+    let si = 0;
+    setInterval(() => {
+      if (si < servingNumbers.length - 1) si++;
+      document.getElementById('serving').textContent = servingNumbers[si];
+    }, 15000);
+
+    // Progress bar creeps
+    let pct = 0;
+    const bar = document.getElementById('progbar');
+    const lbl = document.getElementById('proglabel');
+    const tick = setInterval(() => {
+      pct += 0.4;
+      if (pct > 99.9) { pct = 99.9; clearInterval(tick); }
+      bar.style.width = pct + '%';
+      lbl.textContent = 'Processing your request... ' + pct.toFixed(1) + '%';
+
+      if (pct >= 99.9) {
+        lbl.textContent = 'COMPLETE — Please proceed.';
+        document.getElementById('revealbox').classList.add('visible');
+      }
+    }, 1500);
+  </script>
+</body>
+</html>

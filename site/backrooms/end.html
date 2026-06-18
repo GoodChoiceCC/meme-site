@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEVEL ∞</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #b8b480;
+      color: #2a2800;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      overflow: hidden;
+      transition: background 60s;
+    }
+
+    /* Perpetual flicker — Level ∞ */
+    .light-overlay {
+      position:fixed; inset:0; pointer-events:none; z-index:999;
+      background: rgba(255,255,220,.08);
+      animation: inf-flicker .15s step-end infinite;
+    }
+    @keyframes inf-flicker {
+      0%,100%{opacity:1}
+      5%{opacity:.4}
+      6%{opacity:1}
+      27%{opacity:.7}
+      28%{opacity:1}
+      63%{opacity:0}
+      64%{opacity:1}
+      89%{opacity:.6}
+      90%{opacity:1}
+    }
+
+    /* The infinite corridor — CSS perspective illusion */
+    .corridor {
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      pointer-events:none;
+    }
+    .corridor-lines {
+      position:absolute;
+      width:100%; height:100%;
+      background:
+        linear-gradient(to bottom right, rgba(0,0,0,.05) 0%, transparent 50%),
+        linear-gradient(to bottom left, rgba(0,0,0,.05) 0%, transparent 50%),
+        repeating-linear-gradient(to right, transparent 0px, transparent 119px, rgba(0,0,0,.08) 119px, rgba(0,0,0,.08) 120px),
+        repeating-linear-gradient(to bottom, transparent 0px, transparent 59px, rgba(0,0,0,.05) 59px, rgba(0,0,0,.05) 60px);
+    }
+    .vanishing-point {
+      width:4px; height:4px; background:#5a5800;
+      border-radius:50%;
+      box-shadow: 0 0 40px 20px rgba(90,88,0,.3);
+    }
+
+    .content {
+      position:relative; z-index:10;
+      min-height:100vh;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:40px 20px;
+      text-align:center;
+    }
+
+    .level-badge { font-size:.65rem; letter-spacing:.3em; text-transform:uppercase; color:#4a4820; margin-bottom:8px; }
+    h1 { font-size:3rem; color:#1a1800; margin-bottom:6px; letter-spacing:.1em; }
+    .sub { font-size:.75rem; color:#5a5830; margin-bottom:40px; }
+
+    .main-text { max-width:500px; }
+    p { font-size:.85rem; line-height:2.2; color:#3a3820; margin-bottom:14px; }
+
+    .counter-box {
+      background: rgba(0,0,0,.1);
+      border: 1px solid rgba(0,0,0,.15);
+      padding: 16px 30px;
+      margin: 24px 0;
+      display: inline-block;
+    }
+    .counter-box .clabel { font-size:.6rem; color:#5a5830; letter-spacing:.2em; text-transform:uppercase; margin-bottom:4px; }
+    .counter-box .cval { font-size:1.5rem; color:#1a1800; }
+
+    .things-you-passed {
+      margin: 20px 0;
+      font-size:.75rem;
+      color:#4a4820;
+      line-height:2.2;
+      text-align:left;
+      max-width:400px;
+    }
+    .things-you-passed li { list-style:none; }
+    .things-you-passed li::before { content:'→ '; color:#7a7840; }
+
+    .exit-attempt {
+      margin: 30px 0;
+      font-size:.8rem;
+      color:#2a2810;
+      line-height:2;
+    }
+
+    .home-btn {
+      display:inline-block;
+      background: #888060;
+      color: #f0edd8;
+      padding: 14px 32px;
+      text-decoration:none;
+      font-size:.8rem; letter-spacing:.2em; text-transform:uppercase;
+      border:none; cursor:pointer; font-family:inherit;
+      margin-top:20px;
+      transition: background .3s;
+      animation: home-pulse 4s ease-in-out infinite;
+    }
+    @keyframes home-pulse { 0%,100%{box-shadow:0 0 0 rgba(136,128,96,0)} 50%{box-shadow:0 0 20px rgba(136,128,96,.4)} }
+    .home-btn:hover { background:#6a6840; }
+
+    .walls-note {
+      position:fixed; top:50%; right:20px;
+      transform:translateY(-50%);
+      font-size:.5rem; color:#9a9860; writing-mode:vertical-rl;
+      letter-spacing:.1em; opacity:.4;
+    }
+
+    .room-counter {
+      position:fixed; bottom:16px; left:50%;
+      transform:translateX(-50%);
+      font-size:.55rem; color:#6a6840; letter-spacing:.1em;
+      white-space:nowrap;
+    }
+  </style>
+</head>
+<body id="thebody">
+  <div class="light-overlay"></div>
+
+  <div class="corridor">
+    <div class="corridor-lines"></div>
+    <div class="vanishing-point"></div>
+  </div>
+
+  <div class="walls-note" id="wallsnote">you have been walking for a very long time</div>
+
+  <div class="content">
+    <div class="main-text">
+      <div class="level-badge">Backrooms — Level ∞</div>
+      <h1>∞</h1>
+      <div class="sub">the counting stops here. the walls do not stop.</div>
+
+      <p>You have reached a level that does not have a number. This is because it does not have an end. The walls are the same yellow as Level 0. The carpet is the same moist carpet. The fluorescent lights are the same lights. But the corridors do not connect. They continue. They have always been continuing. You have walked into a place where "forward" is the only concept that still functions, and forward leads here, and here leads forward.</p>
+
+      <div class="counter-box">
+        <div class="clabel">Days in the Backrooms</div>
+        <div class="cval" id="daycount">∞</div>
+      </div>
+
+      <div class="counter-box" style="margin-left:12px">
+        <div class="clabel">Rooms Traversed</div>
+        <div class="cval" id="roomcount">calculating...</div>
+      </div>
+
+      <p>Level ∞ has no entities. Or: the entities are the rooms. Or: you have been here long enough that the distinction has stopped mattering.</p>
+
+      <ul class="things-you-passed" id="passedlist">
+        <li>Level 0: yellow walls, moist carpet</li>
+        <li>Level 1: pipes, survivor logs</li>
+        <li>Level 2: scratchers, emergency exits that weren't</li>
+        <li>Level 3: facelings, a terminal that knew you</li>
+        <li>Level 4: an office, October 14, 2019</li>
+        <li id="newitem" style="opacity:0">...</li>
+      </ul>
+
+      <div class="exit-attempt" id="exitattempt">
+        You have looked for an exit. Exits in the Backrooms are called "no-clip zones" — sections of wall that feel wrong, that your body can slip through if you move in exactly the right way. You have found <span id="noclipcount">0</span> in this level. You will find one eventually. Everyone finds one eventually. The question is what is on the other side.
+      </div>
+
+      <a href="../index.html" class="home-btn" id="homebtn">no-clip out →</a>
+    </div>
+  </div>
+
+  <div class="room-counter" id="roomcounterfooter">room ???,???,??? of ???,???,???</div>
+
+  <script>
+    // Build the hum — sustained
+    document.addEventListener('click', () => {
+      try {
+        const ctx = new AudioContext();
+        [60, 120, 180, 240].forEach((f,i) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = 'sawtooth'; o.frequency.value = f;
+          g.gain.value = [0.02, 0.007, 0.003, 0.001][i];
+          o.connect(g); g.connect(ctx.destination); o.start();
+        });
+      } catch(e){}
+    }, { once: true });
+
+    // Room count climbs
+    let roomct = 1000000;
+    setInterval(() => {
+      roomct += Math.floor(Math.random() * 50 + 10);
+      document.getElementById('roomcount').textContent = roomct.toLocaleString();
+      const r = roomct + Math.floor(Math.random()*1000);
+      const t = roomct * 600 + Math.floor(Math.random()*10000);
+      document.getElementById('roomcounterfooter').textContent =
+        `room ${r.toLocaleString()} of ${t.toLocaleString()}`;
+    }, 800);
+
+    // Day count (surreal)
+    const dayTexts = ['∞','∞','∞','∞','still ∞','∞','more than ∞','∞','∞','the number has stopped working'];
+    let di = 0;
+    setInterval(() => {
+      di = (di+1) % dayTexts.length;
+      document.getElementById('daycount').textContent = dayTexts[di];
+    }, 5000);
+
+    // Noclip count slowly rises
+    let noclips = 0;
+    setInterval(() => {
+      if (Math.random() > 0.7) {
+        noclips++;
+        document.getElementById('noclipcount').textContent = noclips;
+        if (noclips >= 1) {
+          document.getElementById('exitattempt').innerHTML =
+            document.getElementById('exitattempt').innerHTML.replace(
+              'You will find one eventually.',
+              'You found ' + noclips + '.'
+            );
+        }
+      }
+    }, 8000);
+
+    // Things you passed — add a new one
+    setTimeout(() => {
+      const el = document.getElementById('newitem');
+      el.style.opacity = '1';
+      el.textContent = 'Level ∞: it all looks the same now';
+    }, 15000);
+
+    // Walls note cycles
+    const wallNotes = [
+      'you have been walking for a very long time',
+      'the exit is the same distance away as it always was',
+      'level 0 is that way. it is also that way. and that way.',
+      'everyone who entered found a way out. eventually.',
+      'you will also find a way out.',
+    ];
+    let wi = 0;
+    setInterval(() => {
+      wi = (wi+1) % wallNotes.length;
+      document.getElementById('wallsnote').textContent = wallNotes[wi];
+    }, 7000);
+
+    // Background slowly returns to Level 0 yellow
+    setTimeout(() => {
+      document.getElementById('thebody').style.background = '#c8c480';
+    }, 1000);
+  </script>
+</body>
+</html>

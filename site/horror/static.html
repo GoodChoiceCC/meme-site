@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>////</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: monospace;
+      min-height: 100vh;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      opacity: 0.85;
+      mix-blend-mode: screen;
+    }
+
+    svg { display:none; }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      filter: url(#boil4) contrast(2) saturate(0.3);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #ff0000;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      mix-blend-mode: difference;
+      animation: static-glitch .05s step-end infinite;
+    }
+    @keyframes static-glitch {
+      0%,100%{transform:none;filter:none}
+      10%{transform:translate(4px,-2px);filter:hue-rotate(90deg)}
+      20%{transform:translate(-3px,1px)}
+      30%{transform:none}
+      60%{transform:translate(2px,3px);filter:hue-rotate(180deg)}
+      70%{transform:none;filter:none}
+    }
+
+    .signal-text {
+      font-size: .85rem;
+      color: #cc0000;
+      line-height: 2.2;
+      margin: 20px 0;
+      mix-blend-mode: lighten;
+    }
+    .signal-text span {
+      display: inline-block;
+      animation: char-static .1s step-end infinite;
+    }
+    @keyframes char-static {
+      0%,100%{opacity:1;transform:none}
+      50%{opacity:0.3;transform:translateY(2px)}
+    }
+
+    .broken-line {
+      width: 80%;
+      height: 1px;
+      background: #8b0000;
+      margin: 20px auto;
+      animation: line-break 2s step-end infinite;
+    }
+    @keyframes line-break {
+      0%,100%{width:80%;opacity:1}
+      25%{width:30%;opacity:.5}
+      50%{width:95%;opacity:.8}
+      75%{width:10%;opacity:.3}
+    }
+
+    .phone-msg {
+      font-size: 1.1rem;
+      color: #ff4444;
+      letter-spacing: .1em;
+      animation: phone-flicker .2s step-end infinite;
+      margin: 15px 0;
+    }
+    @keyframes phone-flicker {
+      0%,100%{opacity:1}
+      15%{opacity:0}
+      16%{opacity:1}
+      50%{opacity:.7}
+      80%{opacity:0}
+      81%{opacity:1}
+    }
+
+    .barely {
+      font-size: .65rem;
+      color: #330000;
+      margin-top: 40px;
+      letter-spacing: .15em;
+      mix-blend-mode: screen;
+      animation: barely-vis 3s ease-in-out infinite;
+    }
+    @keyframes barely-vis { 0%,100%{opacity:.3} 50%{opacity:.8} }
+
+    .next-link {
+      margin-top: 50px;
+      display: inline-block;
+      color: #1a0000;
+      font-size: .7rem;
+      text-decoration: none;
+      letter-spacing: .3em;
+      animation: show-link 20s forwards;
+      opacity: 0;
+    }
+    @keyframes show-link { 0%,85%{opacity:0} 100%{opacity:.6} }
+    .next-link:hover { color: #ff0000; opacity: 1 !important; }
+  </style>
+</head>
+<body>
+  <svg>
+    <filter id="boil4">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" seed="7" result="noise">
+        <animate attributeName="baseFrequency" values="0.04;0.05;0.035;0.045;0.04" dur="0.5s" repeatCount="indefinite"/>
+        <animate attributeName="seed" values="7;2;11;4;8;7" dur="0.3s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="60" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <canvas id="static-canvas"></canvas>
+
+  <div class="content">
+    <h1>SIGNAL LOST</h1>
+    <div class="broken-line"></div>
+
+    <div class="signal-text" id="signaltext">
+      he called because he knew.<br>
+      john pork called because he saw this coming.<br>
+      all the calls. every single one.<br>
+      were warnings.
+    </div>
+
+    <div class="broken-line"></div>
+
+    <div class="phone-msg">📞 MISSED CALL: JOHN PORK</div>
+    <div class="phone-msg" style="font-size:.75rem;animation-delay:-.1s">📞 MISSED CALL: JOHN PORK</div>
+    <div class="phone-msg" style="font-size:.65rem;animation-delay:-.05s;color:#880000">📞 MISSED CALL: JOHN PORK</div>
+
+    <div class="barely" id="barelytxt">you went too deep to receive calls</div>
+
+    <a href="end.html" class="next-link" id="nextlink">continue</a>
+  </div>
+
+  <script>
+    // TV static canvas
+    const canvas = document.getElementById('static-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function drawStatic() {
+      const imgData = ctx.createImageData(canvas.width, canvas.height);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const v = Math.random() * 80;
+        const red = Math.random() > 0.95 ? 120 : 0;
+        data[i] = v + red;
+        data[i+1] = v * 0.3;
+        data[i+2] = v * 0.3;
+        data[i+3] = 180;
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+
+    setInterval(drawStatic, 50);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    const signals = [
+      'he called because he knew.\njohn pork called because he saw this coming.\nall the calls. every single one.\nwere warnings.',
+      'the signal is degrading.\nyou are too far down.\nthe calls cannot reach here.\nhe is still trying.',
+      'static is just\nall the sounds at once.\nyou are the static now.',
+      'this is the last layer\nbefore the last layer.\ngo back.\nGO BACK.',
+    ];
+    let si = 0;
+    setInterval(() => {
+      si = (si+1) % signals.length;
+      document.getElementById('signaltext').innerHTML = signals[si].replace(/\n/g,'<br>');
+    }, 3000);
+
+    const barely = [
+      'you went too deep to receive calls',
+      'john pork cannot reach you here',
+      'nobody can reach you here',
+      'can you even reach yourself',
+    ];
+    let bi = 0;
+    setInterval(() => {
+      bi = (bi+1) % barely.length;
+      document.getElementById('barelytxt').textContent = barely[bi];
+    }, 4000);
+
+    // Make link visible sooner on click
+    document.addEventListener('click', () => {
+      const l = document.getElementById('nextlink');
+      l.style.animation = 'none';
+      l.style.opacity = '0.6';
+    });
+  </script>
+</body>
+</html>

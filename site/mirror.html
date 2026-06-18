@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Mirror</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #080808;
+      color: #d8d8d8;
+      font-family: Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .mirror-frame {
+      width: 320px;
+      border: 12px solid #2a2a2a;
+      border-radius: 50% / 30%;
+      position: relative;
+      margin-bottom: 30px;
+      box-shadow: 0 0 40px rgba(255,255,255,.04), inset 0 0 20px rgba(0,0,0,.5);
+    }
+    .mirror-surface {
+      background: #111111;
+      height: 260px;
+      border-radius: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .reflection-text {
+      font-size: 1rem;
+      color: rgba(220,220,240,.6);
+      text-align: center;
+      letter-spacing: .05em;
+      font-style: italic;
+      text-shadow: 0 0 10px rgba(200,200,255,.3);
+      transform: scaleX(-1);
+      filter: blur(0.3px);
+    }
+
+    .message {
+      text-align: center;
+      max-width: 360px;
+      padding: 0 20px;
+    }
+    .message h2 {
+      font-size: 1.2rem;
+      color: #e0e0f0;
+      letter-spacing: .05em;
+      margin-bottom: 16px;
+      font-weight: normal;
+    }
+    .message p {
+      font-size: .85rem;
+      color: #8888aa;
+      line-height: 2;
+      margin-bottom: 10px;
+    }
+
+    .phase-0 .main-message { color: #ccccdd; }
+    .phase-1 .main-message { color: #aaaacc; }
+    .phase-2 .main-message { color: #8888aa; }
+    .phase-3 .main-message { color: #6666aa; font-style: italic; }
+    .phase-4 .main-message { color: #aa6688; font-size: 1rem; }
+    .phase-5 .main-message { color: #cc4466; font-size: 1.1rem; letter-spacing: .1em; }
+
+    .subtle-link {
+      position: fixed;
+      bottom: 8px;
+      right: 10px;
+      color: #1e1e28;
+      text-decoration: none;
+      font-size: .55rem;
+      font-family: monospace;
+      letter-spacing: .05em;
+      transition: color .3s;
+    }
+    .subtle-link:hover { color: #555; }
+    .subtle-link.revealed { color: #2a2a3a; }
+
+    .back-link {
+      margin-top: 30px;
+      display: inline-block;
+      color: #3a3a5a;
+      text-decoration: none;
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #2a2a4a;
+      padding-bottom: 2px;
+      transition: color .3s;
+    }
+    .back-link:hover { color: #8888aa; }
+  </style>
+</head>
+<body id="thebody">
+  <div class="mirror-frame">
+    <div class="mirror-surface">
+      <div class="reflection-text" id="refltext">you look fine.</div>
+    </div>
+  </div>
+
+  <div class="message">
+    <h2 class="main-message" id="mainmsg">you look fine.</h2>
+    <p id="submsg">everything is normal. this is a mirror. mirrors show you as you are.</p>
+  </div>
+
+  <a href="waiting.html" class="back-link">← back to waiting room</a>
+  <a href="horror/index.html" class="subtle-link" id="hiddenlink">do not click</a>
+
+  <script>
+    const phases = [
+      {
+        delay: 0,
+        refl: 'you look fine.',
+        main: 'you look fine.',
+        sub: 'everything is normal. this is a mirror. mirrors show you as you are.',
+        cls: 'phase-0'
+      },
+      {
+        delay: 5000,
+        refl: 'you look... fine.',
+        main: 'you look... fine.',
+        sub: 'mirrors reflect light. that is all. this is just light.',
+        cls: 'phase-1'
+      },
+      {
+        delay: 10000,
+        refl: 'you look fine?',
+        main: 'you look fine?',
+        sub: 'the reflection is you. of course it is. who else would it be.',
+        cls: 'phase-2'
+      },
+      {
+        delay: 15000,
+        refl: 'who is fine',
+        main: 'who is fine',
+        sub: 'define fine. go ahead. we have time.',
+        cls: 'phase-3'
+      },
+      {
+        delay: 21000,
+        refl: 'THERE IS NO FINE',
+        main: 'THERE IS NO FINE',
+        sub: 'the mirror has been looking at you longer than you have been looking at it.',
+        cls: 'phase-4'
+      },
+      {
+        delay: 27000,
+        refl: 'stop looking',
+        main: 'stop looking.',
+        sub: 'you know what fine is now. you have always known. put the mirror down.',
+        cls: 'phase-5'
+      }
+    ];
+
+    phases.forEach(ph => {
+      setTimeout(() => {
+        document.getElementById('refltext').textContent = ph.refl;
+        document.getElementById('mainmsg').textContent = ph.main;
+        document.getElementById('submsg').textContent = ph.sub;
+        document.getElementById('thebody').className = ph.cls;
+      }, ph.delay);
+    });
+
+    // Reveal hidden link after phase 4
+    setTimeout(() => {
+      document.getElementById('hiddenlink').classList.add('revealed');
+    }, 22000);
+  </script>
+</body>
+</html>

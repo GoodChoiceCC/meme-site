@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEVEL 4 — THE ABANDONED OFFICE</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #d4cebc;
+      color: #3a3830;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+    }
+
+    /* Subtle flicker — office version */
+    .light-overlay {
+      position:fixed; inset:0; pointer-events:none; z-index:999;
+      animation: office-flicker 5s step-end infinite;
+      background: rgba(255,255,240,.05);
+    }
+    @keyframes office-flicker {
+      0%,100%{opacity:1}
+      40%{opacity:.95}
+      41%{opacity:.5}
+      42%{opacity:.95}
+      80%{opacity:1}
+      81%{opacity:.3}
+      82%{opacity:1}
+    }
+
+    /* Drop ceiling tiles */
+    .ceiling-tiles {
+      position:fixed; top:0; left:0; right:0; height:60px;
+      background: repeating-linear-gradient(
+        90deg,
+        #c0baa8 0px, #c0baa8 59px, #aaa898 59px, #aaa898 60px
+      );
+      border-bottom: 2px solid #999888;
+    }
+    .ceiling-tiles::after {
+      content:'';
+      position:absolute;
+      left:0; right:0; bottom:0; top:0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 29px, rgba(0,0,0,.06) 29px, rgba(0,0,0,.06) 30px
+      );
+    }
+    /* Office light fixtures in ceiling */
+    .office-light {
+      position:fixed; top:30px; height:20px;
+      background: #f0f0e0;
+      box-shadow: 0 0 15px rgba(240,240,200,.5), 0 0 40px rgba(220,220,160,.2);
+    }
+
+    .content {
+      position:relative; z-index:10;
+      padding: 90px 40px 60px;
+      max-width:700px; margin:0 auto;
+    }
+
+    .level-badge { font-size:.65rem; letter-spacing:.3em; text-transform:uppercase; color:#6a6850; margin-bottom:4px; }
+    h1 { font-size:1.8rem; color:#1a1810; margin-bottom:6px; }
+    .sub { font-size:.7rem; color:#8a8870; font-style:italic; margin-bottom:30px; }
+
+    p { font-size:.82rem; line-height:2; color:#4a4838; margin-bottom:14px; }
+
+    .desk-contents {
+      background: #c8c2b0;
+      border: 1px solid #b0a898;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .desk-contents h3 { font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:#6a6850; margin-bottom:10px; }
+    .desk-item { font-size:.76rem; color:#4a4838; margin-bottom:6px; line-height:1.6; }
+    .desk-item::before { content:'• '; color:#8a8870; }
+
+    .document {
+      background: #f0ece0;
+      border: 1px solid #c8c2b0;
+      padding: 20px;
+      margin: 20px 0;
+      font-size:.75rem;
+      line-height:1.9;
+      color:#3a3828;
+    }
+    .document .doc-header {
+      font-size:.6rem; letter-spacing:.15em; text-transform:uppercase;
+      color:#8a8870; border-bottom:1px solid #c8c2b0; margin-bottom:12px; padding-bottom:6px;
+      display:flex; justify-content:space-between;
+    }
+    .redacted {
+      background: #1a1810;
+      color: #1a1810;
+      padding: 0 4px;
+      user-select:none;
+    }
+
+    .calendar {
+      background: #f8f4e8;
+      border: 1px solid #c8c2b0;
+      display: inline-block;
+      padding: 10px 16px;
+      margin:12px 0;
+      text-align:center;
+    }
+    .calendar .month { font-size:.65rem; color:#8a8870; letter-spacing:.15em; text-transform:uppercase; }
+    .calendar .date { font-size:2rem; color:#1a1810; font-weight:bold; }
+    .calendar .year { font-size:.7rem; color:#8a8870; }
+
+    .something-at-desk {
+      background: #c0baa8;
+      border: 1px solid #a8a290;
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size:.78rem;
+      color:#3a3828;
+      line-height:1.9;
+    }
+    .something-at-desk h4 { color:#2a2818; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; margin-bottom:8px; }
+
+    .deja-vu {
+      border-top: 1px solid #b0a898;
+      border-bottom: 1px solid #b0a898;
+      padding: 12px 0;
+      margin: 20px 0;
+      font-size:.78rem;
+      color:#6a6850;
+      line-height:2;
+      font-style:italic;
+    }
+
+    .proceed-link {
+      display:inline-block; margin-top:30px;
+      background:#2a2818; color:#c8c2a8;
+      padding:12px 28px; text-decoration:none;
+      font-size:.8rem; letter-spacing:.15em; text-transform:uppercase;
+      transition:background .2s;
+    }
+    .proceed-link:hover { background:#1a1808; }
+
+    .stat-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0; }
+    .stat-box { background:#c0baa8; border:1px solid #a8a290; padding:10px 14px; font-size:.7rem; }
+    .stat-box .label { color:#6a6850; text-transform:uppercase; font-size:.58rem; letter-spacing:.1em; margin-bottom:4px; }
+    .stat-box .val { color:#2a2818; font-size:1rem; }
+
+    .phone {
+      display:inline-block;
+      background:#b8b2a0;
+      border:1px solid #a0998a;
+      padding:10px 16px;
+      font-size:.75rem;
+      cursor:pointer;
+      transition:background .2s;
+      color:#3a3828;
+    }
+    .phone:hover { background:#a8a290; }
+  </style>
+</head>
+<body>
+  <div class="light-overlay"></div>
+  <div class="ceiling-tiles"></div>
+  <div class="office-light" style="left:100px;width:140px"></div>
+  <div class="office-light" style="left:350px;width:140px"></div>
+  <div class="office-light" style="left:600px;width:140px"></div>
+
+  <div class="content">
+    <div class="level-badge">Backrooms — Level 4</div>
+    <h1>THE ABANDONED OFFICE</h1>
+    <div class="sub">everything here is almost normal. this is the most frightening thing so far.</div>
+
+    <p>Level 4 is an office. Drop ceilings, carpet (drier than Level 0 — a mercy), cubicle walls in beige and a slightly different beige. The lights are fluorescent. The lights work. Everything in Level 4 works, in the sense that it functions. None of it makes sense in the sense that it should be here.</p>
+
+    <p>There is no noise except the lights. The phones are on the desks. The phones do not ring. You pick one up and there is a dial tone. You do not know who you would call. You put it down. The dial tone was not a dial tone. The dial tone had a rhythm that dials tones do not usually have.</p>
+
+    <div class="desk-contents">
+      <h3>Desk Contents — Cubicle #??? (your cubicle, apparently)</h3>
+      <div class="desk-item">A coffee mug. Still warm. You did not warm it.</div>
+      <div class="desk-item">A nameplate. Your name is not on it. A name is on it. You do not recognize the name. You feel like you should recognize the name.</div>
+      <div class="desk-item">47 sticky notes. All blank except one. The one says: "DON'T CHECK THE CALENDAR."</div>
+      <div class="desk-item">A computer. The screen is on. The screen shows a website you recognize.</div>
+    </div>
+
+    <p>You check the calendar. The sticky note said not to. You check it.</p>
+
+    <div>
+      <div class="calendar">
+        <div class="month">October</div>
+        <div class="date" id="caldate">14</div>
+        <div class="year">2019</div>
+      </div>
+      <p style="font-size:.75rem;color:#6a6850;margin-top:8px" id="caldesc">The calendar has not been changed since October 14, 2019. You feel that this is not a coincidence. You do not know what it is a coincidence with. The feeling remains.</p>
+    </div>
+
+    <div class="document">
+      <div class="doc-header">
+        <span>INTERNAL MEMO — DEPT. UNKNOWN</span>
+        <span>DATE: <span class="redacted">OCTOBER 14 2019</span></span>
+      </div>
+      <p>TO: All Staff</p>
+      <p>RE: <span class="redacted">THE INCIDENT</span></p>
+      <br>
+      <p>Following <span class="redacted">what happened on Tuesday</span>, the department has decided to implement new protocols regarding <span class="redacted">the room at the end of the corridor</span>. All staff are reminded that <span class="redacted">it</span> should not be approached, referenced in documentation, or <span class="redacted">looked at directly</span>.</p>
+      <br>
+      <p>The <span class="redacted">47</span> staff members who <span class="redacted">were present</span> are reminded of their NDA. The remaining staff are reminded that there were <span class="redacted">never</span> 47 staff members in this department.</p>
+      <br>
+      <p>Thank you for your continued <span class="redacted">cooperation</span>.</p>
+      <p>— Management (<span class="redacted">name not available</span>)</p>
+    </div>
+
+    <div class="something-at-desk">
+      <h4>Note: Something at the Corner Desk</h4>
+      There is something at the corner desk. It is sitting in the chair. It is the size and approximate shape of a person. It is facing away from you. It has been facing away from you since you entered the level. It has not moved. It appears to be doing paperwork. You cannot see what paperwork. You have decided not to see what paperwork.
+    </div>
+
+    <button class="phone" onclick="pickupPhone()">☎ Pick Up Phone</button>
+
+    <div class="deja-vu" id="dejavu">
+      you have the strong feeling you have been in this cubicle before. this is impossible. you have been in the backrooms for approximately <span id="timein">—</span>. you have not been to Level 4 before. the feeling does not care about this.
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="label">Level</div><div class="val">4 / ∞</div></div>
+      <div class="stat-box"><div class="label">Sanity</div><div class="val" id="san">—</div></div>
+      <div class="stat-box"><div class="label">The Thing at the Corner Desk</div><div class="val" id="thething">still there</div></div>
+      <div class="stat-box"><div class="label">Calendar Date</div><div class="val">Oct 14, 2019</div></div>
+    </div>
+
+    <p style="color:#5a5848;font-size:.78rem">There is a stairwell at the end of the office. The stairwell goes down. The fluorescent light in the stairwell is the only one in the building that is not working correctly. It is the only one in the building that is honest.</p>
+
+    <a href="end.html" class="proceed-link">descend — level ∞ →</a>
+  </div>
+
+  <script>
+    document.addEventListener('click', () => {
+      try {
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 60;
+        gain.gain.value = 0.015;
+        osc.connect(gain); gain.connect(ctx.destination); osc.start();
+      } catch(e){}
+    }, { once: true });
+
+    let san = 28;
+    setInterval(() => {
+      san = Math.max(0, san - 1.0);
+      document.getElementById('san').textContent = san.toFixed(1) + '%';
+    }, 1000);
+
+    let secs = 0;
+    setInterval(() => {
+      secs++;
+      const h = Math.floor(secs/3600);
+      const m = Math.floor((secs%3600)/60);
+      document.getElementById('timein').textContent = `${h}h ${m}m`;
+    }, 1000);
+
+    const things = ['still there','still there','still there','it moved slightly','still there','it is filing something','still there'];
+    let ti = 0;
+    setInterval(() => {
+      ti = (ti+1) % things.length;
+      document.getElementById('thething').textContent = things[ti];
+    }, 8000);
+
+    const caldates = ['14','14','14','15','14','14','14','14','14'];
+    let ci = 0;
+    setInterval(() => {
+      ci = (ci+1) % caldates.length;
+      document.getElementById('caldate').textContent = caldates[ci];
+      if (caldates[ci] === '15') {
+        document.getElementById('caldesc').textContent = 'The calendar changed. It now says October 15. Nobody changed it. You did not change it. The thing at the corner desk has not moved.';
+        setTimeout(() => {
+          document.getElementById('caldate').textContent = '14';
+          document.getElementById('caldesc').textContent = 'The calendar has not been changed since October 14, 2019.';
+        }, 4000);
+      }
+    }, 10000);
+
+    function pickupPhone() {
+      const msgs = [
+        'The dial tone has a rhythm.\n\nYou count the rhythm.\n\nIt is 47 beats per minute.\n\nYou put the phone down.',
+        'There is breathing on the line.\n\nYou do not say anything.\n\nThe breathing stops.\n\nSomething says your name.\n\nYou put the phone down.',
+        'The dial tone is gone.\n\nSomething is playing on the line.\n\nIt is the iPhone ringtone.\n\nIt plays once.\n\nThen there is silence.\n\nThen John Pork picks up.\n\n[the call disconnects]',
+        'You hear the office. The ambient hum.\n\nBut louder.\n\nLike the phone is connected to the same building but in a time when the building was full.\n\nYou can hear typing.\n\nVoices.\n\nSomeone laughing.\n\nOctober 14, 2019.',
+      ];
+      alert(msgs[Math.floor(Math.random() * msgs.length)]);
+    }
+  </script>
+</body>
+</html>

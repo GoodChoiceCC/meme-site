@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> </title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #000000;
+      color: #000;
+      font-family: monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    svg { display:none; }
+
+    .heart {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 8px; height: 8px;
+      background: #8b0000;
+      border-radius: 50%;
+      animation: heartbeat 1.2s ease-in-out infinite;
+      box-shadow: 0 0 20px #8b0000;
+    }
+    @keyframes heartbeat {
+      0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.4}
+      15%{transform:translate(-50%,-50%) scale(2.5);opacity:1}
+      30%{transform:translate(-50%,-50%) scale(1.5);opacity:.7}
+      45%{transform:translate(-50%,-50%) scale(2);opacity:.9}
+      60%{transform:translate(-50%,-50%) scale(1);opacity:.4}
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 40px;
+      filter: url(#boil5);
+    }
+
+    .line {
+      display: block;
+      font-size: .9rem;
+      letter-spacing: .15em;
+      color: #000;
+      margin: 12px 0;
+      opacity: 0;
+      transition: color 2s, opacity 2s;
+    }
+
+    .home-link {
+      display: block;
+      margin-top: 60px;
+      color: #0a0a0a;
+      text-decoration: none;
+      font-size: .6rem;
+      letter-spacing: .3em;
+      opacity: 0;
+      transition: opacity 3s, color .5s;
+    }
+    .home-link:hover { color: #555; }
+
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .final-msg {
+      position: fixed;
+      bottom: 20px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: .5rem;
+      color: #0a0000;
+      letter-spacing: .1em;
+      opacity: 0;
+      transition: opacity 5s;
+    }
+  </style>
+</head>
+<body>
+  <svg>
+    <filter id="boil5">
+      <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="5" seed="13" result="noise">
+        <animate attributeName="baseFrequency" values="0.025;0.03;0.02;0.028;0.025" dur="4s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="90" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <div class="noise-overlay"></div>
+  <div class="heart" id="heart"></div>
+
+  <div class="content">
+    <span class="line" id="l1">you went too deep.</span>
+    <span class="line" id="l2">there is nothing left to find here.</span>
+    <span class="line" id="l3">john pork tried to warn you.</span>
+    <span class="line" id="l4">the call was always about this.</span>
+    <span class="line" id="l5">tim cheese saw you coming.</span>
+    <span class="line" id="l6">the beans knew.</span>
+    <span class="line" id="l7">everyone knew.</span>
+    <span class="line" id="l8">except you.</span>
+    <br>
+    <span class="line" id="l9" style="font-size:1.3rem;letter-spacing:.3em">goodnight.</span>
+    <a href="../index.html" class="home-link" id="homelink">go home</a>
+  </div>
+
+  <div class="final-msg" id="finalmsg">if you can read this, you stayed too long. that's okay. john pork stayed too long too.</div>
+
+  <script>
+    const schedule = [
+      [1500, 'l1', '#1a0005'],
+      [3500, 'l2', '#200008'],
+      [5500, 'l3', '#330010'],
+      [7500, 'l4', '#440015'],
+      [9500, 'l5', '#550018'],
+      [11500, 'l6', '#660020'],
+      [13500, 'l7', '#880028'],
+      [15500, 'l8', '#aa0030'],
+      [18000, 'l9', '#cc0000'],
+      [21000, 'homelink', null],
+      [25000, 'finalmsg', null],
+    ];
+
+    schedule.forEach(([delay, id, color]) => {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        el.style.opacity = '1';
+        if (color) el.style.color = color;
+        if (id === 'homelink') el.style.color = '#1a1a1a';
+      }, delay);
+    });
+
+    // Heart beats faster as page progresses
+    let bpm = 1.2;
+    const heartEl = document.getElementById('heart');
+    setInterval(() => {
+      if (bpm > 0.4) {
+        bpm -= 0.05;
+        heartEl.style.animationDuration = bpm + 's';
+      }
+    }, 2000);
+
+    // Slow red seep on background
+    let redness = 0;
+    setInterval(() => {
+      redness = Math.min(redness + 0.3, 15);
+      document.body.style.background = `rgb(${redness},0,0)`;
+    }, 1000);
+  </script>
+</body>
+</html>

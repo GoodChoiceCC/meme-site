@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Daily Wrong — Established Incorrectly</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #f4f0e4;
+      color: #1a1a0a;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .masthead {
+      border-top: 4px solid #1a1a0a;
+      border-bottom: 4px solid #1a1a0a;
+      text-align: center;
+      padding: 12px 20px 16px;
+      margin: 16px 20px 0;
+      position: relative;
+    }
+    .masthead-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: .6rem;
+      color: #555;
+      margin-bottom: 4px;
+      letter-spacing: .05em;
+    }
+    .masthead h1 {
+      font-size: 3.5rem;
+      letter-spacing: -.02em;
+      line-height: 1;
+      font-style: italic;
+      margin: 4px 0;
+    }
+    .masthead .motto {
+      font-size: .72rem;
+      color: #444;
+      font-style: italic;
+      border-top: 1px solid #1a1a0a;
+      border-bottom: 1px solid #1a1a0a;
+      padding: 3px 0;
+      margin-top: 6px;
+    }
+
+    .layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 20px 40px;
+    }
+
+    .ruling-line { border: none; border-top: 1px solid #1a1a0a; margin: 12px 0; }
+    .ruling-line-thick { border: none; border-top: 2px solid #1a1a0a; margin: 12px 0; }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 20px;
+    }
+    .weather-box {
+      font-size: .65rem;
+      color: #555;
+      border: 1px solid #aaa;
+      padding: 4px 8px;
+      min-width: 100px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .columns-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+    .columns-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 0; }
+    .col { padding: 0 14px; border-right: 1px solid #aaa; }
+    .col:first-child { padding-left: 0; }
+    .col:last-child { border-right: none; padding-right: 0; }
+
+    h2.headline { font-size: 1.5rem; line-height: 1.15; margin-bottom: 8px; }
+    h2.headline-sm { font-size: 1.1rem; line-height: 1.2; margin-bottom: 6px; }
+    h2.headline-lg { font-size: 2.2rem; line-height: 1.1; margin-bottom: 8px; }
+    .byline { font-size: .6rem; color: #666; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+    p.body-text { font-size: .78rem; line-height: 1.65; margin-bottom: 8px; text-align: justify; }
+    .drop-cap::first-letter { float:left; font-size: 3.5rem; line-height: .8; margin-right: 4px; font-weight: bold; }
+
+    .breakout {
+      border: 1px solid #1a1a0a;
+      padding: 10px 14px;
+      margin: 12px 0;
+      background: #eee8d0;
+    }
+    .breakout h4 { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+    .breakout p { font-size: .72rem; line-height: 1.6; }
+
+    .classifieds {
+      border: 1px solid #888;
+      padding: 10px 14px;
+      font-size: .65rem;
+      line-height: 1.8;
+      color: #333;
+    }
+    .classifieds h4 { font-size: .7rem; text-transform: uppercase; letter-spacing: .15em; border-bottom: 1px solid #888; margin-bottom: 6px; padding-bottom: 4px; }
+
+    .crossword-section { border: 1px solid #888; padding: 12px; }
+    .crossword-grid {
+      display: grid;
+      grid-template-columns: repeat(5,22px);
+      gap: 1px;
+      background: #1a1a0a;
+      border: 1px solid #1a1a0a;
+      width: fit-content;
+      margin-bottom: 8px;
+    }
+    .cw-cell {
+      width: 22px; height: 22px;
+      background: #f4f0e4;
+      font-size: .55rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cw-cell.black { background: #1a1a0a; }
+    .cw-clue { font-size: .65rem; line-height: 1.8; }
+    .cw-num { font-size: .45rem; position: relative; top: -5px; right: -2px; }
+
+    .footer-section {
+      border-top: 2px solid #1a1a0a;
+      margin-top: 20px;
+      padding-top: 10px;
+      font-size: .6rem;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+    }
+    .footer-section a { color: #333; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="masthead">
+      <div class="masthead-top">
+        <span>WEDNESDAY, PROBABLY</span>
+        <span>VOL. XLVII · NO. ??? · PRICE: UNCERTAIN</span>
+        <span>ESTABLISHED INCORRECTLY</span>
+      </div>
+      <h1>The Daily Wrong</h1>
+      <div class="motto">"All the news that's unfit to verify" &nbsp;|&nbsp; Printed on genuine paper-like substance</div>
+    </div>
+
+    <hr class="ruling-line" style="margin-top:12px">
+
+    <div class="top-bar">
+      <div style="font-size:.65rem;color:#555">INDEX: Beans A3 &nbsp;|&nbsp; Horse Law B7 &nbsp;|&nbsp; Tim Cheese: Every Page &nbsp;|&nbsp; Void: see page ∞ &nbsp;|&nbsp; John Pork Tribute: still page 1 in our hearts</div>
+      <div class="weather-box">WEATHER<br><strong>Wrong</strong><br><span style="font-size:.55rem">See <a href="weather.html">pg. W1</a></span></div>
+    </div>
+
+    <hr class="ruling-line-thick">
+
+    <div class="columns-2">
+      <div class="col">
+        <h2 class="headline-lg">LOCAL MAN REPORTS CHEESE WHERE CHEESE WASN'T; CHEESE DENIES EVERYTHING</h2>
+        <div class="byline">By Staff Correspondent &nbsp;|&nbsp; Crime &amp; Dairy Desk</div>
+        <p class="body-text drop-cap">A local man reported Tuesday that there was cheese somewhere it shouldn't have been. The cheese, identified by investigators as "the Tim Cheese variety," was unavailable for comment at press time, a behavior which investigators describe as "entirely consistent with Tim Cheese's profile."</p>
+        <p class="body-text">"I didn't put it there," the cheese is alleged to have said, through a representative who was also, according to sources, a cheese. Authorities have not ruled out the possibility that the representative and the cheese are the same cheese.</p>
+        <p class="body-text">The incident marks the 47th time this year that cheese has appeared where it was not expected. In 44 of those cases, the cheese was Tim Cheese. In the remaining three cases, investigators found evidence suggesting Tim Cheese had recently vacated the premises.</p>
+        <div class="breakout">
+          <h4>Official Statement from Tim Cheese</h4>
+          <p>"I was not at the location. I have never been at any location. I do not have locations. I am a mouse in glasses. I am not answering further questions."<br><em>— Tim Cheese, via written statement, Tuesday</em></p>
+        </div>
+      </div>
+
+      <div class="col">
+        <h2 class="headline">HORSE LAW FIRM WINS LANDMARK CASE AGAINST THE CONCEPT OF GRAVITY</h2>
+        <div class="byline">Legal Desk &nbsp;|&nbsp; <a href="horse.html">See full coverage: Horse Law, pg. H1</a></div>
+        <p class="body-text">Neigh &amp; Partners LLP secured a historic victory on Monday, successfully arguing before the Court of Abstract Concepts that gravity constitutes "unreasonable downward harassment" of their client, a chair that had fallen over. The ruling, delivered by Judge Horse (no relation), found in favor of the chair on all counts.</p>
+        <p class="body-text">"Gravity has been getting away with this for billions of years," said lead counsel Trot S. Whinny. "Today we say: enough." Gravity could not be reached for comment, as it does not have a phone.</p>
+        <hr class="ruling-line">
+        <h2 class="headline-sm">BEANS: ARE THEY REAL? EXPERTS DIVIDED</h2>
+        <div class="byline">Science &amp; Philosophy Desk</div>
+        <p class="body-text">A new study published in the Journal of Bean Ontology has reignited debate over the fundamental nature of beans. "They appear to be real," said one researcher. "But appearing to be real is not the same as being real." A second researcher, who is a bean, declined to take a position.</p>
+        <hr class="ruling-line">
+        <div class="classifieds">
+          <h4>Classifieds</h4>
+          <strong>LOST:</strong> One horse. Was attending law school. If found, do not approach — may be in the middle of oral arguments.<br>
+          <strong>FOR SALE:</strong> Air. Vintage 2019. Good condition. Asking price: your future.<br>
+          <strong>WANTED:</strong> Someone to answer the phone. Must be available immediately. No experience necessary. History of not answering is disqualifying.<br>
+          <strong>NOTICE:</strong> The 48th Dave has been located. He does not wish to be contacted.
+        </div>
+      </div>
+    </div>
+
+    <hr class="ruling-line-thick">
+
+    <div class="columns-3">
+      <div class="col">
+        <h2 class="headline-sm">JOHN PORK TRIBUTE ISSUE — STILL ONGOING SINCE APRIL 2023</h2>
+        <div class="byline">Culture &amp; Loss</div>
+        <p class="body-text">The Daily Wrong's tribute to John Pork, launched following his passing in April 2023 due to an unanswered call, entered its third year this week. We are still not over it. "He called," said this paper's editor. "We did not answer. We will print the tribute forever."</p>
+      </div>
+      <div class="col">
+        <h2 class="headline-sm">VOID ACCEPTING SUBMISSIONS; RESPONSE TIME: ETERNAL</h2>
+        <div class="byline">Community Notices</div>
+        <p class="body-text">The void has announced that it is once again accepting thoughts, regrets, and unsent messages. Submission is open to all. The void does not guarantee a response. The void has never responded to anything. The void will not start now. <a href="void.html">Submit here.</a></p>
+        <div class="crossword-section" style="margin-top:10px">
+          <div style="font-size:.65rem;font-weight:bold;margin-bottom:6px">CROSSWORD — by our puzzle editor (a horse)</div>
+          <div class="crossword-grid">
+            <div class="cw-cell"><span class="cw-num">1</span></div><div class="cw-cell"></div><div class="cw-cell black"></div><div class="cw-cell"><span class="cw-num">2</span></div><div class="cw-cell"></div>
+            <div class="cw-cell"></div><div class="cw-cell"></div><div class="cw-cell black"></div><div class="cw-cell"></div><div class="cw-cell"></div>
+            <div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div><div class="cw-cell black"></div>
+            <div class="cw-cell"><span class="cw-num">3</span></div><div class="cw-cell"></div><div class="cw-cell"></div><div class="cw-cell"></div><div class="cw-cell black"></div>
+            <div class="cw-cell"></div><div class="cw-cell"></div><div class="cw-cell"></div><div class="cw-cell"></div><div class="cw-cell black"></div>
+          </div>
+          <div class="cw-clue">
+            <strong>Across</strong><br>
+            1. A pig who called (4,4)<br>
+            2. Where beans live (6)<br>
+            3. Tim ___ (6)<br><br>
+            <strong>Down</strong><br>
+            1. What you didn't do (6)<br>
+            2. The number of Daves (2,5)
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <h2 class="headline-sm">BIRDS CONFIRM THEY WERE WATCHING THE ENTIRE TIME</h2>
+        <div class="byline">Science · <a href="birds.html">Full BirdNet™ Coverage</a></div>
+        <p class="body-text">In a rare public statement, a crow confirmed Wednesday that it has been watching you specifically since at least 2019. The crow described the experience as "informative." When asked what it had observed, the crow said "everything" and flew away before follow-up questions could be asked.</p>
+        <hr class="ruling-line">
+        <h2 class="headline-sm">STOCK REPORT: BEANS UP; CHAIRS DOWN; GRAVITY UNDER APPEAL</h2>
+        <div class="byline">Finance</div>
+        <p class="body-text">Bean futures surged 47% on Thursday following the publication of a philosophical paper confirming that beans may be real. Chair stocks fell sharply following the gravity ruling. Gravity itself is currently untraded, pending legal review.</p>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <span>The Daily Wrong is printed on days that exist. © All rights wrong. <a href="legal.html">Legal</a></span>
+      <span><a href="timcheese.html">Tim Cheese Investigation</a> &nbsp;|&nbsp; <a href="index.html">Home</a></span>
+    </div>
+  </div>
+</body>
+</html>

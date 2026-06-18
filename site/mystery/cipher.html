@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cipher Decode — Case #0047</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #1a1510;
+      color: #c8b898;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+    .page-header {
+      background: #c8a860;
+      width: 100%; max-width: 800px;
+      padding: 10px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2px;
+    }
+    .page-header .left { font-size:.7rem; color:#6a5020; }
+    .page-header .title { font-size:.95rem; color:#1a1008; font-weight:bold; }
+    .page-header .right { font-size:.65rem; color:#8a7030; }
+
+    .instructions {
+      background: #2a2018; border:1px solid #3a3020;
+      padding: 12px 16px; font-size:.75rem; color:#a89878;
+      width:100%; max-width:800px; margin-bottom:10px; line-height:1.8;
+    }
+
+    .phone-screen {
+      background: #0a0a18;
+      border: 3px solid #3a3020;
+      border-radius: 12px;
+      width: 100%; max-width: 800px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+    .phone-header { font-size:.6rem; color:#4a4a6a; letter-spacing:.2em; text-transform:uppercase; margin-bottom:8px; }
+    .phone-contact { font-size:.8rem; color:#6868aa; margin-bottom:6px; }
+
+    .encoded-msg {
+      background: #050510;
+      border: 1px solid #2a2a50;
+      padding: 14px 18px;
+      font-size: 1.1rem;
+      letter-spacing: .18em;
+      color: #8888cc;
+      word-break: break-all;
+      line-height: 2.5;
+      margin: 10px 0;
+      position: relative;
+    }
+    .encoded-msg span.known { color: #88cc88; }
+    .encoded-msg span.unknown { color: #8888cc; cursor: pointer; border-bottom: 1px dotted #4444aa; }
+    .encoded-msg span.active { color: #ffcc44; border-bottom: 1px solid #ffcc44; }
+
+    /* Cipher wheel */
+    .cipher-key {
+      background: #e8d8a8;
+      border: 2px solid #8a7030;
+      padding: 14px;
+      margin: 10px 0;
+      width: 100%; max-width: 800px;
+    }
+    .cipher-key h4 { font-size:.6rem; color:#6a5028; letter-spacing:.2em; text-transform:uppercase; margin-bottom:10px; }
+    .cipher-row { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
+    .cipher-pair {
+      background: #c8b878;
+      border: 1px solid #a89050;
+      padding: 4px 6px;
+      font-size:.65rem;
+      color:#2a2010;
+      cursor: pointer;
+      min-width: 42px; text-align:center;
+      transition: background .15s;
+      user-select: none;
+    }
+    .cipher-pair:hover { background: #b8a868; }
+    .cipher-pair.selected { background: #3a5028; color: #c8e8a8; border-color: #6a8048; }
+    .cipher-pair .encoded { color: #8a7030; font-weight:bold; }
+    .cipher-pair .plain { color: #2a2010; }
+
+    .decode-area {
+      background: #f4eed8;
+      border: 2px solid #c8a860;
+      padding: 16px;
+      margin: 10px 0;
+      width: 100%; max-width: 800px;
+    }
+    .decode-area h4 { font-size:.6rem; color:#6a5028; letter-spacing:.2em; text-transform:uppercase; margin-bottom:10px; }
+    .decoded-display {
+      font-size: 1.1rem;
+      letter-spacing: .15em;
+      color: #1a1008;
+      min-height: 2.5rem;
+      border-bottom: 2px solid #a89050;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+    .char-slots { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:10px; }
+    .char-slot {
+      width:24px; height:32px;
+      border-bottom: 2px solid #8a7030;
+      display:flex; align-items:flex-end; justify-content:center;
+      font-size:.9rem; color:#1a1008; padding-bottom:2px;
+      position:relative;
+    }
+    .char-slot.space { border-bottom-color:transparent; width:12px; }
+    .char-slot .hint { position:absolute; top:-16px; font-size:.45rem; color:#c8a860; }
+    .char-slot.solved { color: #2a5820; }
+    .char-slot.wrong { background: #5a1010; color: #ee8888; animation: shake .3s; }
+    @keyframes shake { 0%,100%{transform:none} 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+
+    .submit-row { display:flex; gap:8px; margin-top:8px; }
+    .action-btn {
+      background:#2a2010; color:#c8b880; border:none; padding:10px 20px;
+      font-family:inherit; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+      cursor:pointer; transition:background .2s;
+    }
+    .action-btn:hover { background:#3a3020; }
+    .action-btn.clear { background:#3a1810; color:#e89878; }
+    .action-btn.clear:hover { background:#4a2820; }
+
+    .hint-box { background:#2a2018; border:1px solid #3a3020; padding:10px 14px; font-size:.72rem; color:#a89878; line-height:1.7; margin-top:8px; }
+
+    .success-panel {
+      background: #1a2a18;
+      border: 2px solid #4a8040;
+      padding: 20px;
+      margin: 10px 0;
+      width: 100%; max-width:800px;
+      display:none;
+      text-align:center;
+    }
+    .success-panel h3 { color:#88cc66; font-size:1rem; margin-bottom:10px; }
+    .success-panel p { font-size:.78rem; color:#88aa70; line-height:1.9; }
+    .success-panel .decoded-final { font-size:1.2rem; color:#c8e8a8; margin:12px 0; letter-spacing:.1em; }
+
+    .nav-bar {
+      display:flex; justify-content:space-between; align-items:center;
+      width:100%; max-width:800px; margin-top:8px;
+    }
+    .nav-bar a { font-size:.65rem; color:#6a5828; text-decoration:none; }
+    .nav-bar a:hover { color:#c8b880; }
+    .proceed-btn {
+      background:#2a2010; color:#c8b880; border:none; padding:10px 24px;
+      font-family:inherit; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase;
+      cursor:pointer; text-decoration:none; display:inline-block;
+      opacity:.4; pointer-events:none; transition:opacity .3s, background .2s;
+    }
+    .proceed-btn.active { opacity:1; pointer-events:all; }
+    .proceed-btn.active:hover { background:#3a3020; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div class="left">◀ <a href="index.html" style="color:#6a5020;text-decoration:none">Case File</a></div>
+    <div class="title">DECRYPT JOHN PORK'S LAST MESSAGE</div>
+    <div class="right">Step 3 of 5</div>
+  </div>
+
+  <div class="instructions">
+    John Pork's phone contains one outgoing message, sent 11 minutes before time of death. It is encoded. The cipher key was found on a napkin near the body. Click a cipher pair to select it, then click the matching encoded character in the message to decode it.
+  </div>
+
+  <div class="phone-screen">
+    <div class="phone-header">📱 John Pork — Last Message Sent — 11:36 PM Apr 14, 2023</div>
+    <div class="phone-contact">To: Unknown Contact (saved as "🧀")</div>
+    <div class="encoded-msg" id="encodedmsg">
+      <!-- Rendered by JS -->
+    </div>
+    <div style="font-size:.55rem;color:#3a3a5a;margin-top:6px">Encrypted with Napkin Cipher v1</div>
+  </div>
+
+  <div class="cipher-key">
+    <h4>Cipher Key (Napkin — found at scene)</h4>
+    <div class="cipher-row" id="cipherrow"></div>
+  </div>
+
+  <div class="decode-area" id="decodearea">
+    <h4>Decoded Message</h4>
+    <div class="char-slots" id="charslots"></div>
+    <div class="hint-box" id="hintbox">Select a cipher pair above, then click the matching symbol in the encoded message above.</div>
+    <div class="submit-row">
+      <button class="action-btn" onclick="checkSolution()">Submit Decryption</button>
+      <button class="action-btn clear" onclick="clearDecoding()">Clear</button>
+    </div>
+  </div>
+
+  <div class="success-panel" id="successpanel">
+    <h3>✔ MESSAGE DECRYPTED</h3>
+    <div class="decoded-final" id="decodefinal"></div>
+    <p>John Pork's last words — a desperate warning to Tim Cheese. Or a threat? Or a goodbye? The message changes what we know about the night of April 14, 2023. Proceed to interviews for confirmation.</p>
+  </div>
+
+  <div class="nav-bar">
+    <a href="fingerprint.html">← Back to Fingerprints</a>
+    <a href="interview.html" class="proceed-btn" id="proceedbtn">Proceed to Interviews →</a>
+  </div>
+
+  <script>
+    // Cipher: each symbol maps to a letter. ATBASH-ish but readable
+    // Encoded message: "I KNOW WHAT YOU ATE" (about the cheese)
+    // Using fun symbol substitutions
+    const CIPHER = {
+      '◈':'I', '⚑':'K', '◉':'N', '⬡':'O', '⧖':'W',
+      '⬢':'A', '◍':'H', '✦':'T', '⬟':'Y','⟡':'U',
+      '⊞':'E', '★':'S', '⌖':'C', '✧':'D', '⬠':'G',
+    };
+    // Message: I KNOW WHAT YOU ATE
+    const ENCODED = '◈ ⚑◉⬡⧖ ⧖◍⬢✦ ⟡⬡⟡ ⬢✦⊞';
+    const ANSWER = 'I KNOW WHAT YOU ATE';
+
+    let decodedMap = {}; // symbol → guessed letter
+    let selectedPair = null;
+
+    function buildUI() {
+      // Encoded message display
+      const msgEl = document.getElementById('encodedmsg');
+      msgEl.innerHTML = ENCODED.split('').map(ch => {
+        if (ch === ' ') return '<span class="space"> </span>';
+        return `<span class="unknown" data-sym="${ch}" onclick="clickSym('${ch}')">${ch}</span>`;
+      }).join('');
+
+      // Cipher pairs (all 15 pairs)
+      const row = document.getElementById('cipherrow');
+      Object.entries(CIPHER).forEach(([sym, letter]) => {
+        const pair = document.createElement('div');
+        pair.className = 'cipher-pair';
+        pair.dataset.sym = sym;
+        pair.dataset.letter = letter;
+        pair.innerHTML = `<span class="encoded">${sym}</span> = <span class="plain">${letter}</span>`;
+        pair.addEventListener('click', () => selectPair(pair));
+        row.appendChild(pair);
+      });
+
+      // Decoded slots
+      buildSlots();
+
+      // Check if already done
+      if (localStorage.getItem('jpc_cipher') === 'done') {
+        document.getElementById('proceedbtn').classList.add('active');
+        showSuccess();
+      }
+    }
+
+    function buildSlots() {
+      const slots = document.getElementById('charslots');
+      slots.innerHTML = '';
+      const chars = ENCODED.split('');
+      chars.forEach(ch => {
+        const slot = document.createElement('div');
+        if (ch === ' ') {
+          slot.className = 'char-slot space';
+        } else {
+          slot.className = 'char-slot';
+          slot.dataset.sym = ch;
+          slot.innerHTML = `<span class="hint">${ch}</span>${decodedMap[ch] || ''}`;
+        }
+        slots.appendChild(slot);
+      });
+    }
+
+    function selectPair(el) {
+      document.querySelectorAll('.cipher-pair').forEach(p => p.classList.remove('selected'));
+      if (selectedPair === el.dataset.sym) { selectedPair = null; return; }
+      el.classList.add('selected');
+      selectedPair = el.dataset.sym;
+      document.getElementById('hintbox').textContent =
+        `Selected: "${el.dataset.sym}" = "${el.dataset.letter}" — now click that symbol in the encoded message above to decode it.`;
+    }
+
+    function clickSym(sym) {
+      if (!selectedPair) {
+        document.getElementById('hintbox').textContent = 'Select a cipher pair from the key first!';
+        return;
+      }
+      if (selectedPair === sym) {
+        decodedMap[sym] = CIPHER[sym];
+        buildSlots();
+        // Mark as known in encoded msg
+        document.querySelectorAll(`[data-sym="${sym}"]`).forEach(el => {
+          if (el.closest('#encodedmsg')) el.className = 'known';
+          else el.classList.add('solved');
+        });
+        document.getElementById('hintbox').textContent = `Decoded "${sym}" → "${CIPHER[sym]}"`;
+        selectedPair = null;
+        document.querySelectorAll('.cipher-pair').forEach(p => p.classList.remove('selected'));
+      } else {
+        document.getElementById('hintbox').textContent = `That symbol (${sym}) doesn't match the selected cipher pair (${selectedPair}). Try again.`;
+      }
+    }
+
+    function checkSolution() {
+      const decoded = ENCODED.split('').map(ch => ch === ' ' ? ' ' : (decodedMap[ch] || '?')).join('');
+      if (decoded === ANSWER) {
+        showSuccess();
+        localStorage.setItem('jpc_cipher', 'done');
+        const done = JSON.parse(localStorage.getItem('jpc_completed') || '[]');
+        if (!done.includes('cipher')) { done.push('cipher'); localStorage.setItem('jpc_completed', JSON.stringify(done)); }
+        document.getElementById('proceedbtn').classList.add('active');
+      } else {
+        const missing = ENCODED.split('').filter(ch => ch !== ' ' && !decodedMap[ch]).length;
+        document.getElementById('hintbox').textContent =
+          missing > 0 ? `Not done yet — ${missing} symbols still undecoded. Use all the cipher pairs.` :
+          `The decoding is complete but the answer isn't right. The message reads: "${decoded}" — double-check your pairs.`;
+      }
+    }
+
+    function showSuccess() {
+      document.getElementById('successpanel').style.display = 'block';
+      document.getElementById('decodefinal').textContent = ANSWER;
+    }
+
+    function clearDecoding() {
+      decodedMap = {};
+      buildSlots();
+      document.querySelectorAll('.unknown').forEach(el => el.className = 'unknown');
+      document.getElementById('hintbox').textContent = 'Cleared. Start again.';
+    }
+
+    buildUI();
+  </script>
+</body>
+</html>

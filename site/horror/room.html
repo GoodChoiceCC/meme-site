@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Room</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #0d0003;
+      color: #c88;
+      font-family: monospace;
+      min-height: 100vh;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    svg { display:none; }
+
+    .room-wrap {
+      filter: url(#boil2);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #6b0000;
+      letter-spacing: .15em;
+      animation: breathe 4s ease-in-out infinite;
+      margin-bottom: 30px;
+    }
+    @keyframes breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+
+    p {
+      font-size: .9rem;
+      line-height: 2.4;
+      color: #7a3038;
+      margin-bottom: 15px;
+      animation: drift 6s ease-in-out infinite;
+    }
+    p:nth-child(even) { animation-delay: -3s; }
+    @keyframes drift { 0%,100%{transform:translateX(0)} 50%{transform:translateX(3px)} }
+
+    .face {
+      font-size: 5rem;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      opacity: 0.03;
+      filter: url(#boil2) blur(3px);
+      animation: facepulse 5s ease-in-out infinite;
+      pointer-events: none;
+      user-select: none;
+    }
+    @keyframes facepulse { 0%,100%{opacity:.03;transform:translate(-50%,-50%) scale(1)} 50%{opacity:.06;transform:translate(-50%,-50%) scale(1.08)} }
+
+    .wall-text {
+      position: fixed;
+      font-size: .55rem;
+      color: #1a0005;
+      letter-spacing: .05em;
+      line-height: 1.4;
+      pointer-events: none;
+      user-select: none;
+    }
+    .wt1 { top: 10px; left: 10px; }
+    .wt2 { bottom: 10px; right: 10px; text-align:right; }
+    .wt3 { top: 50%; left: 8px; transform: translateY(-50%) rotate(-90deg); }
+
+    .red-line {
+      width: 1px;
+      height: 0;
+      background: #8b0000;
+      position: fixed;
+      top: 0;
+      left: 50%;
+      animation: redgrow 8s ease-in forwards;
+      opacity: 0.4;
+    }
+    @keyframes redgrow { from{height:0} to{height:100vh} }
+
+    .next-link {
+      display: inline-block;
+      margin-top: 50px;
+      color: #1a0005;
+      text-decoration: none;
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      transition: color .5s;
+    }
+    .next-link:hover { color: #cc0000; }
+
+    .flicker-text {
+      color: #4a0010;
+      font-size: .8rem;
+      animation: intense-flicker 0.15s step-end infinite;
+      margin: 20px 0;
+    }
+    @keyframes intense-flicker {
+      0%,30%,32%,64%,66%,98%,100% { opacity:1 }
+      31%,65% { opacity:0 }
+    }
+  </style>
+</head>
+<body>
+  <svg>
+    <filter id="boil2">
+      <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="3" seed="9" result="noise">
+        <animate attributeName="seed" values="9;11;7;13;9" dur="3s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <div class="face">👁️</div>
+  <div class="red-line"></div>
+
+  <div class="wall-text wt1">the room knows you're here<br>the room has always known<br>the room was waiting</div>
+  <div class="wall-text wt2">don't look at the corners<br>the corners are not<br>part of this room</div>
+  <div class="wall-text wt3">wrong direction wrong direction wrong direction</div>
+
+  <div class="room-wrap">
+    <h1>THE ROOM</h1>
+    <p>you are in the room now.</p>
+    <p>the room is the correct shape.</p>
+    <p>the walls are exactly where walls should be.</p>
+    <p id="wrongthing">do not look at the corners.</p>
+
+    <div class="flicker-text" id="flickertxt">something moved</div>
+
+    <p style="color:#300010;font-size:.8rem;margin-top:20px;">the room has one door.<br>it is not the door you came in through.</p>
+
+    <a href="bleed.html" class="next-link">find the door</a>
+  </div>
+
+  <script>
+    const wrong = [
+      'do not look at the corners.',
+      'the corners are moving.',
+      'there are five corners.',
+      'rooms have four corners.',
+      'count again.',
+      'do not count again.',
+    ];
+    const flicker = [
+      'something moved',
+      'it moved again',
+      'it is closer',
+      'it has always been this close',
+      'you moved. it moved with you.',
+    ];
+    let wi = 0, fi = 0;
+    setInterval(() => {
+      wi = (wi+1) % wrong.length;
+      document.getElementById('wrongthing').textContent = wrong[wi];
+    }, 2800);
+    setInterval(() => {
+      fi = (fi+1) % flicker.length;
+      document.getElementById('flickertxt').textContent = flicker[fi];
+    }, 4000);
+
+    // Randomly jolt elements
+    setInterval(() => {
+      const els = document.querySelectorAll('p');
+      const el = els[Math.floor(Math.random() * els.length)];
+      el.style.transform = `translateX(${(Math.random()-0.5)*20}px) translateY(${(Math.random()-0.5)*8}px)`;
+      setTimeout(() => el.style.transform = '', 200);
+    }, 1500);
+  </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evidence Board — Case #0047</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #1a1510;
+      color: #c8b898;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+    .page-header {
+      background: #c8a860;
+      width: 100%; max-width: 900px;
+      padding: 10px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2px;
+    }
+    .page-header .left { font-size:.7rem; color:#6a5020; }
+    .page-header .title { font-size:.95rem; color:#1a1008; font-weight:bold; }
+    .page-header .right { font-size:.65rem; color:#8a7030; }
+
+    .instructions {
+      background: #2a2018; border:1px solid #3a3020;
+      padding: 10px 16px; font-size:.75rem; color:#a89878;
+      width:100%; max-width:900px; margin-bottom:10px; line-height:1.7;
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+    .conn-count { font-size:.65rem; color:#c8b880; white-space:nowrap; }
+
+    .board-wrap {
+      position: relative;
+      width: 100%; max-width: 900px;
+      height: 520px;
+      background: #5a3820;
+      background-image:
+        repeating-linear-gradient(90deg, transparent 0, transparent 49px, rgba(0,0,0,.08) 49px, rgba(0,0,0,.08) 50px),
+        repeating-linear-gradient(transparent 0, transparent 49px, rgba(0,0,0,.06) 49px, rgba(0,0,0,.06) 50px);
+      border: 4px solid #3a2810;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    /* SVG overlay for strings */
+    #stringsvg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Pinned cards */
+    .pin-card {
+      position: absolute;
+      background: #f0ead8;
+      border: 1px solid #c8b890;
+      padding: 8px 10px;
+      width: 110px;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 2px 2px 6px rgba(0,0,0,.4), -1px -1px 0 rgba(255,255,255,.1);
+      transition: transform .15s, box-shadow .15s;
+      user-select: none;
+    }
+    .pin-card::before {
+      content: '📌';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.1rem;
+    }
+    .pin-card:hover { transform: rotate(0deg) scale(1.05); box-shadow: 3px 3px 10px rgba(0,0,0,.5); }
+    .pin-card.selected { outline: 3px solid #ee4444; box-shadow: 0 0 12px rgba(238,68,68,.5); transform: scale(1.05); }
+    .pin-card.connected { outline: 2px solid #88aa66; }
+    .pin-card .card-icon { font-size:1.4rem; text-align:center; margin-bottom:4px; }
+    .pin-card .card-label { font-size:.58rem; color:#2a1808; font-weight:bold; text-align:center; line-height:1.4; }
+    .pin-card .card-type { font-size:.5rem; color:#8a6840; text-align:center; margin-top:2px; text-transform:uppercase; letter-spacing:.1em; }
+
+    /* Rotate each card slightly */
+    .pin-card:nth-child(1) { transform: rotate(-2deg); }
+    .pin-card:nth-child(2) { transform: rotate(1.5deg); }
+    .pin-card:nth-child(3) { transform: rotate(-1deg); }
+    .pin-card:nth-child(4) { transform: rotate(3deg); }
+    .pin-card:nth-child(5) { transform: rotate(-2.5deg); }
+    .pin-card:nth-child(6) { transform: rotate(1deg); }
+    .pin-card:nth-child(7) { transform: rotate(-1.5deg); }
+    .pin-card:nth-child(8) { transform: rotate(2deg); }
+    .pin-card:nth-child(9) { transform: rotate(-3deg); }
+
+    .deduction-log {
+      background: #2a2018;
+      border: 1px solid #3a3020;
+      width: 100%; max-width: 900px;
+      padding: 10px 16px;
+      margin-bottom: 10px;
+      font-size: .72rem;
+      color: #a89878;
+      min-height: 48px;
+    }
+    .deduction-log h4 { font-size:.6rem; color:#8a7030; letter-spacing:.15em; text-transform:uppercase; margin-bottom:6px; }
+    .deduction-item { color: #88cc66; margin-bottom: 2px; }
+    .deduction-item::before { content:'→ '; }
+
+    .solved-banner {
+      background: #1a2a18;
+      border: 2px solid #4a8040;
+      padding: 16px 20px;
+      width: 100%; max-width:900px;
+      margin-bottom:10px;
+      display:none;
+      text-align:center;
+    }
+    .solved-banner h3 { color:#88cc66; font-size:1rem; margin-bottom:6px; }
+    .solved-banner p { font-size:.75rem; color:#88aa70; line-height:1.8; }
+
+    .nav-bar {
+      display:flex; justify-content:space-between; align-items:center;
+      width:100%; max-width:900px; margin-top:4px;
+    }
+    .nav-bar a { font-size:.65rem; color:#6a5828; text-decoration:none; }
+    .nav-bar a:hover { color:#c8b880; }
+    .proceed-btn {
+      background:#2a2010; color:#c8b880; border:none; padding:10px 24px;
+      font-family:inherit; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase;
+      cursor:pointer; text-decoration:none; display:inline-block;
+      opacity:.4; pointer-events:none; transition:opacity .3s, background .2s;
+    }
+    .proceed-btn.active { opacity:1; pointer-events:all; }
+    .proceed-btn.active:hover { background:#3a3020; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div class="left">◀ <a href="index.html" style="color:#6a5020;text-decoration:none">Case File</a></div>
+    <div class="title">EVIDENCE BOARD — CONNECT THE CLUES</div>
+    <div class="right">Step 5 of 5</div>
+  </div>
+
+  <div class="instructions">
+    <span>Click a card to select it (red outline), then click another card to connect them with a string. Connect all key evidence to the right suspects. You need at least 5 key connections to close the case.</span>
+    <span class="conn-count" id="conncount">0 connections</span>
+  </div>
+
+  <div class="board-wrap" id="board">
+    <svg id="stringsvg" xmlns="http://www.w3.org/2000/svg"></svg>
+    <!-- Cards positioned by JS -->
+  </div>
+
+  <div class="deduction-log">
+    <h4>Deductions</h4>
+    <div id="deductionlist">Connect evidence cards to unlock deductions.</div>
+  </div>
+
+  <div class="solved-banner" id="solvedbanner">
+    <h3>🔍 CASE CLOSED — The Connections Are Clear</h3>
+    <p>The evidence board is complete. The strings trace back to a single point. Proceed to the verdict.</p>
+  </div>
+
+  <div class="nav-bar">
+    <a href="interview.html">← Back to Interviews</a>
+    <a href="verdict.html" class="proceed-btn" id="proceedbtn">View Verdict →</a>
+  </div>
+
+  <script>
+    const CARDS = [
+      { id:'cheese',   icon:'🧀', label:'Cheddar Crumb',     type:'Evidence',  x:40,  y:60  },
+      { id:'footprint',icon:'👣', label:'Mouse Footprint',   type:'Evidence',  x:40,  y:200 },
+      { id:'feather',  icon:'🪶', label:'Black Feather',     type:'Evidence',  x:40,  y:340 },
+      { id:'phone',    icon:'📱', label:"Victim's Phone",    type:'Evidence',  x:200, y:130 },
+      { id:'note',     icon:'📝', label:'"47 Daves Present"',type:'Evidence',  x:200, y:280 },
+      { id:'timcheese',icon:'🐭', label:'Tim Cheese',        type:'Suspect',   x:570, y:80  },
+      { id:'thecrow',  icon:'🐦‍⬛',label:'The Crow',          type:'Suspect',   x:570, y:220 },
+      { id:'dave48',   icon:'👤', label:'The 48th Dave',     type:'Suspect',   x:570, y:360 },
+      { id:'silence',  icon:'📵', label:'The Silence',       type:'Motive',    x:380, y:400 },
+    ];
+
+    // Key connections that unlock deductions
+    const KEY_CONNECTIONS = {
+      'cheese-timcheese':  'Cheddar crumb → Tim Cheese: cheese residue matches Tim\'s prints from the lab.',
+      'footprint-timcheese': 'Mouse footprint → Tim Cheese: size and gait consistent with Tim\'s profile.',
+      'feather-thecrow':   'Black feather → The Crow: The Crow was present at the scene, watching.',
+      'phone-silence':     'Phone → The Silence: 47 missed calls. Nobody answered. The silence was the weapon.',
+      'note-dave48':       '"47 Daves" note → The 48th Dave: confirms he tried to warn John Pork.',
+      'timcheese-silence': 'Tim Cheese → The Silence: Tim Cheese did not answer. He knew. He chose not to.',
+      'thecrow-silence':   'The Crow → The Silence: The Crow watched and said nothing.',
+      'phone-timcheese':   "Victim's phone → Tim Cheese: the last outgoing message was sent to Tim's number.",
+    };
+
+    let connections = new Set(JSON.parse(localStorage.getItem('jpc_board') || '[]'));
+    let selectedCard = null;
+
+    const board = document.getElementById('board');
+    const svg = document.getElementById('stringsvg');
+    const deductionList = document.getElementById('deductionlist');
+
+    // Build cards
+    CARDS.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'pin-card';
+      el.id = 'card-' + c.id;
+      el.style.left = c.x + 'px';
+      el.style.top = c.y + 'px';
+      el.innerHTML = `<div class="card-icon">${c.icon}</div><div class="card-label">${c.label}</div><div class="card-type">${c.type}</div>`;
+      el.addEventListener('click', () => clickCard(c.id));
+      board.appendChild(el);
+    });
+
+    function clickCard(id) {
+      if (!selectedCard) {
+        selectedCard = id;
+        document.getElementById('card-' + id).classList.add('selected');
+      } else if (selectedCard === id) {
+        selectedCard = null;
+        document.getElementById('card-' + id).classList.remove('selected');
+      } else {
+        // Connect
+        const key = [selectedCard, id].sort().join('-');
+        document.getElementById('card-' + selectedCard).classList.remove('selected');
+        if (!connections.has(key)) {
+          connections.add(key);
+          localStorage.setItem('jpc_board', JSON.stringify([...connections]));
+        }
+        selectedCard = null;
+        renderStrings();
+        renderDeductions();
+        checkSolved();
+      }
+    }
+
+    function getCenter(id) {
+      const el = document.getElementById('card-' + id);
+      if (!el) return { x:0, y:0 };
+      return {
+        x: parseInt(el.style.left) + 55,
+        y: parseInt(el.style.top) + 50
+      };
+    }
+
+    function renderStrings() {
+      svg.innerHTML = '';
+      connections.forEach(key => {
+        const [a, b] = key.split('-');
+        const ca = getCenter(a);
+        const cb = getCenter(b);
+        if (!ca || !cb) return;
+        const isKey = !!KEY_CONNECTIONS[key];
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', ca.x); line.setAttribute('y1', ca.y);
+        line.setAttribute('x2', cb.x); line.setAttribute('y2', cb.y);
+        line.setAttribute('stroke', isKey ? '#cc3030' : '#8a6040');
+        line.setAttribute('stroke-width', isKey ? '2.5' : '1.5');
+        line.setAttribute('stroke-dasharray', isKey ? 'none' : '4 3');
+        line.setAttribute('opacity', isKey ? '0.9' : '0.5');
+        svg.appendChild(line);
+
+        // Mark connected cards
+        [a, b].forEach(id => {
+          const el = document.getElementById('card-'+id);
+          if (el) el.classList.add('connected');
+        });
+      });
+      document.getElementById('conncount').textContent = connections.size + ' connection' + (connections.size !== 1 ? 's' : '');
+    }
+
+    function renderDeductions() {
+      const found = [...connections].filter(k => KEY_CONNECTIONS[k]);
+      if (found.length === 0) {
+        deductionList.innerHTML = 'Connect evidence cards to unlock deductions.';
+        return;
+      }
+      deductionList.innerHTML = found.map(k =>
+        `<div class="deduction-item">${KEY_CONNECTIONS[k]}</div>`
+      ).join('');
+    }
+
+    function checkSolved() {
+      const keyFound = [...connections].filter(k => KEY_CONNECTIONS[k]).length;
+      if (keyFound >= 5) {
+        document.getElementById('solvedbanner').style.display = 'block';
+        document.getElementById('proceedbtn').classList.add('active');
+        const done = JSON.parse(localStorage.getItem('jpc_completed') || '[]');
+        if (!done.includes('board')) { done.push('board'); localStorage.setItem('jpc_completed', JSON.stringify(done)); }
+      }
+    }
+
+    // Init
+    renderStrings();
+    renderDeductions();
+    checkSolved();
+  </script>
+</body>
+</html>

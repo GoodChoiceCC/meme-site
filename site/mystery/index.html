@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case #0047 — The Murder of John Pork</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #1a1510;
+      color: #c8b898;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .folder {
+      background: #c8a860;
+      max-width: 680px;
+      width: 100%;
+      position: relative;
+      box-shadow: 6px 6px 0 #1a1510, 12px 12px 0 rgba(0,0,0,.3);
+    }
+    .folder-tab {
+      background: #b89850;
+      height: 24px;
+      width: 160px;
+      position: absolute;
+      top: -24px;
+      left: 20px;
+      font-size: .65rem;
+      letter-spacing: .2em;
+      color: #8a7030;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      text-transform: uppercase;
+    }
+    .folder-inner {
+      background: #e8d8a8;
+      margin: 12px;
+      padding: 30px 36px;
+      min-height: 500px;
+      position: relative;
+    }
+
+    /* Paper lines */
+    .folder-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(transparent 0px, transparent 27px, rgba(100,100,150,.12) 27px, rgba(100,100,150,.12) 28px);
+      pointer-events: none;
+    }
+
+    .stamp {
+      position: absolute;
+      border: 4px solid;
+      padding: 6px 12px;
+      font-size: .8rem;
+      font-weight: bold;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      transform: rotate(-12deg);
+      opacity: .85;
+    }
+    .stamp-unsolved { top: 20px; right: 20px; color: #cc2200; border-color: #cc2200; }
+    .stamp-confidential { bottom: 30px; right: 20px; color: #440044; border-color: #440044; transform: rotate(8deg); font-size:.65rem; }
+
+    .case-header {
+      border-bottom: 2px solid #8a7030;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .case-number { font-size: .6rem; color: #8a7030; letter-spacing: .2em; text-transform: uppercase; }
+    h1 { font-size: 1.6rem; color: #1a1208; margin: 4px 0; }
+    .case-date { font-size: .7rem; color: #6a5828; margin-top: 4px; }
+
+    .section { margin-bottom: 20px; }
+    .section h3 { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: #6a5828; margin-bottom: 8px; border-bottom: 1px solid #b8a870; padding-bottom: 3px; }
+    .section p { font-size: .8rem; line-height: 1.9; color: #2a2010; }
+
+    .evidence-list { font-size: .78rem; line-height: 2; color: #2a2010; }
+    .evidence-list li { list-style: none; }
+    .evidence-list li::before { content: '☐  '; color: #8a7030; }
+    .evidence-list li.found::before { content: '☑  '; color: #2a6020; }
+    .evidence-list li.found { text-decoration: line-through; color: #6a8a50; }
+
+    .suspects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .suspect-card {
+      background: #d8c890;
+      border: 1px solid #a89050;
+      padding: 10px;
+      text-align: center;
+      font-size: .7rem;
+      color: #2a2010;
+    }
+    .suspect-card .icon { font-size: 2rem; display: block; margin-bottom: 4px; }
+    .suspect-card .name { font-weight: bold; color: #1a1008; }
+    .suspect-card .status { color: #8a7030; font-size: .6rem; margin-top: 2px; }
+
+    .photo-strip {
+      position: absolute;
+      top: 16px;
+      right: 60px;
+      width: 90px;
+      background: #fff;
+      padding: 6px 6px 20px;
+      box-shadow: 2px 2px 4px rgba(0,0,0,.2);
+      transform: rotate(5deg);
+      font-size: .5rem;
+      color: #888;
+      text-align: center;
+    }
+    .photo-strip .photo-area { font-size: 3rem; margin-bottom: 4px; filter: grayscale(1) brightness(.7); }
+
+    .progress-bar-wrap {
+      background: #b8a870;
+      height: 6px;
+      margin: 12px 0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #2a6020;
+      transition: width .5s;
+    }
+    .progress-label { font-size: .6rem; color: #8a7030; }
+
+    .begin-btn {
+      display: block;
+      background: #2a2010;
+      color: #c8b880;
+      text-align: center;
+      padding: 14px;
+      text-decoration: none;
+      font-size: .85rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      margin-top: 24px;
+      transition: background .2s;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+    }
+    .begin-btn:hover { background: #3a3020; }
+
+    .paperclip {
+      position: absolute;
+      top: -8px;
+      left: 40px;
+      font-size: 1.4rem;
+      transform: rotate(20deg);
+      color: #888;
+    }
+
+    .reset-link { font-size:.55rem; color:#8a7030; text-align:center; display:block; margin-top:8px; cursor:pointer; }
+    .reset-link:hover { text-decoration:underline; }
+    .back-link { font-size:.55rem; color:#8a7030; text-align:center; display:block; margin-top:4px; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="folder">
+    <div class="folder-tab">Case #0047</div>
+    <div class="folder-inner">
+      <div class="paperclip">📎</div>
+      <div class="stamp stamp-unsolved">UNSOLVED</div>
+      <div class="stamp stamp-confidential">Confidential</div>
+
+      <div class="photo-strip">
+        <div class="photo-area">🐷</div>
+        VICTIM<br>PORK, J.
+      </div>
+
+      <div class="case-header">
+        <div class="case-number">Case File #0047 — Detective Division</div>
+        <h1>The Murder of John Pork</h1>
+        <div class="case-date">Date of Death: April 14, 2023 &nbsp;|&nbsp; Status: Open</div>
+      </div>
+
+      <div class="section">
+        <h3>Incident Summary</h3>
+        <p>At approximately 11:47 PM on April 14, 2023, John Pork (age: unknown, occupation: caller) was found unresponsive. Cause of death initially ruled as "unanswered calls." However, new evidence suggests foul play. A crumb of cheese was found at the scene. Nobody has answered questions about this cheese.</p>
+      </div>
+
+      <div class="section">
+        <h3>Persons of Interest</h3>
+        <div class="suspects-grid">
+          <div class="suspect-card">
+            <span class="icon">🐭</span>
+            <div class="name">Tim Cheese</div>
+            <div class="status">Primary suspect</div>
+          </div>
+          <div class="suspect-card">
+            <span class="icon">🐦‍⬛</span>
+            <div class="name">The Crow</div>
+            <div class="status">Was watching</div>
+          </div>
+          <div class="suspect-card">
+            <span class="icon">👤</span>
+            <div class="name">The 48th Dave</div>
+            <div class="status">Whereabouts unclear</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Case Progress</h3>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressbar" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progresslabel">0 / 5 steps completed</div>
+
+        <ul class="evidence-list" id="steplist" style="margin-top:10px">
+          <li id="step-scene">Crime scene investigation</li>
+          <li id="step-fingerprint">Fingerprint analysis</li>
+          <li id="step-cipher">Decrypt John Pork's last message</li>
+          <li id="step-interview">Suspect interviews</li>
+          <li id="step-board">Connect the evidence</li>
+        </ul>
+      </div>
+
+      <a href="scene.html" class="begin-btn" id="mainbtn">Begin Investigation →</a>
+      <span class="reset-link" onclick="resetCase()">reset case (lose all progress)</span>
+      <a href="../index.html" class="back-link">← back to main site</a>
+    </div>
+  </div>
+
+  <script>
+    const steps = ['scene','fingerprint','cipher','interview','board'];
+    const labels = {
+      scene: 'Crime scene investigation',
+      fingerprint: 'Fingerprint analysis',
+      cipher: "Decrypt John Pork's last message",
+      interview: 'Suspect interviews',
+      board: 'Connect the evidence'
+    };
+    const nextPages = {
+      scene: 'scene.html',
+      fingerprint: 'fingerprint.html',
+      cipher: 'cipher.html',
+      interview: 'interview.html',
+      board: 'board.html'
+    };
+
+    function getCompleted() {
+      try { return JSON.parse(localStorage.getItem('jpc_completed') || '[]'); } catch(e) { return []; }
+    }
+
+    function updateUI() {
+      const done = getCompleted();
+      const count = done.length;
+      document.getElementById('progressbar').style.width = (count / 5 * 100) + '%';
+      document.getElementById('progresslabel').textContent = count + ' / 5 steps completed';
+
+      steps.forEach(s => {
+        const el = document.getElementById('step-' + s);
+        if (done.includes(s)) el.classList.add('found');
+      });
+
+      // Find next incomplete step
+      const next = steps.find(s => !done.includes(s));
+      if (next) {
+        document.getElementById('mainbtn').href = nextPages[next];
+        document.getElementById('mainbtn').textContent = (count === 0 ? 'Begin Investigation' : 'Continue Investigation') + ' →';
+      } else {
+        document.getElementById('mainbtn').href = 'verdict.html';
+        document.getElementById('mainbtn').textContent = 'View Verdict →';
+        document.getElementById('mainbtn').style.background = '#3a6020';
+        document.querySelector('.stamp-unsolved').textContent = 'SOLVED';
+        document.querySelector('.stamp-unsolved').style.color = '#1a5010';
+        document.querySelector('.stamp-unsolved').style.borderColor = '#1a5010';
+      }
+    }
+
+    function resetCase() {
+      if (confirm('Reset all case progress?')) {
+        localStorage.removeItem('jpc_completed');
+        localStorage.removeItem('jpc_evidence');
+        localStorage.removeItem('jpc_lies');
+        localStorage.removeItem('jpc_board');
+        updateUI();
+      }
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>

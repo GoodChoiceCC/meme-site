@@ -3,170 +3,407 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JOHN PORK IS CALLING</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <title>GOODCHOICE. — A Private Members Club</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
-      background: #07000f;
+      background: #080808;
+      color: #e8e0d0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 48px;
+      border-bottom: 1px solid #1a1a1a;
+      background: #080808;
+    }
+    .nav-logo {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.1rem;
+      letter-spacing: .12em;
+      color: #e8e0d0;
+      font-style: italic;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-links a {
+      color: #888;
+      text-decoration: none;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: #e8e0d0; }
+    .nav-enquire {
+      border: 1px solid #3a3a3a;
+      padding: 9px 22px;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #e8e0d0 !important;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+    .nav-enquire:hover { border-color: #c8a860; background: #0f0f0f; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      overflow: hidden;
-      font-family: 'Creepster', cursive;
-      color: white;
+      text-align: center;
+      padding: 120px 48px 80px;
+      position: relative;
     }
-    .bg-pulse {
+    /* Subtle grain texture */
+    .hero::before {
+      content: '';
       position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse at center, #3a0050 0%, #07000f 70%);
-      animation: pulsebg 2s ease-in-out infinite;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
       z-index: 0;
     }
-    @keyframes pulsebg { 0%,100%{opacity:.4} 50%{opacity:1} }
+    .hero-content { position: relative; z-index: 1; }
 
-    .container { position:relative; z-index:10; text-align:center; padding:20px; }
-    .caller-info { font-size:1.1rem; letter-spacing:.3em; color:#aaa; margin-bottom:8px; text-transform:uppercase; }
-
-    .john-pork {
-      font-size:9rem;
-      display:block;
-      animation: shake .4s ease-in-out infinite;
-      margin: 10px 0;
-      filter: drop-shadow(0 0 20px #ff00aa);
+    .hero-eyebrow {
+      font-size: .65rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: #c8a860;
+      margin-bottom: 28px;
     }
-    @keyframes shake { 0%,100%{transform:rotate(-8deg) scale(1)} 50%{transform:rotate(8deg) scale(1.05)} }
-
-    .name {
-      font-size:3.5rem;
-      color:#ff69b4;
-      text-shadow: 0 0 20px #ff69b4, 0 0 60px #ff00ff;
-      animation: glow 1s ease-in-out infinite alternate;
+    .hero-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-style: italic;
+      font-weight: normal;
+      line-height: .92;
+      letter-spacing: -.01em;
+      color: #f0ece0;
+      margin-bottom: 32px;
     }
-    @keyframes glow { from{text-shadow:0 0 10px #ff69b4} to{text-shadow:0 0 30px #ff69b4,0 0 80px #ff00ff,0 0 120px #aa00aa} }
-
-    .subtitle { font-size:1.4rem; margin:8px 0 40px; color:#ccc; font-family:'Permanent Marker',cursive; }
-
-    .buttons { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; }
-
-    .btn-answer {
-      background: #00cc44;
-      color:white; border:none;
-      padding:20px 55px; font-size:1.5rem;
-      border-radius:50px; cursor:pointer;
-      font-family:inherit;
-      animation:bob 1s ease-in-out infinite;
-      box-shadow: 0 0 25px #00cc44;
-      text-decoration:none; display:inline-block;
+    .hero-name span { display: block; font-size: .4em; font-style: normal; letter-spacing: .2em; color: #666; margin-top: 14px; font-family: 'Helvetica Neue', Helvetica, sans-serif; }
+    .hero-tagline {
+      font-size: .9rem;
+      color: #666;
+      letter-spacing: .08em;
+      max-width: 420px;
+      line-height: 1.8;
+      margin: 0 auto 48px;
     }
-    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .hero-cta {
+      display: inline-block;
+      background: #c8a860;
+      color: #080808;
+      padding: 16px 48px;
+      font-size: .78rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    .hero-cta:hover { background: #e0c070; }
+    .hero-note { font-size: .6rem; color: #2a2a2a; margin-top: 14px; letter-spacing: .1em; }
 
-    .btn-decline {
-      background:#cc0000; color:white; border:none;
-      padding:20px 55px; font-size:1.5rem;
-      border-radius:50px; cursor:not-allowed;
-      font-family:inherit;
-      position:fixed;
-      transition: all 0.1s;
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      font-size: .55rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: #2a2a2a;
     }
 
-    .floater {
-      position:fixed; font-size:2rem;
-      animation:floatup linear infinite;
-      pointer-events:none; user-select:none; z-index:5;
+    /* ── SECTION BASE ── */
+    section { padding: 80px 48px; border-top: 1px solid #111; }
+    .section-label {
+      font-size: .6rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: #c8a860;
+      margin-bottom: 48px;
     }
-    @keyframes floatup { from{transform:translateY(110vh) rotate(0deg)} to{transform:translateY(-150px) rotate(720deg)} }
+    h2 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-style: italic;
+      font-weight: normal;
+      color: #f0ece0;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
 
-    .warning {
-      position:fixed; bottom:15px; right:15px;
-      font-size:.65rem; color:#333; font-family:monospace; text-align:right; z-index:20;
-      line-height:1.6;
+    /* ── PROGRAMME ── */
+    .programme { max-width: 900px; margin: 0 auto; }
+    .programme-intro { color: #666; font-size: .85rem; line-height: 1.8; max-width: 480px; margin-bottom: 48px; }
+    .event-list { display: flex; flex-direction: column; }
+    .event-row {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      align-items: center;
+      padding: 24px 0;
+      border-top: 1px solid #141414;
+      gap: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: background .15s;
     }
-    .warning a { color:#444; }
+    .event-row:last-child { border-bottom: 1px solid #141414; }
+    .event-row:hover .event-title { color: #c8a860; }
+    .event-day { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: #555; }
+    .event-title { font-family: Georgia, serif; font-size: 1.1rem; font-style: italic; color: #e8e0d0; }
+    .event-subtitle { font-size: .72rem; color: #555; margin-top: 3px; letter-spacing: .05em; }
+    .event-arrow { font-size: .8rem; color: #333; }
+    .event-row:hover .event-arrow { color: #c8a860; }
 
-    .miss-counter {
-      position:fixed; top:15px; left:15px;
-      font-size:.7rem; color:#440022; font-family:monospace; z-index:20;
+    /* ── MEMBERSHIP ── */
+    .membership { background: #0c0c0c; }
+    .membership-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    @media (max-width: 640px) { .membership-inner { grid-template-columns: 1fr; gap: 40px; } }
+    .membership p { color: #666; font-size: .85rem; line-height: 2; margin-bottom: 20px; }
+    .text-link {
+      display: inline-block;
+      font-size: .75rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #c8a860;
+      text-decoration: none;
+      border-bottom: 1px solid #3a2a10;
+      padding-bottom: 2px;
+      transition: border-color .2s;
     }
+    .text-link:hover { border-color: #c8a860; }
+    .membership-right { text-align: center; }
+    .big-number {
+      font-family: Georgia, serif;
+      font-size: 8rem;
+      font-style: italic;
+      color: #141414;
+      line-height: 1;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .big-number-label { font-size: .6rem; letter-spacing: .25em; text-transform: uppercase; color: #2a2a2a; }
+
+    /* ── ABOUT STRIP ── */
+    .about-strip { max-width: 900px; margin: 0 auto; }
+    .about-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; margin-top: 48px; }
+    @media (max-width: 720px) { .about-cols { grid-template-columns: 1fr; gap: 32px; } }
+    .about-col h3 { font-family: Georgia, serif; font-style: italic; font-size: 1rem; color: #c8a860; margin-bottom: 10px; font-weight: normal; }
+    .about-col p { font-size: .8rem; color: #555; line-height: 1.9; }
+    .about-col a { color: #4a3a1a; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; display: inline-block; margin-top: 12px; }
+    .about-col a:hover { color: #c8a860; }
+
+    /* ── FIND US ── */
+    .find-us { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+    .find-us-left p { color: #444; font-size: .85rem; line-height: 2; margin-top: 12px; max-width: 360px; }
+    .find-us-right { text-align: right; }
+    .address-block { font-size: .75rem; color: #333; line-height: 2; letter-spacing: .05em; margin-bottom: 16px; }
+    .directions-btn {
+      display: inline-block;
+      border: 1px solid #2a2a2a;
+      padding: 12px 28px;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #666;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+    }
+    .directions-btn:hover { border-color: #c8a860; color: #c8a860; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid #111;
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .footer-logo {
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: .9rem;
+      color: #333;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+    .footer-links a {
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #333;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: #888; }
+    .footer-copy { font-size: .6rem; color: #222; letter-spacing: .08em; }
   </style>
 </head>
 <body>
-  <div class="bg-pulse"></div>
 
-  <div class="container">
-    <div class="caller-info">📞 &nbsp; Incoming Call &nbsp; 📞</div>
-    <span class="john-pork">🐷</span>
-    <div class="name">JOHN PORK</div>
-    <div class="subtitle">is calling you right now</div>
-    <div class="buttons">
-      <a href="answered.html" class="btn-answer">📞 &nbsp;ANSWER</a>
-      <button class="btn-decline" id="decline">❌ &nbsp;Decline</button>
+  <nav>
+    <a href="#" class="nav-logo">Goodchoice.</a>
+    <div class="nav-links">
+      <a href="newspaper.html">Programme</a>
+      <a href="birds.html">Gallery</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="waiting.html" class="nav-enquire">Reserve</a>
     </div>
-  </div>
+  </nav>
 
-  <div class="miss-counter" id="misscnt"></div>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Est. 2023 &nbsp;·&nbsp; Members Only</div>
+      <div class="hero-name">
+        Goodchoice.
+        <span>A Private Members Club</span>
+      </div>
+      <p class="hero-tagline">An experience unlike anything you have been told to expect. We do not promise a good night. We promise <em>a</em> night.</p>
+      <a href="waiting.html" class="hero-cta">Reserve Your Evening</a>
+      <div class="hero-note">availability is limited &nbsp;·&nbsp; always</div>
+    </div>
+    <div class="scroll-hint">scroll to explore</div>
+  </section>
 
-  <div class="warning">
-    john pork died in april 2023<br>
-    because nobody answered his calls<br>
-    this is your chance to make it right<br><br>
-    <a href="legal.html">legal stuff nobody reads</a> &nbsp;|&nbsp;
-    <a href="about.html">about</a> &nbsp;|&nbsp;
-    <a href="timcheese.html" style="color:#553300">⚠ tim cheese</a>
-  </div>
+  <section>
+    <div class="programme">
+      <div class="section-label">This Week's Programme</div>
+      <h2>Upcoming<br>Events</h2>
+      <p class="programme-intro">A curated selection of evenings. Each one distinct. We do not repeat ourselves, except when we do, which is also intentional.</p>
+      <div class="event-list">
+        <a href="answered.html" class="event-row">
+          <div class="event-day">Friday</div>
+          <div>
+            <div class="event-title">The Reckoning</div>
+            <div class="event-subtitle">A night of answers — doors open 11pm</div>
+          </div>
+          <div class="event-arrow">→</div>
+        </a>
+        <a href="timcheese.html" class="event-row">
+          <div class="event-day">Saturday</div>
+          <div>
+            <div class="event-title">Charcuterie &amp; Sound</div>
+            <div class="event-subtitle">A tasting experience — guest appearance</div>
+          </div>
+          <div class="event-arrow">→</div>
+        </a>
+        <a href="void.html" class="event-row">
+          <div class="event-day">Sunday</div>
+          <div>
+            <div class="event-title">The Empty Room</div>
+            <div class="event-subtitle">An ambient evening — no support act</div>
+          </div>
+          <div class="event-arrow">→</div>
+        </a>
+        <a href="mystery/index.html" class="event-row">
+          <div class="event-day">Ongoing</div>
+          <div>
+            <div class="event-title">Crime Night</div>
+            <div class="event-subtitle">Interactive experience — case still open</div>
+          </div>
+          <div class="event-arrow">→</div>
+        </a>
+      </div>
+    </div>
+  </section>
 
-  <script>
-    // Decline button runs away
-    const btn = document.getElementById('decline');
-    let misses = 0;
-    btn.addEventListener('mouseenter', () => {
-      misses++;
-      document.getElementById('misscnt').textContent = `times you tried to decline: ${misses}`;
-      const maxX = window.innerWidth - 200;
-      const maxY = window.innerHeight - 80;
-      btn.style.left = Math.random() * maxX + 'px';
-      btn.style.top = Math.random() * maxY + 'px';
-    });
-    btn.addEventListener('click', () => {
-      alert('you cannot decline john pork.\n\nyou never could.');
-    });
+  <section class="membership">
+    <div class="membership-inner">
+      <div>
+        <div class="section-label">Membership</div>
+        <h2>Apply for<br>Access</h2>
+        <p>Membership to Goodchoice. is by application only. We consider each application on its individual merits. We have not yet defined what those merits are. The process is ongoing.</p>
+        <p>Current members describe the experience as "not what I expected" and "I am still processing this." We consider both to be endorsements.</p>
+        <a href="deep/index.html" class="text-link">Begin Application →</a>
+      </div>
+      <div class="membership-right">
+        <span class="big-number">∞</span>
+        <div class="big-number-label">Members (approx.)</div>
+      </div>
+    </div>
+  </section>
 
-    // Floating emojis
-    const emojis = ['🐷','📞','🐽','🥓','🧀','📱','🐖','💜'];
-    for (let i = 0; i < 18; i++) {
-      const el = document.createElement('div');
-      el.className = 'floater';
-      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.animationDuration = (6 + Math.random() * 12) + 's';
-      el.style.animationDelay = (-Math.random() * 18) + 's';
-      el.style.fontSize = (.8 + Math.random() * 2.5) + 'rem';
-      document.body.appendChild(el);
-    }
+  <section>
+    <div class="about-strip">
+      <div class="section-label">The Club</div>
+      <h2>Who We Are</h2>
+      <div class="about-cols">
+        <div class="about-col">
+          <h3>Our Philosophy</h3>
+          <p>We believe a good choice is, fundamentally, a choice. What that means in practice is something we explore every evening. We have not resolved it. We are comfortable with this.</p>
+          <a href="beans.html">Read More →</a>
+        </div>
+        <div class="about-col">
+          <h3>The Collection</h3>
+          <p>Goodchoice. maintains a permanent collection of selected works, artifacts, and experiences. The collection is curated. The curation is ongoing. Some items are on extended loan.</p>
+          <a href="museum.html">View Collection →</a>
+        </div>
+        <div class="about-col">
+          <h3>Weather &amp; Conditions</h3>
+          <p>We monitor conditions at all times. Our forecasting team operates independently of consensus reality. Accuracy is 47%. We consider this sufficient for the purposes of an evening out.</p>
+          <a href="weather.html">View Forecast →</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    // Phone ring sound on first click
-    document.addEventListener('click', () => {
-      try {
-        const ctx = new AudioContext();
-        const ring = () => {
-          [880, 660].forEach((f, i) => {
-            const o = ctx.createOscillator();
-            const g = ctx.createGain();
-            o.connect(g); g.connect(ctx.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(.08, ctx.currentTime + i*.12);
-            g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i*.12 + .25);
-            o.start(ctx.currentTime + i*.12);
-            o.stop(ctx.currentTime + i*.12 + .25);
-          });
-        };
-        ring();
-        setInterval(ring, 1800);
-      } catch(e){}
-    }, { once: true });
-  </script>
+  <section>
+    <div class="find-us">
+      <div class="find-us-left">
+        <div class="section-label">Find Us</div>
+        <h2>The Venue</h2>
+        <p>Goodchoice. is located exactly where you would expect, which is to say: not quite. We recommend arriving with intention and no particular plan. The entrance is where it always has been.</p>
+      </div>
+      <div class="find-us-right">
+        <div class="address-block">
+          GOODCHOICE.<br>
+          First Left After Everywhere<br>
+          Second Floor, Down<br>
+          — Open When Open —
+        </div>
+        <a href="backrooms/index.html" class="directions-btn">View Directions</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Goodchoice.</div>
+    <div class="footer-links">
+      <a href="newspaper.html">Press</a>
+      <a href="about.html">About</a>
+      <a href="shop.html">Shop</a>
+      <a href="contact.html">Contact</a>
+      <a href="waiting.html">Reservations</a>
+      <a href="legal.html">Legal</a>
+      <a href="horse.html">Legal (Equine)</a>
+      <a href="birds.html">Gallery</a>
+      <a href="deep/index.html">Members Area</a>
+    </div>
+    <div class="footer-copy">© Goodchoice. All rights reserved. Some rights are more reserved than others.</div>
+  </footer>
+
 </body>
 </html>

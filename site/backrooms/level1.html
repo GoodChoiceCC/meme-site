@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEVEL 1 — THE HABITABLE ZONE</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #4a5040;
+      color: #b8c0a0;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .light-overlay {
+      position: fixed; inset:0;
+      pointer-events: none; z-index: 999;
+      animation: flicker2 0.2s step-end infinite;
+      background: rgba(200,220,160,.03);
+    }
+    @keyframes flicker2 {
+      0%,100%{opacity:1}
+      7%{opacity:.5}
+      8%{opacity:1}
+      52%{opacity:.8}
+      53%{opacity:1}
+      88%{opacity:0}
+      89%{opacity:1}
+    }
+
+    /* Industrial ceiling */
+    .ceiling {
+      position: fixed; top:0; left:0; right:0; height:50px;
+      background: #2a2e22;
+      border-bottom: 3px solid #1a1e14;
+    }
+    .pipe {
+      position: fixed;
+      height: 14px;
+      background: linear-gradient(to bottom, #555850 0%, #3a3c32 50%, #2a2c22 100%);
+      border-radius: 7px;
+      border: 1px solid #1a1c12;
+      top: 18px;
+    }
+    /* Dim industrial lights */
+    .ind-light {
+      position: fixed;
+      top: 40px;
+      width: 4px;
+      height: 20px;
+      background: #7a8060;
+      box-shadow: 0 0 15px rgba(180,200,120,.3), 0 0 40px rgba(180,200,120,.1);
+    }
+
+    .content {
+      position: relative; z-index:10;
+      padding: 90px 40px 60px;
+      max-width: 700px; margin: 0 auto;
+    }
+
+    .level-badge { font-size:.65rem; letter-spacing:.3em; text-transform:uppercase; color:#7a8060; margin-bottom:4px; }
+    h1 { font-size:1.8rem; color:#d0d8a8; margin-bottom:6px; }
+    .level-desc { font-size:.7rem; color:#5a6048; letter-spacing:.05em; margin-bottom:30px; font-style:italic; }
+
+    p { font-size:.82rem; line-height:2; color:#a0a888; margin-bottom:14px; }
+
+    .crate-block {
+      border: 1px solid #3a3c2a;
+      background: #3a3c2a;
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size:.78rem;
+      line-height:1.9;
+      color:#8a9070;
+    }
+    .crate-block .item-line::before { content:'[ '; color:#5a6040; }
+    .crate-block .item-line::after { content:' ]'; color:#5a6040; }
+
+    .log-entry {
+      border-left: 3px solid #4a5030;
+      padding: 10px 16px;
+      margin: 16px 0;
+      font-size:.76rem;
+      line-height:1.9;
+      color:#8a9270;
+    }
+    .log-entry .timestamp { color:#4a5030; font-size:.6rem; letter-spacing:.1em; margin-bottom:4px; }
+
+    .entity-event {
+      background: #2a2e1a;
+      border: 1px solid #5a5a30;
+      padding: 12px 16px;
+      margin: 20px 0;
+      font-size:.75rem;
+      color:#aab080;
+      display: none;
+    }
+    .entity-event.visible { display:block; }
+    .entity-event .event-head { color:#c8cc80; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; margin-bottom:6px; }
+
+    .stat-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0; }
+    .stat-box { background:#2a2e1a; border:1px solid #3a3c28; padding:10px 14px; font-size:.7rem; }
+    .stat-box .label { color:#4a5030; text-transform:uppercase; font-size:.58rem; letter-spacing:.1em; margin-bottom:4px; }
+    .stat-box .val { color:#a0a878; font-size:1rem; }
+
+    .vending {
+      background: #1a1e12;
+      border: 2px solid #3a3c28;
+      padding: 16px;
+      margin:20px 0;
+      text-align:center;
+    }
+    .vending h3 { font-size:.65rem; color:#4a5030; letter-spacing:.2em; text-transform:uppercase; margin-bottom:10px; }
+    .vend-items { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:10px; }
+    .vend-item { border:1px solid #2a2e1a; padding:8px 4px; font-size:.65rem; color:#6a7058; line-height:1.4; cursor:pointer; transition:background .2s; }
+    .vend-item:hover { background:#2a2e1a; color:#a0a878; }
+    .vend-note { font-size:.6rem; color:#3a3c28; font-style:italic; }
+
+    .proceed-link {
+      display:inline-block; margin-top:30px;
+      background:#4a5030; color:#c0c890;
+      padding:12px 28px; text-decoration:none;
+      font-size:.8rem; letter-spacing:.15em; text-transform:uppercase;
+      transition:background .2s;
+    }
+    .proceed-link:hover { background:#3a3c20; }
+
+    .sound-log {
+      position: fixed; bottom:20px; right:20px;
+      font-size:.55rem; color:#3a3c28; text-align:right;
+      line-height:1.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="light-overlay"></div>
+  <div class="ceiling"></div>
+  <div class="pipe" style="left:0;width:35%"></div>
+  <div class="pipe" style="left:40%;width:25%"></div>
+  <div class="pipe" style="right:0;width:20%"></div>
+  <div class="ind-light" style="left:15%"></div>
+  <div class="ind-light" style="left:40%"></div>
+  <div class="ind-light" style="left:70%"></div>
+
+  <div class="content">
+    <div class="level-badge">Backrooms — Level 1</div>
+    <h1>THE HABITABLE ZONE</h1>
+    <div class="level-desc">darker than Level 0. industrial. you can survive here. for a while.</div>
+
+    <p>You have descended into Level 1. The wallpaper is gone. In its place: concrete, rebar, large pipes running along the ceiling that lead nowhere useful. The industrial hum has been joined by a lower frequency — mechanical, like something very large breathing somewhere deep in the structure.</p>
+
+    <p>Level 1 is considered habitable. This is the best available word for it. There is water here, in pipes. There are crates here, left by previous wanderers. The lights are dimmer and less consistent than Level 0. There are longer stretches of darkness between fixtures.</p>
+
+    <div class="log-entry">
+      <div class="timestamp">SURVIVOR LOG — ENTRY UNDATED</div>
+      Found a cache near the east corridor (all corridors are east corridors here, there is no compass that works). Crate had: 3 bottles of water, a flashlight with no batteries, and a note that said "DO NOT GO TO LEVEL 2." No explanation. I am going to Level 2.
+    </div>
+
+    <div class="crate-block">
+      <div style="font-size:.6rem;color:#4a5030;letter-spacing:.15em;margin-bottom:8px">CACHE CONTENTS — CRATE #???</div>
+      <div class="item-line">Almond Water, warm (2x)</div>
+      <div class="item-line">Flashlight (no batteries) (1x)</div>
+      <div class="item-line">Note: "DO NOT GO TO LEVEL 2"</div>
+      <div class="item-line">Something else (unclear)</div>
+    </div>
+
+    <p>The mechanical breathing sound is getting slightly closer. This is how the Backrooms work: you don't see what makes the sounds, usually. You hear them approach, and then they stop, and you never know why they stopped. You tell yourself they didn't find you. You do not think about the alternative.</p>
+
+    <div class="entity-event" id="entityevent1">
+      <div class="event-head">⚠ AUDIO EVENT — DETECTED</div>
+      Something in the adjacent corridor just stopped moving.<br>
+      It was moving for approximately 4 minutes.<br>
+      It is now stationary.<br>
+      Do not make noise. Do not move. Wait 3 minutes.<br>
+      <em style="color:#6a6a40;font-size:.65rem">(or proceed anyway, it's probably fine)</em>
+    </div>
+
+    <div class="vending">
+      <h3>Vending Machine — Model Unknown</h3>
+      <div class="vend-items">
+        <div class="vend-item" onclick="vendClick(this,'Almond Water\n(still warm)')">B1<br>Almond<br>Water</div>
+        <div class="vend-item" onclick="vendClick(this,'...')">B2<br>???<br>&nbsp;</div>
+        <div class="vend-item" onclick="vendClick(this,'The machine hums louder for a moment.\nNothing is dispensed.')">B3<br>???<br>&nbsp;</div>
+        <div class="vend-item" onclick="vendClick(this,'A note falls out:\n\"LEAVE LEVEL 1.\n -Someone\"')">C1<br>Note<br>&nbsp;</div>
+        <div class="vend-item" onclick="vendClick(this,'Empty.\nThe machine knew.')">C2<br>Empty<br>&nbsp;</div>
+        <div class="vend-item" onclick="vendClick(this,'You press it.\nYou regret pressing it.\nNothing happens.\nThis is fine.')">C3<br>DO NOT<br>PRESS</div>
+      </div>
+      <div class="vend-note">accepts: no currency. dispenses: unpredictably.</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="label">Level</div><div class="val">1 / ∞</div></div>
+      <div class="stat-box"><div class="label">Entities Audible</div><div class="val" id="ent">1</div></div>
+      <div class="stat-box"><div class="label">Sanity</div><div class="val" id="san">—</div></div>
+      <div class="stat-box"><div class="label">Darkness Ahead</div><div class="val">yes</div></div>
+    </div>
+
+    <p style="color:#6a7058;font-size:.78rem">The note in the crate said not to go to Level 2. You have thought about this and decided that whoever wrote the note also went to Level 2, or they would not have felt the need to warn anyone. Somewhere in that logic is a reason to proceed.</p>
+
+    <a href="level2.html" class="proceed-link">descend to level 2 →</a>
+  </div>
+
+  <div class="sound-log" id="soundlog">
+    last sound detected: —<br>
+    direction: unknown<br>
+    distance: unclear
+  </div>
+
+  <script>
+    // Hum — lower frequency
+    document.addEventListener('click', () => {
+      try {
+        const ctx = new AudioContext();
+        [60, 120].forEach(f => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = 'sawtooth'; o.frequency.value = f;
+          g.gain.value = f === 60 ? 0.02 : 0.008;
+          o.connect(g); g.connect(ctx.destination); o.start();
+        });
+      } catch(e){}
+    }, { once: true });
+
+    // Sanity (carried from level 0 - just estimate)
+    let san = 85;
+    setInterval(() => {
+      san = Math.max(0, san - 0.4);
+      document.getElementById('san').textContent = san.toFixed(1) + '%';
+    }, 1000);
+
+    // Entity count flicker
+    const ents = ['1','1','2','1','1','0','1','3'];
+    let ei = 0;
+    setInterval(() => {
+      ei = (ei+1) % ents.length;
+      document.getElementById('ent').textContent = ents[ei];
+      if (ents[ei] === '3' || ents[ei] === '2') {
+        document.getElementById('entityevent1').classList.add('visible');
+        setTimeout(() => document.getElementById('entityevent1').classList.remove('visible'), 5000);
+      }
+    }, 6000);
+
+    // Sound log
+    const sounds = [
+      ['scraping','east corridor','close'],
+      ['breathing','below','unknown'],
+      ['footsteps','north','far'],
+      ['—','—','—'],
+      ['knocking','wall to your left','very close'],
+      ['—','—','—'],
+      ['something wet','ceiling','above you'],
+    ];
+    let si = 0;
+    setInterval(() => {
+      si = (si+1) % sounds.length;
+      const [snd, dir, dist] = sounds[si];
+      document.getElementById('soundlog').textContent =
+        `last sound detected: ${snd}\ndirection: ${dir}\ndistance: ${dist}`;
+    }, 5000);
+
+    function vendClick(el, msg) {
+      alert(msg);
+    }
+  </script>
+</body>
+</html>

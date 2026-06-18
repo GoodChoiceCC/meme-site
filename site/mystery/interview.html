@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suspect Interviews — Case #0047</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #1a1510;
+      color: #c8b898;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+    .page-header {
+      background: #c8a860;
+      width: 100%; max-width: 800px;
+      padding: 10px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2px;
+    }
+    .page-header .left { font-size:.7rem; color:#6a5020; }
+    .page-header .title { font-size:.95rem; color:#1a1008; font-weight:bold; }
+    .page-header .right { font-size:.65rem; color:#8a7030; }
+
+    .suspect-tabs {
+      display: flex; gap:2px; width:100%; max-width:800px; margin-bottom:2px;
+    }
+    .tab {
+      flex:1; background:#2a2018; border:1px solid #3a3020; padding:10px;
+      text-align:center; cursor:pointer; font-size:.7rem; color:#8a7030;
+      transition:background .2s;
+    }
+    .tab:hover { background:#3a3020; }
+    .tab.active { background:#c8a860; color:#1a1008; border-color:#c8a860; }
+    .tab .icon { font-size:1.4rem; display:block; margin-bottom:2px; }
+    .tab .name { font-size:.6rem; }
+    .tab.done .name::after { content:' ✓'; color:#4a8040; }
+
+    .interview-room {
+      background: #222018;
+      border: 1px solid #3a3020;
+      width: 100%; max-width: 800px;
+      padding: 0;
+      overflow: hidden;
+    }
+    .room-top {
+      background: #2a2018;
+      padding: 14px 20px;
+      border-bottom: 1px solid #3a3020;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .room-top h3 { font-size:.85rem; color:#c8a860; }
+    .room-top .status { font-size:.6rem; color:#8a7030; }
+
+    .dialogue-area {
+      padding: 20px;
+      min-height: 300px;
+    }
+
+    .suspect-portrait {
+      text-align:center; margin-bottom:16px;
+    }
+    .suspect-portrait .emoji { font-size:4rem; display:block; margin-bottom:4px; }
+    .suspect-portrait .name { font-size:.8rem; color:#c8a860; }
+    .suspect-portrait .bio { font-size:.65rem; color:#6a5828; margin-top:2px; }
+
+    .dialogue-bubble {
+      background: #2a2018;
+      border: 1px solid #3a3020;
+      border-left: 3px solid #8a7030;
+      padding: 12px 16px;
+      font-size:.8rem;
+      color: #c8b880;
+      line-height: 1.9;
+      margin-bottom: 14px;
+      min-height: 48px;
+    }
+    .dialogue-bubble .speaker { font-size:.6rem; color:#8a7030; letter-spacing:.15em; text-transform:uppercase; margin-bottom:6px; }
+
+    .questions { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+    .q-btn {
+      background:#2a2010; color:#c8b880; border:1px solid #4a3820;
+      padding:10px 16px; font-family:inherit; font-size:.75rem; text-align:left;
+      cursor:pointer; transition:background .2s, border-color .2s; line-height:1.5;
+    }
+    .q-btn:hover:not(:disabled) { background:#3a3020; border-color:#6a5830; }
+    .q-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .q-btn.used { opacity:.5; background:#1a1808; }
+
+    /* LIE DETECTOR */
+    .lie-detector {
+      background: #0a0a18;
+      border: 2px solid #4a4080;
+      padding: 16px;
+      margin: 10px 0;
+      text-align:center;
+      display: none;
+    }
+    .lie-detector h4 { font-size:.65rem; color:#6060aa; letter-spacing:.2em; text-transform:uppercase; margin-bottom:12px; }
+    .gauge {
+      position:relative; width:200px; height:120px; margin:0 auto 12px;
+      overflow:hidden;
+    }
+    /* Gauge arc background */
+    .gauge-bg {
+      width:200px; height:100px;
+      border-radius:100px 100px 0 0;
+      background: conic-gradient(from 180deg at 50% 100%,
+        #2a8040 0deg 60deg,
+        #888040 60deg 90deg,
+        #aa3020 90deg 120deg,
+        #888040 120deg 150deg,
+        #2a8040 150deg 180deg
+      );
+      border: 2px solid #3a3060;
+      position:absolute; bottom:0; left:0;
+    }
+    /* Needle */
+    .needle {
+      position:absolute; bottom:0; left:50%;
+      width:3px; height:90px;
+      background: linear-gradient(to top, #c8b880, #ff4444);
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(0deg);
+      transition: none;
+    }
+    .needle-pivot {
+      position:absolute; bottom:-4px; left:50%;
+      transform:translateX(-50%);
+      width:12px; height:12px; background:#c8b880; border-radius:50%;
+    }
+    .gauge-label {
+      display:flex; justify-content:space-between;
+      font-size:.55rem; color:#6a6a8a; padding:0 10px;
+      margin-bottom:8px;
+    }
+
+    .catch-btn {
+      background:#aa2020; color:#ffaaaa; border:2px solid #cc3030;
+      padding:12px 28px; font-family:inherit; font-size:.8rem; letter-spacing:.15em;
+      text-transform:uppercase; cursor:pointer; transition:background .15s;
+      animation: catchpulse 1s ease-in-out infinite;
+    }
+    @keyframes catchpulse { 0%,100%{box-shadow:0 0 0 rgba(200,50,50,0)} 50%{box-shadow:0 0 15px rgba(200,50,50,.5)} }
+    .catch-btn:hover { background:#cc3030; }
+    .catch-btn:disabled { opacity:.4; cursor:not-allowed; animation:none; }
+    .lie-result { font-size:.75rem; color:#ee8888; margin-top:8px; min-height:20px; }
+    .lie-result.caught { color:#88ee88; }
+
+    /* Lies counter */
+    .lies-counter {
+      display:inline-block; background:#3a2018; border:1px solid #6a3020;
+      padding:4px 12px; font-size:.65rem; color:#ee9868;
+    }
+
+    .summary-box {
+      background:#2a2018; border:1px solid #3a3020;
+      padding:12px 16px; font-size:.75rem; color:#a89878; margin-bottom:10px;
+      line-height:1.8;
+    }
+
+    .nav-bar {
+      display:flex; justify-content:space-between; align-items:center;
+      width:100%; max-width:800px; margin-top:8px;
+    }
+    .nav-bar a { font-size:.65rem; color:#6a5828; text-decoration:none; }
+    .nav-bar a:hover { color:#c8b880; }
+    .proceed-btn {
+      background:#2a2010; color:#c8b880; border:none; padding:10px 24px;
+      font-family:inherit; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase;
+      cursor:pointer; text-decoration:none; display:inline-block;
+      opacity:.4; pointer-events:none; transition:opacity .3s, background .2s;
+    }
+    .proceed-btn.active { opacity:1; pointer-events:all; }
+    .proceed-btn.active:hover { background:#3a3020; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div class="left">◀ <a href="index.html" style="color:#6a5020;text-decoration:none">Case File</a></div>
+    <div class="title">SUSPECT INTERVIEWS</div>
+    <div class="right">Step 4 of 5</div>
+  </div>
+
+  <div class="suspect-tabs">
+    <div class="tab active" id="tab-tim" onclick="switchSuspect('tim')">
+      <span class="icon">🐭</span><div class="name">Tim Cheese</div>
+    </div>
+    <div class="tab" id="tab-crow" onclick="switchSuspect('crow')">
+      <span class="icon">🐦‍⬛</span><div class="name">The Crow</div>
+    </div>
+    <div class="tab" id="tab-dave" onclick="switchSuspect('dave')">
+      <span class="icon">👤</span><div class="name">The 48th Dave</div>
+    </div>
+  </div>
+
+  <div class="interview-room">
+    <div class="room-top">
+      <h3 id="roomtitle">Interview Room A — Tim Cheese</h3>
+      <div class="status">Polygraph active &nbsp;|&nbsp; Lies caught: <span class="lies-counter" id="liescount">0</span></div>
+    </div>
+    <div class="dialogue-area" id="dialoguearea"></div>
+  </div>
+
+  <div class="nav-bar">
+    <a href="cipher.html">← Back to Cipher</a>
+    <a href="board.html" class="proceed-btn" id="proceedbtn">Proceed to Evidence Board →</a>
+  </div>
+
+  <script>
+    const suspects = {
+      tim: {
+        name: 'Tim Cheese',
+        icon: '🐭',
+        bio: 'Anthropomorphic mouse. Cheese enthusiast. Alleged murderer.',
+        intro: 'Tim Cheese enters the room. He is wearing a small tie. He does not blink. He places his hands on the table. His hands are very small. He has cheese under his fingernails.',
+        questions: [
+          {
+            text: 'Where were you on the night of April 14, 2023?',
+            answer: 'I was at home. All night. Alone. I did not go anywhere. I certainly did not go to wherever John Pork was. Which I do not know.',
+            isLie: false,
+          },
+          {
+            text: 'Did you have a relationship with John Pork?',
+            answer: 'We were acquaintances. He was a pig. I am a mouse. We moved in different circles. Some of those circles occasionally overlapped. This is the nature of circles.',
+            isLie: false,
+          },
+          {
+            text: 'Did you ever call John Pork?',
+            answer: 'I have never owned a phone in my life. I do not use phones. I find them unsettling. The concept of voices coming out of a small rectangle is something I have never been comfortable with.',
+            isLie: true,
+            lieReveal: 'His hand twitches toward his pocket. There is a rectangular bulge in his pocket. It vibrates twice during this answer. He does not react. His left eye closes 4% more than his right eye.',
+          },
+        ],
+      },
+      crow: {
+        name: 'The Crow',
+        icon: '🐦‍⬛',
+        bio: 'Black bird. Observed at scene. Claims to have seen nothing.',
+        intro: 'The Crow arrives. It is a bird. It cannot sit in the chair properly. It stands on top of the chair. It stares. It has been staring since before you entered the room. This is worth noting.',
+        questions: [
+          {
+            text: 'Were you near John Pork\'s apartment on April 14?',
+            answer: 'I am a bird. I go where birds go. The concept of "near" is a human construction. From my altitude, everything is near.',
+            isLie: false,
+          },
+          {
+            text: 'What do you know about the cheese found at the scene?',
+            answer: 'Birds do not eat cheese. I do not eat cheese. I have never had an opinion about cheese. Cheese and I have nothing to do with each other.',
+            isLie: false,
+          },
+          {
+            text: 'Did you see anything unusual that night?',
+            answer: 'No. I saw nothing. Nothing happened on any roof near that location that night. There was no meeting. Nobody handed anything to anyone. I was not present.',
+            isLie: true,
+            lieReveal: 'The Crow cocks its head 47 degrees. This is not a normal head angle for crows. The polygraph registers a spike. The Crow says "caw" very quietly. It seems involuntary.',
+          },
+        ],
+      },
+      dave: {
+        name: 'The 48th Dave',
+        icon: '👤',
+        bio: 'Unknown entity. Claims to have tried to warn John Pork.',
+        intro: 'The 48th Dave enters. He looks like a person. He looks like 48 people, slightly overlapping. He sits down. You are not sure he was not already sitting down. He smells like photocopier toner.',
+        questions: [
+          {
+            text: 'Who are you, exactly?',
+            answer: 'I am the 48th Dave. There were 47 before me. The previous 47 Daves were present at various historical events. I am the continuation. I am always present at things that matter. This mattered.',
+            isLie: false,
+          },
+          {
+            text: 'Do you know Tim Cheese?',
+            answer: 'Everyone knows Tim Cheese. Tim Cheese knows everyone. Tim Cheese knows things that have not happened yet. I have seen Tim Cheese in places that Tim Cheese should not have been. I have seen Tim Cheese in a photograph taken before Tim Cheese existed.',
+            isLie: false,
+          },
+          {
+            text: 'Did you try to contact John Pork?',
+            answer: 'I tried. I tried many times. I reached only voicemail. The voicemail said: this is John Pork. I am currently on another call. Please leave a message. But there was no other call. I know this now. There was never another call. He was waiting. And nobody called.',
+            isLie: false,
+            isKey: true,
+            keyReveal: 'The 48th Dave pauses. 47 of his 48 expressions show sadness. The 48th shows something else. He says: "The cheese did not kill him. The silence did. The cheese only confirmed that someone had been there. Someone who had hands. Someone who had eaten the evidence."',
+          },
+        ],
+      },
+    };
+
+    let currentSuspect = 'tim';
+    let usedQ = { tim: [], crow: [], dave: [] };
+    let liesCaught = parseInt(localStorage.getItem('jpc_lies') || '0');
+    let interviewsDone = new Set(JSON.parse(localStorage.getItem('jpc_interviews') || '[]'));
+    let lieDetectorActive = false;
+    let needleAngle = 0;
+    let needleDir = 1;
+    let lieQuestion = null;
+    let lieAnimFrame = null;
+
+    function updateLiesDisplay() {
+      document.getElementById('liescount').textContent = liesCaught;
+    }
+
+    function checkProceed() {
+      if (interviewsDone.size >= 3) {
+        document.getElementById('proceedbtn').classList.add('active');
+        const done = JSON.parse(localStorage.getItem('jpc_completed') || '[]');
+        if (!done.includes('interview')) { done.push('interview'); localStorage.setItem('jpc_completed', JSON.stringify(done)); }
+      }
+      // Mark tabs done
+      ['tim','crow','dave'].forEach(s => {
+        const tab = document.getElementById('tab-'+s);
+        if (interviewsDone.has(s)) tab.classList.add('done');
+      });
+    }
+
+    function switchSuspect(id) {
+      currentSuspect = id;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-'+id).classList.add('active');
+      const s = suspects[id];
+      document.getElementById('roomtitle').textContent = `Interview Room — ${s.name}`;
+      stopLieDetector();
+      renderDialogue();
+    }
+
+    function renderDialogue() {
+      const s = suspects[currentSuspect];
+      const used = usedQ[currentSuspect];
+      const area = document.getElementById('dialoguearea');
+
+      let html = `
+        <div class="suspect-portrait">
+          <span class="emoji">${s.icon}</span>
+          <div class="name">${s.name}</div>
+          <div class="bio">${s.bio}</div>
+        </div>
+        <div class="dialogue-bubble">
+          <div class="speaker">Detective's Observation</div>
+          ${s.intro}
+        </div>
+      `;
+
+      // Show used Q&A
+      used.forEach(qi => {
+        const q = s.questions[qi];
+        html += `
+          <div class="dialogue-bubble" style="border-left-color:#c8a860">
+            <div class="speaker">Detective</div>
+            ${q.text}
+          </div>
+          <div class="dialogue-bubble" style="border-left-color:#${q.isLie ? 'cc3020' : '4a8040'}">
+            <div class="speaker">${s.name}</div>
+            ${q.answer}
+          </div>
+        `;
+        if (q.isLie && q.caught) {
+          html += `<div class="dialogue-bubble" style="border-left-color:#ee4444;background:#2a1010">
+            <div class="speaker">Polygraph — LIE DETECTED</div>
+            ${q.lieReveal}
+          </div>`;
+        } else if (q.isKey && q.seen) {
+          html += `<div class="dialogue-bubble" style="border-left-color:#6a8040;background:#1a2a10">
+            <div class="speaker">Key Testimony</div>
+            ${q.keyReveal}
+          </div>`;
+        }
+      });
+
+      // Questions remaining
+      const remaining = s.questions.filter((_, i) => !used.includes(i));
+      if (remaining.length > 0) {
+        html += `<div class="questions" id="qbtns">`;
+        s.questions.forEach((q, i) => {
+          if (!used.includes(i)) {
+            html += `<button class="q-btn" onclick="askQuestion(${i})">${q.text}</button>`;
+          }
+        });
+        html += `</div>`;
+      }
+
+      // Lie detector placeholder
+      html += `<div class="lie-detector" id="liedet">
+        <h4>⚡ Polygraph Alert — Deception Detected</h4>
+        <div class="gauge">
+          <div class="gauge-bg"></div>
+          <div class="needle" id="needle"></div>
+          <div class="needle-pivot"></div>
+        </div>
+        <div class="gauge-label"><span>TRUTH</span><span>NEUTRAL</span><span>LIE</span><span>NEUTRAL</span><span>TRUTH</span></div>
+        <button class="catch-btn" id="catchbtn" onclick="catchLie()">PRESS TO CATCH LIE</button>
+        <div class="lie-result" id="lieresult"></div>
+      </div>`;
+
+      if (interviewsDone.has(currentSuspect)) {
+        html += `<div class="summary-box">✓ Interview complete — all questions asked.</div>`;
+      }
+
+      area.innerHTML = html;
+      updateLiesDisplay();
+      checkProceed();
+    }
+
+    function askQuestion(idx) {
+      const s = suspects[currentSuspect];
+      const q = s.questions[idx];
+      usedQ[currentSuspect].push(idx);
+
+      if (q.isLie) {
+        startLieDetector(idx);
+      } else {
+        if (q.isKey) q.seen = true;
+        // Check if all done
+        if (usedQ[currentSuspect].length >= s.questions.length) {
+          interviewsDone.add(currentSuspect);
+          localStorage.setItem('jpc_interviews', JSON.stringify([...interviewsDone]));
+        }
+        renderDialogue();
+      }
+    }
+
+    function startLieDetector(qi) {
+      lieQuestion = qi;
+      renderDialogue();
+      document.getElementById('liedet').style.display = 'block';
+      lieDetectorActive = true;
+      animateNeedle();
+    }
+
+    function animateNeedle() {
+      if (!lieDetectorActive) return;
+      needleAngle += needleDir * 3.5;
+      if (needleAngle > 80) { needleAngle = 80; needleDir = -1; }
+      if (needleAngle < -80) { needleAngle = -80; needleDir = 1; }
+      const needle = document.getElementById('needle');
+      if (needle) needle.style.transform = `translateX(-50%) rotate(${needleAngle}deg)`;
+      lieAnimFrame = requestAnimationFrame(animateNeedle);
+    }
+
+    function catchLie() {
+      if (!lieDetectorActive) return;
+      stopLieDetector();
+      const q = suspects[currentSuspect].questions[lieQuestion];
+      const inLieZone = Math.abs(needleAngle) > 40;
+      const resultEl = document.getElementById('lieresult');
+      const catchBtn = document.getElementById('catchbtn');
+      if (catchBtn) catchBtn.disabled = true;
+
+      if (inLieZone) {
+        q.caught = true;
+        liesCaught++;
+        localStorage.setItem('jpc_lies', liesCaught);
+        resultEl.textContent = '✓ LIE CAUGHT — needle was in the red zone.';
+        resultEl.className = 'lie-result caught';
+      } else {
+        resultEl.textContent = '✗ Missed — needle was not in the lie zone. The lie is recorded anyway.';
+        resultEl.className = 'lie-result';
+        q.caught = false;
+      }
+
+      setTimeout(() => {
+        if (usedQ[currentSuspect].length >= suspects[currentSuspect].questions.length) {
+          interviewsDone.add(currentSuspect);
+          localStorage.setItem('jpc_interviews', JSON.stringify([...interviewsDone]));
+        }
+        renderDialogue();
+        document.getElementById('liedet').style.display = 'none';
+      }, 2000);
+    }
+
+    function stopLieDetector() {
+      lieDetectorActive = false;
+      if (lieAnimFrame) cancelAnimationFrame(lieAnimFrame);
+    }
+
+    updateLiesDisplay();
+    checkProceed();
+    renderDialogue();
+  </script>
+</body>
+</html>

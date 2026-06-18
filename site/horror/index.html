@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>you shouldn't be here</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #0a0005;
+      color: #c0a0a8;
+      font-family: monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    svg { display:none; }
+
+    .page-wrap {
+      filter: url(#boil1);
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 520px;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      letter-spacing: .25em;
+      color: #8b0000;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      animation: candle 3s ease-in-out infinite;
+    }
+    @keyframes candle { 0%,100%{opacity:.6;text-shadow:0 0 8px #8b0000} 50%{opacity:1;text-shadow:0 0 20px #cc0000, 0 0 40px #440000} }
+
+    p {
+      font-size: .9rem;
+      line-height: 2.2;
+      color: #7a6068;
+      margin-bottom: 20px;
+    }
+
+    .watching {
+      font-size: .75rem;
+      color: #3a1a1f;
+      margin: 30px 0;
+      letter-spacing: .1em;
+      animation: flicker 4s step-end infinite;
+    }
+    @keyframes flicker {
+      0%,90%,100%{opacity:1}
+      91%{opacity:0}
+      92%{opacity:1}
+      93%{opacity:0}
+      94%{opacity:1}
+    }
+
+    .corner-thing {
+      position: fixed;
+      top: -20px;
+      right: -20px;
+      font-size: 6rem;
+      opacity: 0.04;
+      filter: blur(2px);
+      animation: cornermove 8s ease-in-out infinite;
+      pointer-events: none;
+      user-select: none;
+    }
+    @keyframes cornermove {
+      0%,100%{transform:translate(0,0) rotate(0deg)}
+      50%{transform:translate(-15px,15px) rotate(5deg)}
+    }
+
+    .go-back {
+      display: inline-block;
+      margin-top: 50px;
+      color: #3a1a1f;
+      text-decoration: none;
+      font-size: .75rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #1a0808;
+      padding-bottom: 3px;
+      transition: color .3s, border-color .3s;
+    }
+    .go-back:hover { color: #8b0000; border-color: #8b0000; }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(139,0,0,0.15) 100%);
+      pointer-events: none;
+    }
+
+    .cursor-follower {
+      position: fixed;
+      width: 6px; height: 6px;
+      background: #8b0000;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.3;
+      transition: transform 0.8s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <svg>
+    <filter id="boil1">
+      <feTurbulence type="turbulence" baseFrequency="0.008" numOctaves="2" seed="5" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <div class="vignette"></div>
+  <div class="corner-thing">👁</div>
+  <div class="cursor-follower" id="dot"></div>
+
+  <div class="page-wrap">
+    <h1>this page was not meant to be found</h1>
+
+    <p>you have been online for a while now.<br>longer than you think.</p>
+
+    <p>something has been watching since you<br>opened this browser tab.</p>
+
+    <p id="knows">it knows your scroll speed.</p>
+
+    <div class="watching" id="watcher">. . . still watching . . .</div>
+
+    <p style="color:#2a1015;font-size:.8rem;">you could go back.<br>most people go back here.</p>
+
+    <a href="room.html" class="go-back">i don't want to go back</a>
+  </div>
+
+  <script>
+    const dot = document.getElementById('dot');
+    document.addEventListener('mousemove', e => {
+      setTimeout(() => {
+        dot.style.left = (e.clientX - 3) + 'px';
+        dot.style.top = (e.clientY - 3) + 'px';
+      }, 400);
+    });
+
+    const messages = [
+      'it knows your scroll speed.',
+      'it knows how long you paused on each page.',
+      'it counted your keystrokes.',
+      'it has been here before you.',
+      'it was in the first page too.',
+      'it followed you down here.',
+    ];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % messages.length;
+      document.getElementById('knows').style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById('knows').textContent = messages[i];
+        document.getElementById('knows').style.opacity = 1;
+      }, 600);
+    }, 3500);
+  </script>
+</body>
+</html>

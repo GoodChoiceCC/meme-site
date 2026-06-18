@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEVEL 2 — PIPE DREAMS</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #0a0c0a;
+      color: #5a7050;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Emergency lighting — red tinge */
+    .emergency-light {
+      position: fixed; inset:0;
+      background: radial-gradient(ellipse at 20% 30%, rgba(80,0,0,.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 70%, rgba(60,0,0,.15) 0%, transparent 60%);
+      pointer-events:none; z-index:0;
+      animation: em-flicker .8s step-end infinite;
+    }
+    @keyframes em-flicker {
+      0%,100%{opacity:1}
+      30%{opacity:.7}
+      31%{opacity:1}
+      70%{opacity:0}
+      71%{opacity:1}
+    }
+
+    /* Pipes all over ceiling */
+    .pipe-h, .pipe-v {
+      position: fixed;
+      background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 50%, #0a0a0a 100%);
+      border: 1px solid #111;
+    }
+    .pipe-h { height:12px; }
+    .pipe-v { width:12px; }
+
+    /* Dripping effect */
+    .drip {
+      position: fixed;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(40,60,30,.8), rgba(20,40,15,0));
+      animation: drip-fall linear infinite;
+      border-radius: 0 0 2px 2px;
+    }
+    @keyframes drip-fall {
+      0%{height:0;opacity:.8}
+      80%{opacity:.4}
+      100%{height:60px;opacity:0;transform:translateY(20px)}
+    }
+
+    /* Scratch marks on wall */
+    .scratch {
+      position: fixed;
+      font-size: 3rem;
+      color: #1a2010;
+      pointer-events:none; user-select:none;
+      font-style:italic;
+    }
+
+    .content {
+      position:relative; z-index:10;
+      padding: 60px 40px 80px;
+      max-width: 700px; margin:0 auto;
+    }
+
+    .level-badge { font-size:.65rem; letter-spacing:.3em; text-transform:uppercase; color:#4a5a38; margin-bottom:4px; }
+    h1 { font-size:1.8rem; color:#6a8a50; margin-bottom:6px; }
+    .sub { font-size:.7rem; color:#2a3a20; font-style:italic; margin-bottom:30px; }
+
+    p { font-size:.82rem; line-height:2; color:#5a7050; margin-bottom:14px; }
+
+    .dark-passage {
+      background: #050705;
+      border: 1px solid #1a2014;
+      border-left: 3px solid #2a4020;
+      padding: 14px 18px;
+      margin:20px 0;
+      font-size:.78rem;
+      line-height:1.9;
+      color:#3a4a30;
+    }
+
+    .scratching-event {
+      background: #050505;
+      border: 1px solid #880000;
+      padding: 12px 16px;
+      margin: 20px 0;
+      font-size:.75rem;
+      color:#884040;
+      animation: scratch-pulse 2s step-end infinite;
+    }
+    @keyframes scratch-pulse {
+      0%,100%{border-color:#880000}
+      50%{border-color:#440000}
+    }
+
+    .wall-writing {
+      font-size:.7rem;
+      color:#1a2a14;
+      line-height:2;
+      border-top: 1px solid #1a2014;
+      border-bottom: 1px solid #1a2014;
+      padding: 12px 0;
+      margin: 20px 0;
+      font-style: italic;
+    }
+    .wall-writing::before { content: '"'; font-size:1.5rem; color:#1a2a14; margin-right:4px; }
+    .wall-writing::after { content: '"'; font-size:1.5rem; color:#1a2a14; margin-left:4px; }
+
+    .emergency-exit {
+      display:inline-block;
+      background: #1a0000;
+      border: 1px solid #880000;
+      color: #884040;
+      padding: 10px 20px;
+      font-size:.75rem;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      margin: 8px 0;
+      cursor:pointer;
+      font-family:inherit;
+      transition: background .2s;
+    }
+    .emergency-exit:hover { background:#220000; }
+
+    .proceed-link {
+      display:inline-block; margin-top:30px;
+      background:#1a2a14; color:#5a7a48;
+      padding:12px 28px; text-decoration:none;
+      font-size:.8rem; letter-spacing:.15em; text-transform:uppercase;
+      border: 1px solid #2a3a20;
+      transition:background .2s;
+    }
+    .proceed-link:hover { background:#0a1a08; }
+
+    .stat-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0; }
+    .stat-box { background:#050805; border:1px solid #1a2014; padding:10px 14px; font-size:.7rem; }
+    .stat-box .label { color:#2a3a20; text-transform:uppercase; font-size:.58rem; letter-spacing:.1em; margin-bottom:4px; }
+    .stat-box .val { color:#4a6038; font-size:1rem; }
+
+    .scratcher-desc {
+      background:#0a0c08;
+      border-left:3px solid #3a4a28;
+      padding:12px 16px;
+      margin:16px 0;
+      font-size:.75rem;
+      color:#3a4a28;
+      line-height:1.9;
+    }
+    .scratcher-desc h4 { color:#4a6038; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; margin-bottom:6px; }
+  </style>
+</head>
+<body>
+  <div class="emergency-light"></div>
+
+  <!-- Pipes -->
+  <div class="pipe-h" style="top:0;left:0;right:0"></div>
+  <div class="pipe-h" style="top:20px;left:10%;width:40%"></div>
+  <div class="pipe-h" style="top:15px;left:60%;width:30%"></div>
+  <div class="pipe-v" style="top:0;left:20%;height:100px"></div>
+  <div class="pipe-v" style="top:0;left:65%;height:80px"></div>
+
+  <!-- Drips -->
+  <div class="drip" style="left:20%;top:20px;animation-duration:4s;animation-delay:0s"></div>
+  <div class="drip" style="left:33%;top:12px;animation-duration:6s;animation-delay:2s"></div>
+  <div class="drip" style="left:65%;top:15px;animation-duration:3.5s;animation-delay:1s"></div>
+  <div class="drip" style="left:80%;top:20px;animation-duration:7s;animation-delay:3s"></div>
+
+  <!-- Scratch marks -->
+  <div class="scratch" style="top:30%;right:15px;transform:rotate(-15deg);opacity:.6">////</div>
+  <div class="scratch" style="top:60%;left:10px;transform:rotate(8deg);opacity:.4">\\\\</div>
+
+  <div class="content">
+    <div class="level-badge">Backrooms — Level 2 ⚠</div>
+    <h1>PIPE DREAMS</h1>
+    <div class="sub">you were warned. you came anyway. that's fine.</div>
+
+    <p>The note said not to come here. You came here. Level 2 is pipes. Not the manageable pipes of Level 1 — pipes everywhere. Pipes along the ceiling, pipes along the floor, pipes running through what used to be walls. The sound of water and something else moving through them never stops.</p>
+
+    <p>The lights here are emergency lights only. Red-tinted. There are long sections with no lights at all. Your eyes adjust. Then something moves in the part they've adjusted to, and you realize adjustment was the wrong goal.</p>
+
+    <div class="scratching-event">
+      ⚠ SCRATCHING DETECTED — WALL TO YOUR LEFT<br>
+      <span style="font-size:.65rem;color:#4a2020;margin-top:4px;display:block">The sound moves downward. Then stops at floor level. Then there is silence. Then the silence is worse than the sound was.</span>
+    </div>
+
+    <div class="scratcher-desc">
+      <h4>Entity: Scratchers</h4>
+      Scratchers are the primary entity of Level 2. They make themselves known by dragging their claws along walls. You will hear them before you see them. Most survivors report that seeing them is not an improvement. Their behavior is territorial. Do not scratch the walls back. This was tried. It escalated the situation.
+    </div>
+
+    <div class="dark-passage">
+      <div style="font-size:.6rem;color:#2a3a20;letter-spacing:.1em;margin-bottom:6px">PASSAGE LOG — UNKNOWN SURVIVOR</div>
+      Found the long corridor. No lights for about 200 meters. Moved through it by keeping one hand on the left pipe and counting steps. At step 147 something touched the pipe from the other side. I counted to 200 and kept moving. I do not know what happened between step 147 and step 200. I have chosen not to think about it.
+    </div>
+
+    <div class="wall-writing" id="walltext">
+      they scratch but they do not break through. they have not broken through yet. this is important to remember. they have not broken through yet.
+    </div>
+
+    <p>The emergency exits in Level 2 are marked with standard green EXIT signs. They do not lead out of the Backrooms. They lead to other parts of Level 2. This is either a design flaw or intentional. Both options are distressing.</p>
+
+    <button class="emergency-exit" onclick="exitClick()">🚪 EMERGENCY EXIT</button>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="label">Level</div><div class="val">2 / ∞</div></div>
+      <div class="stat-box"><div class="label">Entities</div><div class="val" id="ent">3+</div></div>
+      <div class="stat-box"><div class="label">Sanity</div><div class="val" id="san">—</div></div>
+      <div class="stat-box"><div class="label">Light Available</div><div class="val" id="light">12%</div></div>
+    </div>
+
+    <p style="color:#3a4a28;font-size:.78rem">You find a ladder. The ladder goes down. The note said not to go to Level 2. There was no note about Level 3. You take this as ambiguous encouragement.</p>
+
+    <a href="level3.html" class="proceed-link">descend to level 3 →</a>
+  </div>
+
+  <script>
+    document.addEventListener('click', () => {
+      try {
+        const ctx = new AudioContext();
+        [60, 90, 120].forEach((f, i) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = i === 0 ? 'sawtooth' : 'sine';
+          o.frequency.value = f;
+          g.gain.value = [0.02, 0.006, 0.003][i];
+          o.connect(g); g.connect(ctx.destination); o.start();
+          // Occasional clicking sound
+          if (i === 0) setInterval(() => {
+            g.gain.setValueAtTime(0.04, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.02, ctx.currentTime + 0.1);
+          }, 3000 + Math.random() * 5000);
+        });
+      } catch(e){}
+    }, { once: true });
+
+    let san = 68;
+    setInterval(() => {
+      san = Math.max(0, san - 0.6);
+      document.getElementById('san').textContent = san.toFixed(1) + '%';
+    }, 1000);
+
+    // Light flicker
+    const lights = ['12%','8%','0%','0%','4%','12%','0%','6%'];
+    let li = 0;
+    setInterval(() => {
+      li = (li+1) % lights.length;
+      document.getElementById('light').textContent = lights[li];
+    }, 2000);
+
+    const wallTexts = [
+      'they scratch but they do not break through. they have not broken through yet. this is important to remember. they have not broken through yet.',
+      'level 3 is worse. level 3 is also the only way forward. you understand the problem.',
+      'if you hear your name being said, that is not something that says names. do not respond.',
+      'someone was here before you. they left this message. they did not leave anything else.',
+    ];
+    let wi = 0;
+    setInterval(() => {
+      wi = (wi+1) % wallTexts.length;
+      document.getElementById('walltext').textContent = wallTexts[wi];
+    }, 7000);
+
+    function exitClick() {
+      alert('EMERGENCY EXIT\n\nYou push through the door.\n\nYou are in a corridor.\n\nThe corridor looks the same as the corridor you just left.\n\nYou check the door behind you.\n\nIt is now a wall.\n\nThis is fine.');
+    }
+  </script>
+</body>
+</html>

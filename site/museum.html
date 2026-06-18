@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Museum of Absent Things — Permanent Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #f5f2ec;
+      color: #2a2a22;
+      font-family: 'Source Serif 4', serif;
+      min-height: 100vh;
+    }
+
+    .museum-header {
+      background: #1a1a14;
+      color: #e8e2d4;
+      padding: 30px 40px;
+      text-align: center;
+    }
+    .museum-header .subtitle { font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+    .museum-header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 400; letter-spacing: -.01em; }
+    .museum-header .tagline { font-size: .75rem; color: #666; margin-top: 8px; font-style: italic; }
+
+    .nav-bar {
+      background: #2a2a22;
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      border-bottom: 1px solid #3a3a30;
+    }
+    .nav-bar a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: .68rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      transition: color .2s, background .2s;
+    }
+    .nav-bar a:hover { color: #e8e2d4; background: #1a1a14; }
+
+    .gallery-intro {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .gallery-intro h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; margin-bottom: 12px; }
+    .gallery-intro p { font-size: .82rem; color: #666; line-height: 1.9; }
+
+    .gallery {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 24px 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 32px;
+    }
+
+    .exhibit {
+      background: #fff;
+      border: 1px solid #ddd8cc;
+    }
+    .exhibit-display {
+      height: 180px;
+      background: #f0ece4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #ddd8cc;
+      position: relative;
+    }
+    .exhibit-display .absent-label {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0,0,0,.05);
+      font-size: .55rem;
+      color: #aaa;
+      padding: 2px 6px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .exhibit-label {
+      padding: 14px 16px;
+    }
+    .exhibit-label .catalog-num { font-size: .6rem; color: #aaa; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 4px; }
+    .exhibit-label h3 { font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 400; margin-bottom: 6px; }
+    .exhibit-label p { font-size: .72rem; color: #666; line-height: 1.7; }
+
+    .empty-case {
+      width: 80px; height: 100px;
+      border: 1px solid #ccc;
+      background: linear-gradient(135deg, #e8e2d4, #f0ece4);
+      position: relative;
+    }
+    .empty-case::after {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border: 1px dashed #bbb;
+    }
+    .case-label { font-size: .5rem; color: #bbb; text-align: center; margin-top: 6px; letter-spacing: .1em; }
+
+    .audio-guide-btn {
+      display: block;
+      background: #1a1a14;
+      color: #e8e2d4;
+      text-align: center;
+      padding: 12px;
+      font-size: .68rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      margin-top: 8px;
+      font-family: inherit;
+      transition: background .2s;
+    }
+    .audio-guide-btn:hover { background: #2a2a22; }
+
+    .gift-shop-banner {
+      background: #2a2a22;
+      color: #e8e2d4;
+      text-align: center;
+      padding: 24px;
+      margin: 0 24px 40px;
+      max-width: 900px;
+      margin: 0 auto 40px;
+    }
+    .gift-shop-banner h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 400; margin-bottom: 8px; }
+    .gift-shop-banner p { font-size: .75rem; color: #888; margin-bottom: 12px; }
+    .gift-shop-banner a { color: #e8e2d4; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; }
+
+    .museum-footer {
+      background: #1a1a14;
+      color: #555;
+      text-align: center;
+      padding: 20px;
+      font-size: .6rem;
+      letter-spacing: .1em;
+    }
+    .museum-footer a { color: #666; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="museum-header">
+    <div class="subtitle">est. ????</div>
+    <h1>Museum of Absent Things</h1>
+    <div class="tagline">A permanent collection of things that were, are, or never will be present.</div>
+  </div>
+
+  <div class="nav-bar">
+    <a href="#">Permanent Collection</a>
+    <a href="#">Special Exhibitions</a>
+    <a href="#">Education</a>
+    <a href="#">Plan Your Visit (not advised)</a>
+    <a href="shop.html">Gift Shop</a>
+  </div>
+
+  <div class="gallery-intro">
+    <h2>Current Collection — Gallery 1 through ∞</h2>
+    <p>The Museum of Absent Things houses the world's most comprehensive collection of things that are not here. Each exhibit has been carefully curated to represent something missing. Photography is permitted, but you will not capture what is absent.</p>
+  </div>
+
+  <div class="gallery">
+
+    <div class="exhibit">
+      <div class="exhibit-display">
+        <div>
+          <div class="empty-case"></div>
+          <div class="case-label">DO NOT TOUCH<br>(NOTHING IS THERE)</div>
+        </div>
+        <div class="absent-label">on display</div>
+      </div>
+      <div class="exhibit-label">
+        <div class="catalog-num">Cat. #0001</div>
+        <h3>The Last Thought Before Sleep</h3>
+        <p>Whatever it was, it's gone now. This exhibit contains the exact thought you had last night as you lost consciousness. The museum has chosen not to label what it was.</p>
+        <button class="audio-guide-btn" onclick="alert('The audio guide for this exhibit is 4 minutes and 32 seconds of silence.')">🎧 Audio Guide</button>
+      </div>
+    </div>
+
+    <div class="exhibit">
+      <div class="exhibit-display" style="flex-direction:column">
+        <div style="font-size:3rem">💺</div>
+        <div style="font-size:.6rem;color:#aaa;margin-top:8px;letter-spacing:.1em">THE CHAIR FACES THE WALL</div>
+        <div class="absent-label">permanent</div>
+      </div>
+      <div class="exhibit-label">
+        <div class="catalog-num">Cat. #0002</div>
+        <h3>The Concept of Monday</h3>
+        <p>Monday has been placed in the collection as a concept. The chair faces the wall because Monday has always faced the wall. This is not a metaphor. This is just how Monday is.</p>
+      </div>
+    </div>
+
+    <div class="exhibit">
+      <div class="exhibit-display">
+        <div style="text-align:center">
+          <div style="font-size:2rem">📦</div>
+          <div style="font-size:.6rem;color:#aaa;margin-top:6px;letter-spacing:.05em">LOCKED</div>
+          <div style="font-size:.5rem;color:#bbb;margin-top:2px">key not included</div>
+        </div>
+        <div class="absent-label">on loan</div>
+      </div>
+      <div class="exhibit-label">
+        <div class="catalog-num">Cat. #0019</div>
+        <h3>What Was In That Box</h3>
+        <p>The box you once moved from house to house without opening. The box you eventually threw away. This exhibit contains exactly what was inside. The box is locked. The key was in the box.</p>
+      </div>
+    </div>
+
+    <div class="exhibit">
+      <div class="exhibit-display">
+        <div style="text-align:center">
+          <div style="font-size:3rem">🐷</div>
+          <div style="font-size:2rem;margin-top:-10px">📞</div>
+          <div style="font-size:.55rem;color:#aaa;letter-spacing:.08em;margin-top:6px">VOICEMAIL: UNHEARD</div>
+        </div>
+        <div class="absent-label">permanent</div>
+      </div>
+      <div class="exhibit-label">
+        <div class="catalog-num">Cat. #0047</div>
+        <h3>John Pork's Final Call</h3>
+        <p>A phone exhibit. The voicemail nobody listened to. The museum has received 47 visitor reports of hearing the phone ring during gallery hours. There is no phone in the exhibit. There has never been a phone in the exhibit.</p>
+        <button class="audio-guide-btn" onclick="alert('The voicemail has been played. You did not hear it. This is consistent with all previous visits.')">🎧 Play Voicemail</button>
+      </div>
+    </div>
+
+    <div class="exhibit">
+      <div class="exhibit-display">
+        <div style="text-align:center">
+          <div style="font-size:2rem;color:#ccc">👤</div>
+          <div style="font-size:.6rem;color:#bbb;margin-top:8px;letter-spacing:.08em">PORTRAIT<br>SUBJECT: UNKNOWN</div>
+        </div>
+        <div class="absent-label">new acquisition</div>
+      </div>
+      <div class="exhibit-label">
+        <div class="catalog-num">Cat. #0048</div>
+        <h3>The 48th Dave</h3>
+        <p>The About page lists 47 Daves. The museum acquired this portrait of no one in 2024. It arrived by post. No return address. The frame was labeled "The 48th." Nobody at the museum is named Dave. Yet.</p>
+      </div>
+    </div>
+
+    <div class="exhibit">
+      <div class="exhibit-display">
+        <div style="text-align:center;padding:10px">
+          <div style="font-size:3rem;filter:grayscale(1);opacity:.3">🌅</div>
+          <div style="font-size:.55rem;color:#aaa;letter-spacing:.1em;margin-top:8px">THE MOMENT IS ABSENT</div>
+        </div>
+        <div class="absent-label">on display</div>
+      </div>
+      <div class="exhibit-label">
+        <div class="catalog-num">Cat. #0003</div>
+        <h3>A Good Moment You Forgot to Notice</h3>
+        <p>It happened. It was good. You were there. You did not notice it was good until later, and by then it was here, in this museum, under glass.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="gift-shop-banner">
+    <h3>The Gift Shop</h3>
+    <p>Purchase items that may or may not exist. All sales are final. All items are non-refundable. Some items are non-present.</p>
+    <a href="shop.html">→ Visit the Shop</a>
+  </div>
+
+  <div class="museum-footer">
+    Museum of Absent Things &nbsp;|&nbsp; Gallery Hours: Unknown &nbsp;|&nbsp; <a href="about.html">About</a> &nbsp;|&nbsp; <a href="index.html">Home</a>
+  </div>
+</body>
+</html>

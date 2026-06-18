@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Void</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #000;
+      color: #2a2a2a;
+      font-family: monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .void-circle {
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #0a0a0a 0%, #000 100%);
+      border: 1px solid #111;
+      box-shadow: 0 0 60px rgba(0,0,0,1), inset 0 0 40px rgba(255,255,255,.02);
+      position: relative;
+      margin-bottom: 30px;
+      animation: void-breathe 8s ease-in-out infinite;
+    }
+    @keyframes void-breathe { 0%,100%{box-shadow:0 0 40px #000,inset 0 0 20px rgba(255,255,255,.01)} 50%{box-shadow:0 0 80px #000,inset 0 0 60px rgba(255,255,255,.03)} }
+
+    .submission-pile {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .falling-text {
+      position: absolute;
+      font-size: .65rem;
+      color: #0f0f0f;
+      animation: fall-into-void linear forwards;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    @keyframes fall-into-void {
+      0%{opacity:.6;transform:scale(1) translateY(-80px)}
+      80%{opacity:.2;transform:scale(.3) translateY(60px)}
+      100%{opacity:0;transform:scale(0) translateY(80px)}
+    }
+
+    h1 {
+      font-size: 1rem;
+      color: #2a2a2a;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .void-counter {
+      font-size: .65rem;
+      color: #1a1a1a;
+      letter-spacing: .1em;
+      margin-bottom: 30px;
+    }
+
+    .submission-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 280px;
+    }
+    .submission-form textarea {
+      width: 100%;
+      background: #050505;
+      border: 1px solid #1a1a1a;
+      color: #3a3a3a;
+      font-family: monospace;
+      font-size: .8rem;
+      padding: 12px;
+      resize: none;
+      outline: none;
+      height: 70px;
+      border-radius: 3px;
+      caret-color: #333;
+    }
+    .submission-form textarea::placeholder { color: #1a1a1a; }
+    .submission-form textarea:focus { border-color: #222; color: #4a4a4a; }
+
+    .submit-btn {
+      background: transparent;
+      border: 1px solid #1a1a1a;
+      color: #2a2a2a;
+      font-family: monospace;
+      font-size: .75rem;
+      padding: 8px 24px;
+      cursor: pointer;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      transition: border-color .3s, color .3s;
+    }
+    .submit-btn:hover { border-color: #333; color: #444; }
+
+    .void-response {
+      margin-top: 20px;
+      font-size: .7rem;
+      color: #0f0f0f;
+      text-align: center;
+      letter-spacing: .05em;
+      min-height: 20px;
+      transition: color 2s;
+    }
+
+    .void-response.visible { color: #2a2a2a; }
+
+    .footer-note {
+      position: fixed;
+      bottom: 16px;
+      font-size: .55rem;
+      color: #0d0d0d;
+      letter-spacing: .1em;
+      text-align: center;
+    }
+    .footer-note a { color: #111; text-decoration: none; }
+    .footer-note a:hover { color: #333; }
+  </style>
+</head>
+<body>
+  <div class="void-circle">
+    <div class="submission-pile" id="submissionPile"></div>
+  </div>
+
+  <h1>The Void</h1>
+  <div class="void-counter" id="voidcounter">the void has received 0 submissions</div>
+
+  <div class="submission-form">
+    <textarea id="thoughtInput" placeholder="submit a thought to the void..."></textarea>
+    <button class="submit-btn" onclick="submitToVoid()">send to void</button>
+  </div>
+
+  <div class="void-response" id="voidResponse"></div>
+
+  <div class="footer-note">
+    the void does not keep records &nbsp;|&nbsp; <a href="newspaper.html">← Daily Wrong</a> &nbsp;|&nbsp; <a href="index.html">home</a>
+  </div>
+
+  <script>
+    let count = 0;
+    const responses = [
+      '.',
+      'received.',
+      'the void has noted your submission.',
+      'ok.',
+      'the void already knew.',
+      'this has been absorbed.',
+      'the void does not judge. but it noticed.',
+      'your words are now part of the void.',
+      '...',
+      'the void thanks you. the void does not thank you. the void is the void.',
+      'john pork once submitted a thought here.\nit was the word "oink".\nit remains.',
+      'noted. filed. forgotten. remembered. filed again.',
+      'you submitted this to feel better.\ndid it work?',
+      'the void has received everything.\nthe void has received nothing.\nboth are true.',
+    ];
+    let ri = 0;
+
+    function submitToVoid() {
+      const input = document.getElementById('thoughtInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      count++;
+      document.getElementById('voidcounter').textContent = 'the void has received ' + count + ' submission' + (count !== 1 ? 's' : '');
+
+      // Animate text falling
+      const pile = document.getElementById('submissionPile');
+      const falling = document.createElement('div');
+      falling.className = 'falling-text';
+      falling.textContent = text.length > 20 ? text.substring(0,20) + '...' : text;
+      falling.style.animationDuration = (2 + Math.random() * 2) + 's';
+      falling.style.left = (20 + Math.random() * 60) + '%';
+      pile.appendChild(falling);
+      setTimeout(() => falling.remove(), 4000);
+
+      input.value = '';
+
+      // Void response
+      const resp = document.getElementById('voidResponse');
+      resp.classList.remove('visible');
+      resp.textContent = '';
+      setTimeout(() => {
+        resp.textContent = responses[ri % responses.length];
+        resp.classList.add('visible');
+        ri++;
+      }, 1200);
+    }
+
+    document.getElementById('thoughtInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitToVoid(); }
+    });
+  </script>
+</body>
+</html>
